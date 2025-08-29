@@ -1,3 +1,5 @@
+// src/views/VerifyEmail.vue
+
 <script setup lang="ts">
 import { useAuthStore } from '@/stores/auth';
 import { DocumentTextIcon } from '@heroicons/vue/24/outline';

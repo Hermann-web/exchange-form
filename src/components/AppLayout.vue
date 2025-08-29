@@ -32,7 +32,7 @@ const handleLogout = async () => {
               >
                 <span class="text-white font-bold text-lg">S8</span>
               </div>
-              <span class="text-white font-semibold text-xl">Mobility Portal</span>
+              <span class="text-white font-semibold text-xl">Exchange Portal</span>
             </router-link>
           </div>
 
@@ -45,7 +45,7 @@ const handleLogout = async () => {
               Dashboard
             </router-link>
             <router-link
-              to="/dossier"
+              to="/add-submission"
               class="text-blue-100 hover:text-white px-3 py-2 rounded-md text-sm font-medium transition-colors"
               :class="{ 'bg-white/20': $route.name === 'Dossier' }"
             >
@@ -74,7 +74,7 @@ const handleLogout = async () => {
     <footer class="glass backdrop-blur-lg border-t border-white/20 mt-auto">
       <div class="max-w-7xl mx-auto px-4 py-6 sm:px-6 lg:px-8">
         <div class="text-center text-blue-100 text-sm">
-          <p>&copy; 2025 S8 Mobility Portal - Secure Document Submission</p>
+          <p>&copy; 2025 S8 Exchange Portal - Secure Document Submission</p>
         </div>
       </div>
     </footer>

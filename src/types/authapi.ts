@@ -1,4 +1,4 @@
-// src/types/api.ts
+// src/types/authapi.ts
 
 // Auth API Types
 export interface LoginRequest {

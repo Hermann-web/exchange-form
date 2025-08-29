@@ -93,7 +93,7 @@ const handleSubmit = async () => {
       <!-- Header -->
       <div class="text-center mb-8">
         <h1 class="text-3xl font-bold text-white mb-2">Create Account</h1>
-        <p class="text-blue-100">Join the S8 Mobility Program</p>
+        <p class="text-blue-100">Join the S8 Exchange Program</p>
       </div>
 
       <!-- Signup Form -->

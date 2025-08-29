@@ -1,3 +1,4 @@
+// src/views/LoginView.vue
 <script setup lang="ts">
 import { ref, reactive, computed } from 'vue';
 import { useRouter, RouterLink } from 'vue-router';
@@ -49,7 +50,7 @@ const handleSubmit = async () => {
       <!-- Header -->
       <div class="text-center mb-8">
         <h1 class="text-3xl font-bold text-white mb-2">Welcome Back</h1>
-        <p class="text-blue-100">Sign in to access your mobility portal</p>
+        <p class="text-blue-100">Sign in to access your exchange portal</p>
       </div>
 
       <!-- Login Form -->

@@ -1,21 +1,25 @@
+// src/views/DashboardView.vue
 <template>
   <div class="max-w-6xl mx-auto px-4 py-8 sm:px-6 lg:px-8">
     <div class="glass rounded-2xl p-8 mb-8">
       <div class="text-center">
-        <h1 class="text-4xl font-bold text-white mb-4">Welcome to S8 Mobility</h1>
+        <h1 class="text-4xl font-bold text-white mb-4">Welcome to S8 Exchange</h1>
         <p class="text-blue-100 text-lg mb-8">
-          Ready to take your studies abroad? Submit your mobility dossier below.
+          Ready to take your studies abroad? Submit your exchange application below.
         </p>
 
         <div class="flex flex-col sm:flex-row gap-4 justify-center">
-          <router-link to="/dossier" class="btn-primary inline-flex items-center">
+          <router-link to="/add-submission" class="btn-primary inline-flex items-center">
             <DocumentTextIcon class="w-5 h-5 mr-2" />
             Submit Dossier
           </router-link>
-          <button class="btn-secondary inline-flex items-center">
+          <router-link
+            to="/read-submission"
+            class="btn-secondary inline-flex items-center"
+          >
             <ClipboardDocumentListIcon class="w-5 h-5 mr-2" />
             View My Application
-          </button>
+          </router-link>
         </div>
       </div>
     </div>
@@ -50,7 +54,7 @@
             <li><strong>Application Deadline:</strong> March 15, 2025</li>
             <li><strong>Interview Period:</strong> April 1-15, 2025</li>
             <li><strong>Results Announcement:</strong> May 1, 2025</li>
-            <li><strong>Mobility Period:</strong> September 2025 - January 2026</li>
+            <li><strong>Exchange Period:</strong> September 2025 - January 2026</li>
           </ul>
         </div>
       </div>
