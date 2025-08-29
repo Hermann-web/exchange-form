@@ -1,4 +1,4 @@
-// src/utils/api-firebase.ts
+// src/utils/firebase/auth.ts
 import type {
   AuthApiInterface,
   LoginResponse,
@@ -7,7 +7,7 @@ import type {
   UserProfile,
   AuthSession,
   AuthUser,
-} from '@/types/api';
+} from '@/types/authapi';
 
 import {
   createUserWithEmailAndPassword,

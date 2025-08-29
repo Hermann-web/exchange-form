@@ -1,20 +1,39 @@
 // utils/api.ts
-import { authApi as edgeFunctionsAuthApi } from './api-firebase';
+import { authApi as FirebaseAuthApi } from './firebase/auth';
+import { fileStorageApi as FirebaseStorageFileStorageApi } from './firebase/firebase-storage';
+import { fileStorageApi as SupabaseStorageFileStorageApi } from './supabase/filestorage';
+import { databaseApi as FirebaseFileBasedDataBaseApi } from './firebase/firebase-storage-db';
+import { databaseApi as FirestoreDataBaseApi } from './firebase/firestore-db';
 
-import type { AuthApiInterface } from '@/types/api';
+import type { AuthApiInterface } from '@/types/authapi';
+import type {
+  DataBaseApiInterface,
+  FileStorageApiInterface,
+} from '@/types/submissionapi';
+
+const DATABASE_STRATEGY: string = 'firestore';
+const FILE_STORAGE_STRATEGY: string = 'supabase';
 
 // Strategy selection logic
 function getApiImplementation(): {
   authApi: AuthApiInterface;
-  // dossierApi: DossierApiInterface;
+  fileStorageApi: FileStorageApiInterface;
+  databaseApi: DataBaseApiInterface;
 } {
   return {
-    authApi: edgeFunctionsAuthApi,
-    //   financeApi: edgeFunctionsFinanceApi,
+    authApi: FirebaseAuthApi,
+    fileStorageApi:
+      FILE_STORAGE_STRATEGY == 'firebase'
+        ? FirebaseStorageFileStorageApi
+        : SupabaseStorageFileStorageApi,
+    databaseApi:
+      DATABASE_STRATEGY == 'firestore'
+        ? FirestoreDataBaseApi
+        : FirebaseFileBasedDataBaseApi,
   };
 }
 
-const { authApi } = getApiImplementation();
+const { authApi, fileStorageApi, databaseApi } = getApiImplementation();
 
-export { authApi };
-export default { authApi };
+export { authApi, fileStorageApi, databaseApi };
+export default { authApi, fileStorageApi, databaseApi };

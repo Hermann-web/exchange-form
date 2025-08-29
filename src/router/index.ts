@@ -48,9 +48,19 @@ const router = createRouter({
           component: () => import('@/views/DashboardView.vue'),
         },
         {
-          path: 'dossier',
-          name: 'dossier',
-          component: () => import('@/views/DashboardView.vue'),
+          path: 'add-submission',
+          name: 'add-submission',
+          component: () => import('@/views/AddSubmissionView.vue'),
+        },
+        {
+          path: 'read-submission',
+          name: 'read-submission',
+          component: () => import('@/views/ReadSubmission.vue'),
+        },
+        {
+          path: 'admin/all-submissions/in-school',
+          name: 'admin-all-submissions-in-school',
+          component: () => import('@/views/AllSubmissions.vue'),
         },
       ],
     },
