@@ -37,6 +37,9 @@ export interface SubmissionFormObject {
   s5Transcripts: File; // 2-page PDF
   s6Transcripts: File; // 2-page PDF
   residencePermit?: File; // required only for non-Moroccans, .pdf
+  school1LearningAgreement: File; // pdf
+  school2LearningAgreement: File; // pdf
+  passeportPdf: File; // pdf
 }
 
 export type SubmissionForm = SubmissionFormMeta & SubmissionFormObject;
@@ -48,6 +51,9 @@ export interface SubmissionFormObjectUrls {
   s5TranscriptsUrl: string; // public download URL for S5 transcripts
   s6TranscriptsUrl: string; // public download URL for S6 transcripts
   residencePermitUrl?: string; // if applicable
+  school1LearningAgreementUrl: string; // pdf
+  school2LearningAgreementUrl: string; // pdf
+  passeportUrl: string; // pdf
 }
 
 export interface SubmissionData extends SubmissionFormMeta, SubmissionFormObjectUrls {

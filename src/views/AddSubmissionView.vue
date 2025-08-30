@@ -35,6 +35,9 @@ const form = reactive<SubmissionForm>({
   s5Transcripts: null as any,
   s6Transcripts: null as any,
   residencePermit: undefined,
+  school1LearningAgreement: null as any,
+  school2LearningAgreement: null as any,
+  passeportPdf: null as any,
 });
 
 // File input refs
@@ -56,6 +59,9 @@ const errors = reactive({
   s5Transcripts: '',
   s6Transcripts: '',
   residencePermit: '',
+  school1LearningAgreement: '',
+  school2LearningAgreement: '',
+  passeportPdf: '',
 });
 
 // School options
@@ -108,7 +114,10 @@ type FileField =
   | 'resumePdf'
   | 's5Transcripts'
   | 's6Transcripts'
-  | 'residencePermit';
+  | 'residencePermit'
+  | 'school1LearningAgreement'
+  | 'school2LearningAgreement'
+  | 'passeportPdf';
 const handleFileChange = (event: Event, field: FileField) => {
   const target = event.target as HTMLInputElement;
   const file = target.files?.[0];
@@ -135,6 +144,15 @@ const handleFileChange = (event: Event, field: FileField) => {
           validateFile('residencePermit', file, ['pdf']);
         }
         break;
+      case 'school1LearningAgreement':
+        validateFile('school1LearningAgreement', file, ['pdf']);
+        break;
+      case 'school2LearningAgreement':
+        validateFile('school2LearningAgreement', file, ['pdf']);
+        break;
+      case 'passeportPdf':
+        validateFile('passeportPdf', file, ['pdf']);
+        break;
     }
   }
 };
@@ -151,6 +169,9 @@ const isFormValid = computed(() => {
     form.resumePdf,
     form.s5Transcripts,
     form.s6Transcripts,
+    form.school1LearningAgreement,
+    form.school2LearningAgreement,
+    form.passeportPdf,
   ];
 
   // Add residence permit if not Moroccan
@@ -178,6 +199,9 @@ const handleSubmit = async () => {
   validateFile('resume', form.resumePdf, ['pdf']);
   validateFile('s5Transcripts', form.s5Transcripts, ['pdf']);
   validateFile('s6Transcripts', form.s6Transcripts, ['pdf']);
+  validateFile('school1LearningAgreement', form.school1LearningAgreement, ['pdf']);
+  validateFile('school2LearningAgreement', form.school2LearningAgreement, ['pdf']);
+  validateFile('passeportPdf', form.passeportPdf, ['pdf']);
 
   if (form.nationality === 'other') {
     validateFile('residencePermit', form.residencePermit ?? null, ['pdf']);
@@ -527,6 +551,81 @@ onMounted(async () => {
             >
               <CheckCircleIcon class="w-4 h-4 mr-1" />
               {{ form.s6Transcripts.name }}
+            </div>
+          </div>
+
+          <!-- Learning Agreement (School1) -->
+          <div>
+            <label class="block text-blue-100 text-sm font-medium mb-2">
+              Learning Agreement (School 1) (.pdf) *
+            </label>
+            <input
+              ref="school1LearningAgreementRef"
+              @change="handleFileChange($event, 'school1LearningAgreement')"
+              type="file"
+              accept=".pdf"
+              class="file-input"
+              :class="{ 'border-red-400': errors.school1LearningAgreement }"
+            />
+            <p v-if="errors.school1LearningAgreement" class="text-red-300 text-xs mt-1">
+              {{ errors.school1LearningAgreement }}
+            </p>
+            <div
+              v-if="form.school1LearningAgreement"
+              class="flex items-center mt-2 text-green-400 text-sm"
+            >
+              <CheckCircleIcon class="w-4 h-4 mr-1" />
+              {{ form.school1LearningAgreement.name }}
+            </div>
+          </div>
+
+          <!-- Learning Agreement (School2) -->
+          <div>
+            <label class="block text-blue-100 text-sm font-medium mb-2">
+              Learning Agreement (School 2) (.pdf) *
+            </label>
+            <input
+              ref="school2LearningAgreementRef"
+              @change="handleFileChange($event, 'school2LearningAgreement')"
+              type="file"
+              accept=".pdf"
+              class="file-input"
+              :class="{ 'border-red-400': errors.school2LearningAgreement }"
+            />
+            <p v-if="errors.school2LearningAgreement" class="text-red-300 text-xs mt-1">
+              {{ errors.school2LearningAgreement }}
+            </p>
+            <div
+              v-if="form.school2LearningAgreement"
+              class="flex items-center mt-2 text-green-400 text-sm"
+            >
+              <CheckCircleIcon class="w-4 h-4 mr-1" />
+              {{ form.school2LearningAgreement.name }}
+            </div>
+          </div>
+
+          <!-- Passeport -->
+          <div>
+            <label class="block text-blue-100 text-sm font-medium mb-2">
+              Passeport (.pdf) *
+            </label>
+            <input
+              ref="passeportPdfRef"
+              @change="handleFileChange($event, 'passeportPdf')"
+              type="file"
+              accept=".pdf"
+              class="file-input"
+              :class="{ 'border-red-400': errors.passeportPdf }"
+            />
+            <p v-if="errors.passeportPdf" class="text-red-300 text-xs mt-1">
+              {{ errors.passeportPdf }}
+            </p>
+            <div
+              v-if="form.passeportPdf"
+              class="flex items-center mt-2 text-green-400 text-sm"
+            >
+              <CheckCircleIcon class="w-4 h-4 mr-1" />
+              {{ form.passeportPdf.name }}
             </div>
           </div>
 

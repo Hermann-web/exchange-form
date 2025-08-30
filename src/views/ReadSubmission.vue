@@ -347,6 +347,64 @@ onMounted(async () => {
             </button>
           </div>
 
+          <!-- Learning Agreement School 1 -->
+          <div class="flex items-center justify-between p-4 bg-white/5 rounded-lg">
+            <div class="flex items-center">
+              <DocumentTextIcon class="w-6 h-6 text-blue-300 mr-3" />
+              <div>
+                <p class="text-white font-medium">Learning Agreement School 1</p>
+                <p class="text-blue-300 text-sm">PDF Document (.pdf)</p>
+              </div>
+            </div>
+            <button
+              @click="
+                downloadFile(submission.school1LearningAgreementUrl, 'la_school1.pdf')
+              "
+              class="btn-secondary flex items-center py-2 px-4"
+            >
+              <ArrowDownTrayIcon class="w-4 h-4 mr-2" />
+              Download
+            </button>
+          </div>
+
+          <!-- Learning Agreement School 2 -->
+          <div class="flex items-center justify-between p-4 bg-white/5 rounded-lg">
+            <div class="flex items-center">
+              <DocumentTextIcon class="w-6 h-6 text-blue-300 mr-3" />
+              <div>
+                <p class="text-white font-medium">Learning Agreement School 2</p>
+                <p class="text-blue-300 text-sm">PDF Document (.pdf)</p>
+              </div>
+            </div>
+            <button
+              @click="
+                downloadFile(submission.school2LearningAgreementUrl, 'la_school2.pdf')
+              "
+              class="btn-secondary flex items-center py-2 px-4"
+            >
+              <ArrowDownTrayIcon class="w-4 h-4 mr-2" />
+              Download
+            </button>
+          </div>
+
+          <!-- Passeport -->
+          <div class="flex items-center justify-between p-4 bg-white/5 rounded-lg">
+            <div class="flex items-center">
+              <DocumentTextIcon class="w-6 h-6 text-blue-300 mr-3" />
+              <div>
+                <p class="text-white font-medium">Passeport</p>
+                <p class="text-blue-300 text-sm">PDF Document (.pdf)</p>
+              </div>
+            </div>
+            <button
+              @click="downloadFile(submission.passeportUrl, 'passeport.pdf')"
+              class="btn-secondary flex items-center py-2 px-4"
+            >
+              <ArrowDownTrayIcon class="w-4 h-4 mr-2" />
+              Download
+            </button>
+          </div>
+
           <!-- Residence Permit (if applicable) -->
           <div
             v-if="submission.residencePermitUrl"

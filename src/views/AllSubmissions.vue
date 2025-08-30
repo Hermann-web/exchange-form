@@ -547,6 +547,57 @@ onMounted(async () => {
                   </button>
 
                   <button
+                    @click="
+                      downloadFile(
+                        submission.school1LearningAgreementUrl,
+                        `${submission.firstName}-${submission.lastName}-la_school1.pdf`
+                      )
+                    "
+                    class="bg-white/5 hover:bg-white/10 rounded-lg p-3 text-center transition-all duration-200 group"
+                  >
+                    <DocumentTextIcon
+                      class="w-5 h-5 text-blue-300 mx-auto mb-2 group-hover:text-white group-hover:scale-110 transition-all"
+                    />
+                    <span class="text-xs text-blue-200 group-hover:text-white block"
+                      >Learning Agreement School 1</span
+                    >
+                  </button>
+
+                  <button
+                    @click="
+                      downloadFile(
+                        submission.school2LearningAgreementUrl,
+                        `${submission.firstName}-${submission.lastName}-la_school2.pdf`
+                      )
+                    "
+                    class="bg-white/5 hover:bg-white/10 rounded-lg p-3 text-center transition-all duration-200 group"
+                  >
+                    <DocumentTextIcon
+                      class="w-5 h-5 text-blue-300 mx-auto mb-2 group-hover:text-white group-hover:scale-110 transition-all"
+                    />
+                    <span class="text-xs text-blue-200 group-hover:text-white block"
+                      >Learning Agreement School 2</span
+                    >
+                  </button>
+
+                  <button
+                    @click="
+                      downloadFile(
+                        submission.passeportUrl,
+                        `${submission.firstName}-${submission.lastName}-passeport.pdf`
+                      )
+                    "
+                    class="bg-white/5 hover:bg-white/10 rounded-lg p-3 text-center transition-all duration-200 group"
+                  >
+                    <DocumentTextIcon
+                      class="w-5 h-5 text-blue-300 mx-auto mb-2 group-hover:text-white group-hover:scale-110 transition-all"
+                    />
+                    <span class="text-xs text-blue-200 group-hover:text-white block"
+                      >Passeport</span
+                    >
+                  </button>
+
+                  <button
                     v-if="submission.residencePermitUrl"
                     @click="
                       downloadFile(
