@@ -1,21 +1,29 @@
+<!-- src/views/ReadSubmission.vue -->
 <script setup lang="ts">
 import { computed, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import { useAuthStore } from '@/stores/auth';
 import { useSubmissionStore } from '@/stores/submission';
 import {
-  DocumentTextIcon,
   CalendarIcon,
   UserIcon,
   GlobeAltIcon,
-  AcademicCapIcon,
   PaperClipIcon,
-  ArrowDownTrayIcon,
   ExclamationCircleIcon,
   CheckCircleIcon,
   XCircleIcon,
 } from '@heroicons/vue/24/outline';
-import type { School } from '@/types/submissionapi';
+import * as Icons from '@heroicons/vue/24/outline';
+
+// Shared configuration and components
+import {
+  schoolChoices,
+  createDocumentConfigs,
+  formatDate,
+  downloadFile,
+} from '@/components/types';
+import SchoolChoiceDisplay from '@/components/SchoolChoiceDisplay.vue';
+import DocumentItem from '@/components/DocumentItem.vue';
 
 const router = useRouter();
 const authStore = useAuthStore();
@@ -23,41 +31,43 @@ const submissionStore = useSubmissionStore();
 
 // Computed properties
 const submission = computed(() => submissionStore.mySubmission);
-const schoolLabels: Record<School, string> = {
-  centrale_supelec: 'CentraleSupélec',
-  centrale_nantes: 'Centrale Nantes',
-  centrale_lille: 'Centrale Lille',
-  centrale_marseille: 'Centrale Marseille',
-  centrale_lyon: 'Centrale Lyon',
-};
+const documentConfigs = createDocumentConfigs(Icons);
 
-const formatDate = (dateString: string) => {
-  return new Date(dateString).toLocaleDateString('en-US', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit',
+// Personal information fields configuration
+const personalInfoFields = computed(() => {
+  if (!submission.value) return [];
+
+  return [
+    {
+      label: 'Full Name',
+      value: `${submission.value.firstName} ${submission.value.lastName}`,
+    },
+    {
+      label: 'Email',
+      value: submission.value.email,
+    },
+    {
+      label: 'Nationality',
+      value: submission.value.nationality === 'moroccan' ? 'Moroccan' : 'Other',
+    },
+  ];
+});
+
+// Get available documents for this submission
+const availableDocuments = computed(() => {
+  if (!submission.value) return [];
+
+  return documentConfigs.filter((doc) => {
+    if (doc.key === 'residencePermit') {
+      return submission.value?.residencePermitUrl;
+    }
+    return submission.value?.[doc.urlKey as keyof typeof submission.value];
   });
-};
+});
 
-const getElectives = (electivesString: string) => {
-  if (!electivesString) return [];
-  return electivesString
-    .split(';')
-    .map((e) => e.trim())
-    .filter((e) => e.length > 0);
-};
-
-// Download file handler
-const downloadFile = (url: string, filename: string) => {
-  const link = document.createElement('a');
-  link.href = url;
-  link.download = filename;
-  link.target = '_blank';
-  document.body.appendChild(link);
-  link.click();
-  document.body.removeChild(link);
+// Action handlers
+const handleDownloadFile = (url: string, filename: string) => {
+  downloadFile(url, filename);
 };
 
 // Initialize data
@@ -126,11 +136,6 @@ onMounted(async () => {
             <CalendarIcon class="w-4 h-4 mr-2" />
             Submitted: {{ formatDate(submission.createdAt) }}
           </div>
-          <!-- <div class="hidden sm:block">•</div>
-          <div class="flex items-center">
-            <DocumentTextIcon class="w-4 h-4 mr-2" />
-            Application ID: {{ submission.storageId }}
-          </div> -->
         </div>
       </div>
 
@@ -142,23 +147,11 @@ onMounted(async () => {
         </h2>
 
         <div class="grid md:grid-cols-2 gap-6">
-          <div>
-            <label class="block text-blue-300 text-sm font-medium mb-1">Full Name</label>
-            <p class="text-white">{{ submission.firstName }} {{ submission.lastName }}</p>
-          </div>
-
-          <div>
-            <label class="block text-blue-300 text-sm font-medium mb-1">Email</label>
-            <p class="text-white">{{ submission.email }}</p>
-          </div>
-
-          <div>
-            <label class="block text-blue-300 text-sm font-medium mb-1"
-              >Nationality</label
-            >
-            <p class="text-white capitalize">
-              {{ submission.nationality === 'moroccan' ? 'Moroccan' : 'Other' }}
-            </p>
+          <div v-for="field in personalInfoFields" :key="field.label">
+            <label class="block text-blue-300 text-sm font-medium mb-1">
+              {{ field.label }}
+            </label>
+            <p class="text-white">{{ field.value }}</p>
           </div>
         </div>
       </div>
@@ -171,97 +164,12 @@ onMounted(async () => {
         </h2>
 
         <div class="space-y-8">
-          <!-- First Choice -->
-          <div>
-            <h3 class="text-lg font-medium text-green-300 mb-4">🥇 First Choice</h3>
-            <div class="bg-white/5 rounded-lg p-4 space-y-3">
-              <div class="grid md:grid-cols-2 gap-4">
-                <div>
-                  <label class="block text-blue-300 text-sm font-medium mb-1"
-                    >School</label
-                  >
-                  <p class="text-white font-medium">
-                    {{ schoolLabels[submission.school1] }}
-                  </p>
-                </div>
-
-                <div>
-                  <label class="block text-blue-300 text-sm font-medium mb-1"
-                    >Program</label
-                  >
-                  <p class="text-white">{{ submission.program1 }}</p>
-                </div>
-              </div>
-
-              <div v-if="submission.thematicSequence1" class="pt-2">
-                <label class="block text-blue-300 text-sm font-medium mb-1"
-                  >Thematic Sequence</label
-                >
-                <p class="text-white">{{ submission.thematicSequence1 }}</p>
-              </div>
-
-              <div v-if="submission.electives1" class="pt-2">
-                <label class="block text-blue-300 text-sm font-medium mb-2"
-                  >Electives</label
-                >
-                <div class="flex flex-wrap gap-2">
-                  <span
-                    v-for="elective in getElectives(submission.electives1)"
-                    :key="elective"
-                    class="bg-blue-500/20 text-blue-200 px-3 py-1 rounded-full text-sm"
-                  >
-                    {{ elective }}
-                  </span>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Second Choice -->
-          <div>
-            <h3 class="text-lg font-medium text-yellow-300 mb-4">🥈 Second Choice</h3>
-            <div class="bg-white/5 rounded-lg p-4 space-y-3">
-              <div class="grid md:grid-cols-2 gap-4">
-                <div>
-                  <label class="block text-blue-300 text-sm font-medium mb-1"
-                    >School</label
-                  >
-                  <p class="text-white font-medium">
-                    {{ schoolLabels[submission.school2] }}
-                  </p>
-                </div>
-
-                <div>
-                  <label class="block text-blue-300 text-sm font-medium mb-1"
-                    >Program</label
-                  >
-                  <p class="text-white">{{ submission.program2 }}</p>
-                </div>
-              </div>
-
-              <div v-if="submission.thematicSequence2" class="pt-2">
-                <label class="block text-blue-300 text-sm font-medium mb-1"
-                  >Thematic Sequence</label
-                >
-                <p class="text-white">{{ submission.thematicSequence2 }}</p>
-              </div>
-
-              <div v-if="submission.electives2" class="pt-2">
-                <label class="block text-blue-300 text-sm font-medium mb-2"
-                  >Electives</label
-                >
-                <div class="flex flex-wrap gap-2">
-                  <span
-                    v-for="elective in getElectives(submission.electives2)"
-                    :key="elective"
-                    class="bg-blue-500/20 text-blue-200 px-3 py-1 rounded-full text-sm"
-                  >
-                    {{ elective }}
-                  </span>
-                </div>
-              </div>
-            </div>
-          </div>
+          <SchoolChoiceDisplay
+            v-for="choice in schoolChoices"
+            :key="choice.title"
+            :choice="choice"
+            :submission="submission"
+          />
         </div>
       </div>
 
@@ -273,158 +181,16 @@ onMounted(async () => {
         </h2>
 
         <div class="space-y-4">
-          <!-- Application Form -->
-          <div class="flex items-center justify-between p-4 bg-white/5 rounded-lg">
-            <div class="flex items-center">
-              <DocumentTextIcon class="w-6 h-6 text-blue-300 mr-3" />
-              <div>
-                <p class="text-white font-medium">Application Form</p>
-                <p class="text-blue-300 text-sm">Microsoft Word Document (.docx)</p>
-              </div>
-            </div>
-            <button
-              @click="
-                downloadFile(submission.applicationFormUrl, 'application-form.docx')
-              "
-              class="btn-secondary flex items-center py-2 px-4"
-            >
-              <ArrowDownTrayIcon class="w-4 h-4 mr-2" />
-              Download
-            </button>
-          </div>
-
-          <!-- Resume -->
-          <div class="flex items-center justify-between p-4 bg-white/5 rounded-lg">
-            <div class="flex items-center">
-              <AcademicCapIcon class="w-6 h-6 text-blue-300 mr-3" />
-              <div>
-                <p class="text-white font-medium">Resume/CV</p>
-                <p class="text-blue-300 text-sm">PDF Document (.pdf)</p>
-              </div>
-            </div>
-            <button
-              @click="downloadFile(submission.resumeUrl, 'resume.pdf')"
-              class="btn-secondary flex items-center py-2 px-4"
-            >
-              <ArrowDownTrayIcon class="w-4 h-4 mr-2" />
-              Download
-            </button>
-          </div>
-
-          <!-- S5 Transcripts -->
-          <div class="flex items-center justify-between p-4 bg-white/5 rounded-lg">
-            <div class="flex items-center">
-              <DocumentTextIcon class="w-6 h-6 text-blue-300 mr-3" />
-              <div>
-                <p class="text-white font-medium">S5 Transcripts</p>
-                <p class="text-blue-300 text-sm">PDF Document (.pdf)</p>
-              </div>
-            </div>
-            <button
-              @click="downloadFile(submission.s5TranscriptsUrl, 's5-transcripts.pdf')"
-              class="btn-secondary flex items-center py-2 px-4"
-            >
-              <ArrowDownTrayIcon class="w-4 h-4 mr-2" />
-              Download
-            </button>
-          </div>
-
-          <!-- S6 Transcripts -->
-          <div class="flex items-center justify-between p-4 bg-white/5 rounded-lg">
-            <div class="flex items-center">
-              <DocumentTextIcon class="w-6 h-6 text-blue-300 mr-3" />
-              <div>
-                <p class="text-white font-medium">S6 Transcripts</p>
-                <p class="text-blue-300 text-sm">PDF Document (.pdf)</p>
-              </div>
-            </div>
-            <button
-              @click="downloadFile(submission.s6TranscriptsUrl, 's6-transcripts.pdf')"
-              class="btn-secondary flex items-center py-2 px-4"
-            >
-              <ArrowDownTrayIcon class="w-4 h-4 mr-2" />
-              Download
-            </button>
-          </div>
-
-          <!-- Learning Agreement School 1 -->
-          <div class="flex items-center justify-between p-4 bg-white/5 rounded-lg">
-            <div class="flex items-center">
-              <DocumentTextIcon class="w-6 h-6 text-blue-300 mr-3" />
-              <div>
-                <p class="text-white font-medium">Learning Agreement School 1</p>
-                <p class="text-blue-300 text-sm">PDF Document (.pdf)</p>
-              </div>
-            </div>
-            <button
-              @click="
-                downloadFile(submission.school1LearningAgreementUrl, 'la_school1.pdf')
-              "
-              class="btn-secondary flex items-center py-2 px-4"
-            >
-              <ArrowDownTrayIcon class="w-4 h-4 mr-2" />
-              Download
-            </button>
-          </div>
-
-          <!-- Learning Agreement School 2 -->
-          <div class="flex items-center justify-between p-4 bg-white/5 rounded-lg">
-            <div class="flex items-center">
-              <DocumentTextIcon class="w-6 h-6 text-blue-300 mr-3" />
-              <div>
-                <p class="text-white font-medium">Learning Agreement School 2</p>
-                <p class="text-blue-300 text-sm">PDF Document (.pdf)</p>
-              </div>
-            </div>
-            <button
-              @click="
-                downloadFile(submission.school2LearningAgreementUrl, 'la_school2.pdf')
-              "
-              class="btn-secondary flex items-center py-2 px-4"
-            >
-              <ArrowDownTrayIcon class="w-4 h-4 mr-2" />
-              Download
-            </button>
-          </div>
-
-          <!-- Passeport -->
-          <div class="flex items-center justify-between p-4 bg-white/5 rounded-lg">
-            <div class="flex items-center">
-              <DocumentTextIcon class="w-6 h-6 text-blue-300 mr-3" />
-              <div>
-                <p class="text-white font-medium">Passeport</p>
-                <p class="text-blue-300 text-sm">PDF Document (.pdf)</p>
-              </div>
-            </div>
-            <button
-              @click="downloadFile(submission.passeportUrl, 'passeport.pdf')"
-              class="btn-secondary flex items-center py-2 px-4"
-            >
-              <ArrowDownTrayIcon class="w-4 h-4 mr-2" />
-              Download
-            </button>
-          </div>
-
-          <!-- Residence Permit (if applicable) -->
-          <div
-            v-if="submission.residencePermitUrl"
-            class="flex items-center justify-between p-4 bg-white/5 rounded-lg"
-          >
-            <div class="flex items-center">
-              <DocumentTextIcon class="w-6 h-6 text-blue-300 mr-3" />
-              <div>
-                <p class="text-white font-medium">Residence Permit</p>
-                <p class="text-blue-300 text-sm">PDF Document (.pdf)</p>
-              </div>
-            </div>
-            <button
-              @click="downloadFile(submission.residencePermitUrl, 'residence-permit.pdf')"
-              class="btn-secondary flex items-center py-2 px-4"
-            >
-              <ArrowDownTrayIcon class="w-4 h-4 mr-2" />
-              Download
-            </button>
-          </div>
+          <DocumentItem
+            v-for="document in availableDocuments"
+            :key="document.key"
+            :document="document"
+            :url="
+              submission[document.urlKey] ||
+              'internal error: undefined url after filtering'
+            "
+            @download="handleDownloadFile"
+          />
         </div>
       </div>
 
@@ -443,19 +209,6 @@ onMounted(async () => {
               </p>
             </div>
           </div>
-        </div>
-
-        <div class="mt-6 text-center">
-          <p class="text-blue-200 text-sm">
-            For any questions about your application, please contact the exchange office
-            at
-            <a
-              href="mailto:exchange@centrale-casablanca.ma"
-              class="text-blue-300 hover:text-white underline"
-            >
-              exchange@centrale-casablanca.ma
-            </a>
-          </p>
         </div>
       </div>
 
