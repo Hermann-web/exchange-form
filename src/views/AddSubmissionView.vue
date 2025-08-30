@@ -6,7 +6,6 @@ import { useSubmissionStore } from '@/stores/submission';
 import type {
   SubmissionForm,
   SubmissionFormObject,
-  School,
   SubmissionFormMeta,
 } from '@/types/submissionapi';
 import {
@@ -15,244 +14,80 @@ import {
   ExclamationCircleIcon,
   InformationCircleIcon,
 } from '@heroicons/vue/24/outline';
-
-// Components
 import FormField from '@/components/FormField.vue';
 import FileUpload from '@/components/FileUpload.vue';
 import SchoolChoice from '@/components/SchoolChoice.vue';
-import type { PersonalField } from '@/components/types';
+import type {
+  FileExtension,
+  FileUploadField,
+  PersonalField,
+  SubmissionErrorType,
+} from '@/components/types';
+import {
+  schoolOptions,
+  schoolChoices,
+  createPersonalFieldConfigs,
+  createFileUploadFieldConfigs,
+  validateRequired,
+  initialize_submission_reactives,
+  validateAllFields,
+} from '@/components/types';
 
 const router = useRouter();
 const authStore = useAuthStore();
 const submissionStore = useSubmissionStore();
 
+const { initial_form, initial_errors } = initialize_submission_reactives(
+  authStore.user?.email || ''
+);
+
 // Form data
-const form = reactive<SubmissionForm>({
-  firstName: '',
-  lastName: '',
-  nationality: 'moroccan',
-  email: authStore.user?.email || '',
-  school1: 'centrale_supelec',
-  program1: '',
-  thematicSequence1: '',
-  electives1: '',
-  school2: 'centrale_nantes',
-  program2: '',
-  thematicSequence2: '',
-  electives2: '',
-  applicationFormDocx: null as any,
-  resumePdf: null as any,
-  s5Transcripts: null as any,
-  s6Transcripts: null as any,
-  residencePermit: undefined,
-  school1LearningAgreement: null as any,
-  school2LearningAgreement: null as any,
-  passeportPdf: null as any,
-});
+const form = reactive<SubmissionForm>(initial_form);
 
 // Form validation
-const errors = reactive({
-  firstName: '',
-  lastName: '',
-  email: '',
-  program1: '',
-  program2: '',
-  applicationFormDocx: '',
-  resumePdf: '',
-  s5Transcripts: '',
-  s6Transcripts: '',
-  residencePermit: '',
-  school1LearningAgreement: '',
-  school2LearningAgreement: '',
-  passeportPdf: '',
-  // more
-  nationality: '',
-  school1: '',
-  school2: '',
-  thematicSequence1: '',
-  thematicSequence2: '',
-  electives1: '',
-  electives2: '',
-});
+const errors: SubmissionErrorType = reactive(initial_errors);
 
 // Configuration objects
-const personalFields: PersonalField<SubmissionFormMeta>[] = [
-  {
-    key: 'firstName',
-    label: 'First Name',
-    type: 'text',
-    required: true,
-    validator: (value: string) => validateRequired('firstName', value),
-  },
-  {
-    key: 'lastName',
-    label: 'Last Name',
-    type: 'text',
-    required: true,
-    validator: (value: string) => validateRequired('lastName', value),
-  },
-  {
-    key: 'nationality',
-    label: 'Nationality',
-    type: 'select',
-    required: true,
-    options: [
-      { value: 'moroccan', label: 'Moroccan' },
-      { value: 'other', label: 'Other' },
-    ],
-  },
-  {
-    key: 'email',
-    label: 'Email Address',
-    type: 'email',
-    required: true,
-    readonly: true,
-    validator: () => validateEmail(),
-  },
-];
+const personalFields: PersonalField<SubmissionFormMeta>[] = createPersonalFieldConfigs(
+  form,
+  errors
+);
 
-const schoolOptions: { value: School; label: string }[] = [
-  { value: 'centrale_supelec', label: 'CentraleSupélec' },
-  { value: 'centrale_nantes', label: 'Centrale Nantes' },
-  { value: 'centrale_lille', label: 'Centrale Lille' },
-  { value: 'centrale_marseille', label: 'Centrale Marseille' },
-  { value: 'centrale_lyon', label: 'Centrale Lyon' },
-];
+const fileUploadConfigs: FileUploadField<SubmissionFormObject>[] =
+  createFileUploadFieldConfigs(form);
 
-const schoolChoices = [
-  {
-    title: 'First Choice',
-    schoolKey: 'school1',
-    programKey: 'program1',
-    thematicKey: 'thematicSequence1',
-    electivesKey: 'electives1',
-  },
-  {
-    title: 'Second Choice',
-    schoolKey: 'school2',
-    programKey: 'program2',
-    thematicKey: 'thematicSequence2',
-    electivesKey: 'electives2',
-  },
-];
-
-type Extension = '.docx' | '.pdf';
-type Extension2 = 'docx' | 'pdf';
-
-interface FileUploads<Tform = any> {
-  key: keyof Tform;
-  label: string;
-  accept: Extension;
-  extensions: Extension2[];
-  errorKey: keyof Tform;
-  required: boolean;
-  conditional?: () => boolean;
-}
-
-const fileUploads: FileUploads<SubmissionFormObject>[] = [
-  {
-    key: 'applicationFormDocx',
-    label: 'Application Form (.docx)',
-    accept: '.docx',
-    extensions: ['docx'],
-    errorKey: 'applicationFormDocx',
-    required: true,
-  },
-  {
-    key: 'resumePdf',
-    label: 'Resume/CV (.pdf)',
-    accept: '.pdf',
-    extensions: ['pdf'],
-    errorKey: 'resumePdf',
-    required: true,
-  },
-  {
-    key: 's5Transcripts',
-    label: 'S5 Transcripts (.pdf)',
-    accept: '.pdf',
-    extensions: ['pdf'],
-    errorKey: 's5Transcripts',
-    required: true,
-  },
-  {
-    key: 's6Transcripts',
-    label: 'S6 Transcripts (.pdf)',
-    accept: '.pdf',
-    extensions: ['pdf'],
-    errorKey: 's6Transcripts',
-    required: true,
-  },
-  {
-    key: 'school1LearningAgreement',
-    label: 'Learning Agreement (School 1) (.pdf)',
-    accept: '.pdf',
-    extensions: ['pdf'],
-    errorKey: 'school1LearningAgreement',
-    required: true,
-  },
-  {
-    key: 'school2LearningAgreement',
-    label: 'Learning Agreement (School 2) (.pdf)',
-    accept: '.pdf',
-    extensions: ['pdf'],
-    errorKey: 'school2LearningAgreement',
-    required: true,
-  },
-  {
-    key: 'passeportPdf',
-    label: 'Passeport (.pdf)',
-    accept: '.pdf',
-    extensions: ['pdf'],
-    errorKey: 'passeportPdf',
-    required: true,
-  },
-  {
-    key: 'residencePermit',
-    label: 'Residence Permit (.pdf)',
-    accept: '.pdf',
-    extensions: ['pdf'],
-    errorKey: 'residencePermit',
-    required: true,
-    conditional: () => form.nationality === 'other',
-  },
-];
-
-// Validation functions
-const validateEmail = () => {
-  const emailRegex = /^[a-zA-Z]+\.[a-zA-Z]+@centrale-casablanca\.ma$/;
-  errors.email = !emailRegex.test(form.email)
-    ? 'Email must be in format: firstname.lastname@centrale-casablanca.ma'
-    : '';
-};
-
-const validateRequired = (field: string, value: string) => {
-  errors[field as keyof typeof errors] = !value.trim() ? 'This field is required' : '';
-};
-
-const validateFile = (field: string, file: File | null, extensions: string[]) => {
+const validateFile = (
+  field: keyof SubmissionFormObject,
+  file: File | null,
+  extensions: FileExtension[]
+): void => {
   if (!file) {
-    errors[field as keyof typeof errors] = 'This file is required';
+    errors[field] = 'This file is required';
     return;
   }
 
   const extension = file.name.split('.').pop()?.toLowerCase();
-  if (!extension || !extensions.includes(extension)) {
-    errors[field as keyof typeof errors] =
-      `File must be ${extensions.join(' or ')} format`;
+  if (!extension) {
+    errors[field] = 'File has no extension';
+    return;
+  }
+
+  if (!extension || !extensions.includes(extension as FileExtension)) {
+    errors[field] = `Invalid file extension. Allowed: ${extensions.join(' or ')}`;
     return;
   }
 
   if (file.size > 10 * 1024 * 1024) {
-    errors[field as keyof typeof errors] = 'File size must be less than 10MB';
+    errors[field] = 'File size must be less than 10MB';
     return;
   }
 
-  errors[field as keyof typeof errors] = '';
+  errors[field] = '';
 };
 
 // File handlers
 const handleFileChange = (
-  fileConfig: FileUploads<SubmissionFormObject>,
+  fileConfig: FileUploadField<SubmissionFormObject>,
   file: File | null
 ) => {
   if (file) {
@@ -262,31 +97,7 @@ const handleFileChange = (
 };
 
 // Form validation
-const isFormValid = computed(() => {
-  const requiredFields: any[] = [
-    form.firstName,
-    form.lastName,
-    form.email,
-    form.program1,
-    form.program2,
-    form.applicationFormDocx,
-    form.resumePdf,
-    form.s5Transcripts,
-    form.s6Transcripts,
-    form.school1LearningAgreement,
-    form.school2LearningAgreement,
-    form.passeportPdf,
-  ];
-
-  if (form.nationality === 'other') {
-    requiredFields.push(form.residencePermit);
-  }
-
-  const hasAllRequiredFields = requiredFields.every((field) => field);
-  const hasNoErrors = Object.values(errors).every((error) => !error);
-
-  return hasAllRequiredFields && hasNoErrors;
-});
+const isFormValid = computed(() => validateAllFields(form, errors));
 
 // Submit handler
 const handleSubmit = async () => {
@@ -298,7 +109,7 @@ const handleSubmit = async () => {
   });
 
   // Validate all files
-  fileUploads.forEach((fileConfig) => {
+  fileUploadConfigs.forEach((fileConfig) => {
     if (!fileConfig.conditional || fileConfig.conditional()) {
       const file = form[fileConfig.key] as File | null;
       validateFile(fileConfig.errorKey, file, fileConfig.extensions);
@@ -389,7 +200,7 @@ const setMetaField = <K extends keyof SubmissionFormMeta>(
           :errors="errors"
           :school-options="schoolOptions"
           :class="{ 'mb-8': index === 0 }"
-          @validate-program="validateRequired(choice.programKey, $event)"
+          @validate-program="validateRequired(choice.programKey, $event, errors)"
         />
       </div>
 
@@ -402,7 +213,7 @@ const setMetaField = <K extends keyof SubmissionFormMeta>(
 
         <div class="space-y-6">
           <FileUpload
-            v-for="fileConfig in fileUploads"
+            v-for="fileConfig in fileUploadConfigs"
             :key="fileConfig.key"
             v-show="!fileConfig.conditional || fileConfig.conditional()"
             :config="fileConfig"
