@@ -40,16 +40,16 @@ const handleLogout = async () => {
             <router-link
               to="/dashboard"
               class="text-blue-100 hover:text-white px-3 py-2 rounded-md text-sm font-medium transition-colors"
-              :class="{ 'bg-white/20': $route.name === 'Dashboard' }"
+              :class="{ 'bg-white/20': $route.name === 'dashboard' }"
             >
               Dashboard
             </router-link>
             <router-link
               to="/add-submission"
               class="text-blue-100 hover:text-white px-3 py-2 rounded-md text-sm font-medium transition-colors"
-              :class="{ 'bg-white/20': $route.name === 'Dossier' }"
+              :class="{ 'bg-white/20': $route.name === 'add-submission' }"
             >
-              Submit Dossier
+              Submit Application
             </router-link>
             <div class="flex items-center space-x-3">
               <span class="text-blue-100 text-sm">{{ authStore.user?.email }}</span>

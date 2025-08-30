@@ -11,7 +11,7 @@
         <div class="flex flex-col sm:flex-row gap-4 justify-center">
           <router-link to="/add-submission" class="btn-primary inline-flex items-center">
             <DocumentTextIcon class="w-5 h-5 mr-2" />
-            Submit Dossier
+            Submit Application
           </router-link>
           <router-link
             to="/read-submission"
