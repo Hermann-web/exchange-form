@@ -60,6 +60,9 @@ const getCurrentUser = async (): Promise<AuthUser> => {
 };
 
 export const authApi: AuthApiInterface = {
+  emailVerificationStrategy: 'provider-hosted',
+  passwordResetStrategy: 'provider-hosted',
+
   login: async (email: string, password: string): Promise<LoginResponse> => {
     const userCredential = await signInWithEmailAndPassword(auth, email, password);
     const user = mapFirebaseUser(userCredential.user);
@@ -117,13 +120,12 @@ export const authApi: AuthApiInterface = {
     await sendPasswordResetEmail(auth, email);
   },
 
-  resetPassword: async (
-    newPassword1: string,
-    _newPassword2?: string,
-    _token?: string
-  ): Promise<void> => {
-    if (!auth.currentUser) throw new Error('No authenticated user');
-    await updatePassword(auth.currentUser, newPassword1);
+  updatePassword: async (newPassword: string): Promise<void> => {
+    const user = auth.currentUser;
+    if (!user) {
+      throw new Error('No authenticated user found.');
+    }
+    await updatePassword(user, newPassword);
   },
 
   getSession: async (): Promise<AuthSession | null> => {

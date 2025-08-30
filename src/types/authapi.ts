@@ -48,30 +48,25 @@ export interface UserProfile {
   created_at?: string;
 }
 
-export interface ResetPasswordRequest {
-  email: string;
-}
+export type PasswordResetStrategy = 'provider-hosted' | 'app-hosted';
 
-export interface ResetPasswordResponse {
-  newPassword1: string;
-  newPassword2?: string;
-  token?: string;
-}
+export type EmailVerificationStrategy = 'provider-hosted' | 'app-hosted';
 
 // API Interface Definitions
 export interface AuthApiInterface {
   login(email: string, password: string): Promise<LoginResponse>;
+
+  emailVerificationStrategy: EmailVerificationStrategy;
   sendVerificationEmail(): Promise<void>;
   verifyEmailByToken(token: string): Promise<void>;
+
   signup(userData: SignupRequest): Promise<SignupResponse>;
   me(): Promise<UserProfile>;
   logout(): Promise<void>;
+
+  passwordResetStrategy: PasswordResetStrategy;
   resetPasswordRequest(email: string): Promise<void>;
-  resetPassword(
-    newPassword1: string,
-    newPassword2?: string,
-    token?: string
-  ): Promise<void>;
+  updatePassword(newPassword: string, token?: string): Promise<void>;
   getSession(): Promise<AuthSession | null>;
   //   onAuthStateChange(callback: AuthStateChangeCallback): { data: { subscription: any } };
 }

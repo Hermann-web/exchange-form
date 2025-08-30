@@ -110,6 +110,34 @@ export const useAuthStore = defineStore('auth', () => {
     }
   };
 
+  // const verifyEmail = async (token: string): Promise<boolean> => {
+
+  //   if (authApi.emailVerificationStrategy === 'provider-hosted') {
+  //     // Some Providers handles the verification link
+  //     // refeching user and getting isVerified.value gives us the data
+  //     throw new Error('Email verification is handled by the provider. This method is not needed.');
+  //   }
+
+  //   fetchUser();
+
+  //   if (isVerified.value) {
+  //     console.log('Email is already verified.');
+  //     return true;
+  //   }
+
+  //   loading.value = true;
+  //   error.value = null;
+  //   try {
+  //     await authApi.verifyEmailByToken(token);
+  //     return true;
+  //   } catch (err: any) {
+  //     error.value = err.response?.message || err.message || 'Email verification failed';
+  //     return false;
+  //   } finally {
+  //     loading.value = false;
+  //   }
+  // };
+
   const resetPasswordRequest = async (email: string): Promise<boolean> => {
     loading.value = true;
     error.value = null;
@@ -124,32 +152,17 @@ export const useAuthStore = defineStore('auth', () => {
     }
   };
 
-  const resetPassword = async (
+  const updatePassword = async (
     newPassword: string,
-    confirmPassword?: string,
     token?: string
   ): Promise<boolean> => {
     loading.value = true;
     error.value = null;
     try {
-      await authApi.resetPassword(newPassword, confirmPassword, token);
+      await authApi.updatePassword(newPassword, token);
       return true;
     } catch (err: any) {
       error.value = err.message || 'Failed to reset password';
-      return false;
-    } finally {
-      loading.value = false;
-    }
-  };
-
-  const verifyEmail = async (token: string): Promise<boolean> => {
-    loading.value = true;
-    error.value = null;
-    try {
-      await authApi.verifyEmailByToken(token);
-      return true;
-    } catch (err: any) {
-      error.value = err.response?.message || err.message || 'Email verification failed';
       return false;
     } finally {
       loading.value = false;
@@ -196,8 +209,8 @@ export const useAuthStore = defineStore('auth', () => {
     fetchUser,
     logout,
     resetPasswordRequest,
-    resetPassword,
-    verifyEmail,
+    updatePassword,
+    // verifyEmail,
     clearAuth,
     clearError,
     sendVerificationEmail,

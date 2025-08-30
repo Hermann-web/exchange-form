@@ -18,6 +18,12 @@ const router = createRouter({
       component: () => import('@/views/SignupView.vue'),
       meta: { requiresAuth: false },
     },
+    {
+      path: '/forgot-password',
+      name: 'forgot-password',
+      component: () => import('@/views/ForgotPasswordView.vue'),
+      meta: { requiresAuth: false },
+    },
     // {
     //   path: '/verify',
     //   name: 'verify',
@@ -51,6 +57,11 @@ const router = createRouter({
           path: 'verify',
           name: 'verify',
           component: () => import('@/views/VerifyEmailView.vue'),
+        },
+        {
+          path: 'update-password',
+          name: 'update-password',
+          component: () => import('@/views/UpdatePasswordView.vue'),
         },
         {
           path: 'add-submission',

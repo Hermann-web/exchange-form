@@ -1,22 +1,19 @@
-<!-- src/views/LoginView.vue -->
+<!-- src/views/ForgotPasswordView.vue -->
 <script setup lang="ts">
 import { ref, reactive, computed } from 'vue';
-import { useRouter, RouterLink } from 'vue-router';
+import { RouterLink } from 'vue-router';
 import { useAuthStore } from '@/stores/auth';
-import type { LoginForm } from '@/types';
-
-import { EyeIcon, EyeSlashIcon } from '@heroicons/vue/24/outline';
+import { ArrowLeftIcon, EnvelopeIcon } from '@heroicons/vue/24/outline';
 import { testEmail } from '@/components/types';
 
-const router = useRouter();
 const authStore = useAuthStore();
 
-const form = reactive<LoginForm>({
+const form = reactive({
   email: '',
-  password: '',
 });
-const showPassword = ref(false);
+
 const isSubmitting = ref(false);
+const success = ref(false);
 
 const emailError = computed(() => {
   if (!form.email) return '';
@@ -24,20 +21,20 @@ const emailError = computed(() => {
 });
 
 const isFormValid = computed(() => {
-  return form.email && form.password && !emailError.value;
+  return form.email && !emailError.value;
 });
 
 const handleSubmit = async () => {
   if (!isFormValid.value) return;
+
   isSubmitting.value = true;
-  authStore.clearError(); // Clear any previous errors
   try {
-    const success = await authStore.login(form.email, form.password);
-    if (success) {
-      router.push('/dashboard');
+    const result = await authStore.resetPasswordRequest(form.email);
+    if (result) {
+      success.value = true;
     }
   } catch (err) {
-    // Error handled in auth store
+    // Error handled in store
   } finally {
     isSubmitting.value = false;
   }
@@ -49,12 +46,40 @@ const handleSubmit = async () => {
     <div class="w-full max-w-md">
       <!-- Header -->
       <div class="text-center mb-8">
-        <h1 class="text-3xl font-bold text-white mb-2">Welcome Back</h1>
-        <p class="text-blue-100">Sign in to access your exchange portal</p>
+        <h1 class="text-3xl font-bold text-white mb-2">Reset Password</h1>
+        <p class="text-blue-100">Enter your email to receive reset instructions</p>
       </div>
 
-      <!-- Login Form -->
-      <div class="glass rounded-2xl p-8">
+      <!-- Success State -->
+      <div v-if="success" class="glass rounded-2xl p-8 text-center">
+        <div class="mb-6">
+          <EnvelopeIcon class="h-16 w-16 text-green-400 mx-auto mb-4" />
+          <h2 class="text-xl font-semibold text-white mb-2">Check Your Email</h2>
+          <p class="text-blue-100">
+            We've sent password reset instructions to <strong>{{ form.email }}</strong>
+          </p>
+        </div>
+
+        <div class="space-y-4">
+          <router-link
+            to="/login"
+            class="btn-primary w-full inline-flex items-center justify-center"
+          >
+            <ArrowLeftIcon class="h-5 w-5 mr-2" />
+            Back to Login
+          </router-link>
+
+          <button
+            @click="success = false"
+            class="w-full text-blue-100 hover:text-white transition-colors text-sm"
+          >
+            Try a different email
+          </button>
+        </div>
+      </div>
+
+      <!-- Form State -->
+      <div v-else class="glass rounded-2xl p-8">
         <form @submit.prevent="handleSubmit" class="space-y-6">
           <div>
             <label for="email" class="block text-blue-100 text-sm font-medium mb-2">
@@ -72,38 +97,6 @@ const handleSubmit = async () => {
             <p v-if="emailError" class="text-red-300 text-xs mt-1">
               {{ emailError }}
             </p>
-          </div>
-
-          <div>
-            <div class="flex justify-between items-center mb-2">
-              <label for="password" class="block text-blue-100 text-sm font-medium">
-                Password
-              </label>
-              <router-link
-                to="/forgot-password"
-                class="text-blue-200 hover:text-white text-xs transition-colors"
-              >
-                Forgot password?
-              </router-link>
-            </div>
-            <div class="relative">
-              <input
-                id="password"
-                v-model="form.password"
-                :type="showPassword ? 'text' : 'password'"
-                required
-                class="input-field pr-12"
-                placeholder="Enter your password"
-              />
-              <button
-                type="button"
-                @click="showPassword = !showPassword"
-                class="absolute right-3 top-1/2 transform -translate-y-1/2 text-blue-200 hover:text-white transition-colors"
-              >
-                <EyeIcon v-if="showPassword" class="h-5 w-5" />
-                <EyeSlashIcon v-else class="h-5 w-5" />
-              </button>
-            </div>
           </div>
 
           <div
@@ -139,22 +132,20 @@ const handleSubmit = async () => {
                   d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
                 ></path>
               </svg>
-              Signing in...
+              Sending...
             </span>
-            <span v-else>Sign In</span>
+            <span v-else>Send Reset Instructions</span>
           </button>
         </form>
 
         <div class="mt-6 text-center">
-          <p class="text-blue-100 text-sm">
-            Don't have an account?
-            <router-link
-              to="/signup"
-              class="text-white font-semibold hover:underline ml-1"
-            >
-              Create one
-            </router-link>
-          </p>
+          <router-link
+            to="/login"
+            class="inline-flex items-center text-blue-100 hover:text-white transition-colors text-sm"
+          >
+            <ArrowLeftIcon class="h-4 w-4 mr-1" />
+            Back to Login
+          </router-link>
         </div>
       </div>
     </div>
