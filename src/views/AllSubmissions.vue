@@ -32,11 +32,9 @@ const schoolOptions: { value: School | 'all'; label: string }[] = [
   { value: 'centrale_lille', label: 'Centrale Lille' },
   { value: 'centrale_marseille', label: 'Centrale Marseille' },
   { value: 'centrale_lyon', label: 'Centrale Lyon' },
-  { value: 'centrale_casablanca', label: 'Centrale Casablanca' },
 ];
 
 const schoolLabels: Record<School, string> = {
-  centrale_casablanca: 'Centrale Casablanca',
   centrale_supelec: 'CentraleSupélec',
   centrale_nantes: 'Centrale Nantes',
   centrale_lille: 'Centrale Lille',

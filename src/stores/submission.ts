@@ -124,7 +124,6 @@ export const useSubmissionStore = defineStore('submission', () => {
   const getStatistics = computed(() => {
     const total = allSubmissions.value.length;
     const bySchool: Record<School, number> = {
-      centrale_casablanca: 0,
       centrale_supelec: 0,
       centrale_nantes: 0,
       centrale_lille: 0,
