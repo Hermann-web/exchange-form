@@ -32,7 +32,11 @@
           <ul class="space-y-2 text-blue-100">
             <li class="flex items-center">
               <CheckIcon class="w-4 h-4 text-green-400 mr-2" />
-              Academic Transcripts
+              Application Form including learning agreements
+            </li>
+            <li class="flex items-center">
+              <CheckIcon class="w-4 h-4 text-green-400 mr-2" />
+              Academic Transcripts (S5, S6)
             </li>
             <li class="flex items-center">
               <CheckIcon class="w-4 h-4 text-green-400 mr-2" />
@@ -40,24 +44,63 @@
             </li>
             <li class="flex items-center">
               <CheckIcon class="w-4 h-4 text-green-400 mr-2" />
-              Motivation Letter
+              CIN (For non Moroccan) and Passeport
             </li>
             <li class="flex items-center">
               <CheckIcon class="w-4 h-4 text-green-400 mr-2" />
-              Language Certificates
+              Learning Agreements in two separate files
             </li>
           </ul>
         </div>
         <div>
           <h3 class="text-lg font-medium text-blue-200 mb-3">Important Dates</h3>
           <ul class="space-y-2 text-blue-100">
-            <li><strong>Application Deadline:</strong> March 15, 2025</li>
-            <li><strong>Interview Period:</strong> April 1-15, 2025</li>
-            <li><strong>Results Announcement:</strong> May 1, 2025</li>
-            <li><strong>Exchange Period:</strong> September 2025 - January 2026</li>
+            <li><strong>Application Deadline:</strong> September 25, 2025</li>
+            <li><strong>Review Period (ECC):</strong> October 1-10, 2025</li>
+            <li><strong>Review Period (Partner):</strong> October 15-25, 2025</li>
+            <li><strong>Results Announcement:</strong> November 10, 2025</li>
+            <li><strong>Exchange Period:</strong> January 2026 - April 2026</li>
           </ul>
         </div>
       </div>
+    </div>
+
+    <!-- Critical Information -->
+    <div class="glass rounded-xl p-6 mt-8">
+      <h2 class="text-2xl font-semibold text-red-400 mb-4">⚠️ Critical Information</h2>
+      <ul class="space-y-2 text-blue-100">
+        <li class="flex items-start">
+          <ExclamationCircleIcon class="w-5 h-5 text-red-400 mr-2 mt-0.5" />
+          <span>
+            All information and documents submitted must be
+            <strong>true and accurate</strong>. Any false declaration will result in
+            <strong>automatic rejection</strong> of the application.
+          </span>
+        </li>
+        <li class="flex items-start">
+          <ExclamationCircleIcon class="w-5 h-5 text-red-400 mr-2 mt-0.5" />
+          <span>
+            The platform will <strong>automatically close</strong> after the deadline.
+            <u>No late submissions</u> will be possible.
+            <u>No submissions via mail will be looked up, before or after the deadline</u
+            >.
+          </span>
+        </li>
+        <li class="flex items-start">
+          <ExclamationCircleIcon class="w-5 h-5 text-red-400 mr-2 mt-0.5" />
+          <span>
+            Your chosen courses must respect <strong>ECTS credit equivalence</strong>.
+            Check that the total matches your academic requirements.
+          </span>
+        </li>
+        <li class="flex items-start">
+          <ExclamationCircleIcon class="w-5 h-5 text-red-400 mr-2 mt-0.5" />
+          <span>
+            <strong>Electives</strong> are the student’s responsibility: please consult
+            the partner school websites for up-to-date course availability.
+          </span>
+        </li>
+      </ul>
     </div>
   </div>
 </template>

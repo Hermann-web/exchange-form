@@ -448,4 +448,20 @@ const setMetaField = <K extends keyof SubmissionFormMeta>(
       </div>
     </form>
   </div>
+
+  <!-- Disclaimer -->
+  <div
+    class="bg-yellow-500/10 border border-yellow-400/30 rounded-lg p-4 text-sm text-yellow-200"
+  >
+    <p class="mb-2">✅ By submitting, you confirm that:</p>
+    <ul class="list-disc pl-6 space-y-1">
+      <li>
+        All provided information and documents are
+        <strong>accurate and authentic</strong>.
+      </li>
+      <li>ECTS credits in your Learning Agreement are correctly matched.</li>
+      <li>Electives were checked on the official school websites.</li>
+      <li>Late submissions will not be accepted once the platform closes.</li>
+    </ul>
+  </div>
 </template>
