@@ -5,6 +5,8 @@ import { RouterLink } from 'vue-router';
 import { useAuthStore } from '@/stores/auth';
 import { ref, reactive, computed } from 'vue';
 import type { LogupForm } from '@/types';
+import { testEmail } from '@/components/types';
+import router from '@/router';
 const isSubmitting = ref(false);
 const authStore = useAuthStore();
 
@@ -20,8 +22,7 @@ const form = reactive<LogupForm>({
 
 const emailError = computed(() => {
   if (!form.email) return '';
-  const emailRegex = /^[a-zA-Z]+\.([a-zA-Z]+)@centrale-casablanca\.ma$/;
-  return !emailRegex.test(form.email) ? 'Please enter a valid email' : '';
+  return !testEmail(form.email) ? 'Please enter a valid email' : '';
 });
 const firstNameError = computed(() => {
   return !form.first_name ? 'First name is required' : '';
@@ -78,6 +79,7 @@ const handleSubmit = async () => {
 
     if (result) {
       success.value = true;
+      router.push('/');
     }
   } catch (err) {
     // Error handled in composable

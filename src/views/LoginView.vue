@@ -6,6 +6,7 @@ import { useAuthStore } from '@/stores/auth';
 import type { LoginForm } from '@/types';
 
 import { EyeIcon, EyeSlashIcon } from '@heroicons/vue/24/outline';
+import { testEmail } from '@/components/types';
 
 const router = useRouter();
 const authStore = useAuthStore();
@@ -20,8 +21,7 @@ const error = ref('');
 
 const emailError = computed(() => {
   if (!form.email) return '';
-  const emailRegex = /^[a-zA-Z]+\.([a-zA-Z]+)@centrale-casablanca\.ma$/;
-  return !emailRegex.test(form.email) ? 'Please enter a valid email' : '';
+  return !testEmail(form.email) ? 'Please enter a valid email' : '';
 });
 
 const isFormValid = computed(() => {

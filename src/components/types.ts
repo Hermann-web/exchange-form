@@ -332,11 +332,22 @@ export const createFileUploadFieldConfigs = (form: SubmissionForm) => {
   return fileUploadConfigs;
 };
 
+// export const testEmail = (email:string):boolean =>{
+//   if(!email) return false;
+//   const emailRegex = /^[a-zA-Z\-]+\.([a-zA-Z\-]+)@centrale-casablanca\.ma$/;
+//   return emailRegex.test(email);
+// }
+
+export const testEmail = (email: string): boolean => {
+  if (!email) return false;
+  // const emailRegex = /^[a-zA-Z\-]+\.([a-zA-Z\-]+)@etu\.univh2c\.ma$/;
+  return true;
+};
+
 // Validation functions
 const validateEmail = (errors: SubmissionErrorType, form: SubmissionForm) => {
-  const emailRegex = /^[a-zA-Z]+\.[a-zA-Z]+@centrale-casablanca\.ma$/;
-  errors.email = !emailRegex.test(form.email)
-    ? 'Email must be in format: firstname.lastname@centrale-casablanca.ma'
+  errors.email = !testEmail(form.email)
+    ? 'Email must be in format: firstname.lastname@etu.univh2c.ma'
     : '';
 };
 
