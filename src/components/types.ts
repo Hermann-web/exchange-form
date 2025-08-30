@@ -332,16 +332,14 @@ export const createFileUploadFieldConfigs = (form: SubmissionForm) => {
   return fileUploadConfigs;
 };
 
-// export const testEmail = (email:string):boolean =>{
-//   if(!email) return false;
-//   const emailRegex = /^[a-zA-Z\-]+\.([a-zA-Z\-]+)@centrale-casablanca\.ma$/;
-//   return emailRegex.test(email);
-// }
-
 export const testEmail = (email: string): boolean => {
   if (!email) return false;
-  // const emailRegex = /^[a-zA-Z\-]+\.([a-zA-Z\-]+)@etu\.univh2c\.ma$/;
-  return true;
+
+  const domain = import.meta.env.VITE_ALLOWED_EMAIL_DOMAIN || 'centrale-casablanca.ma';
+
+  // Match "firstname.lastname@centrale-casablanca.ma" or oters depending on env
+  const emailRegex = new RegExp(`^[^\\s@]+@${domain.replace('.', '\\.')}$`);
+  return emailRegex.test(email);
 };
 
 // Validation functions
