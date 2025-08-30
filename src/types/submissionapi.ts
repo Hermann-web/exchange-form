@@ -1,7 +1,6 @@
 // src/types/submissionapi.ts
 
 export type School =
-  | 'centrale_casablanca'
   | 'centrale_supelec'
   | 'centrale_nantes'
   | 'centrale_lille'

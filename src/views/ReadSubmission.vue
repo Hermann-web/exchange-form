@@ -15,6 +15,7 @@ import {
   CheckCircleIcon,
   XCircleIcon,
 } from '@heroicons/vue/24/outline';
+import type { School } from '@/types/submissionapi';
 
 const router = useRouter();
 const authStore = useAuthStore();
@@ -22,8 +23,7 @@ const submissionStore = useSubmissionStore();
 
 // Computed properties
 const submission = computed(() => submissionStore.mySubmission);
-const schoolLabels: Record<string, string> = {
-  centrale_casablanca: 'Centrale Casablanca',
+const schoolLabels: Record<School, string> = {
   centrale_supelec: 'CentraleSupélec',
   centrale_nantes: 'Centrale Nantes',
   centrale_lille: 'Centrale Lille',
