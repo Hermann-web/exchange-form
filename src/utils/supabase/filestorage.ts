@@ -44,6 +44,18 @@ export const fileStorageApi: FileStorageApiInterface = {
       `${folder}/s6.pdf`,
       formData.s6Transcripts
     );
+    const school1LearningAgreementUrl = await uploadAndGetUrl(
+      `${folder}/la_school1.pdf`,
+      formData.school1LearningAgreement
+    );
+    const school2LearningAgreementUrl = await uploadAndGetUrl(
+      `${folder}/la_school2.pdf`,
+      formData.school2LearningAgreement
+    );
+    const passeportUrl = await uploadAndGetUrl(
+      `${folder}/passeport.pdf`,
+      formData.passeportPdf
+    );
 
     let residencePermitUrl: string | undefined;
     if (formData.residencePermit) {
@@ -61,6 +73,9 @@ export const fileStorageApi: FileStorageApiInterface = {
       s5Transcripts,
       s6Transcripts,
       residencePermit,
+      school1LearningAgreement,
+      school2LearningAgreement,
+      passeportPdf,
       ...metadata
     } = formData;
 
@@ -70,6 +85,9 @@ export const fileStorageApi: FileStorageApiInterface = {
       resumeUrl,
       s5TranscriptsUrl,
       s6TranscriptsUrl,
+      school1LearningAgreementUrl,
+      school2LearningAgreementUrl,
+      passeportUrl,
       ...(residencePermitUrl ? { residencePermitUrl } : {}), // only add if defined
       createdAt: timestamp,
     };

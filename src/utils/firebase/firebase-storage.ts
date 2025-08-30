@@ -22,6 +22,9 @@ export const fileStorageApi: FileStorageApiInterface = {
         s5TranscriptsUrl,
         s6TranscriptsUrl,
         residencePermitUrl,
+        school1LearningAgreementUrl,
+        school2LearningAgreementUrl,
+        passeportUrl,
       ] = await Promise.all([
         uploadFile(formData.applicationFormDocx, `${basePath}/application_form.docx`),
         uploadFile(formData.resumePdf, `${basePath}/resume.pdf`),
@@ -31,6 +34,9 @@ export const fileStorageApi: FileStorageApiInterface = {
         formData.residencePermit
           ? uploadFile(formData.residencePermit, `${basePath}/residence_permit.pdf`)
           : Promise.resolve(undefined),
+        uploadFile(formData.school1LearningAgreement, `${basePath}/la_school1.pdf`),
+        uploadFile(formData.school2LearningAgreement, `${basePath}/la_school2.pdf`),
+        uploadFile(formData.passeportPdf, `${basePath}/passeport.pdf`),
       ]);
 
       const urls: SubmissionFormObjectUrls = {
@@ -39,6 +45,9 @@ export const fileStorageApi: FileStorageApiInterface = {
         s5TranscriptsUrl,
         s6TranscriptsUrl,
         ...(residencePermitUrl && { residencePermitUrl }),
+        school1LearningAgreementUrl,
+        school2LearningAgreementUrl,
+        passeportUrl,
       };
 
       //   return urls;
