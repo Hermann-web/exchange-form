@@ -72,18 +72,20 @@ export interface SchoolChoiceConfig {
 // School configuration
 export const schoolOptions: { value: School; label: string }[] = [
   { value: 'centrale_supelec', label: 'CentraleSupélec' },
-  { value: 'centrale_nantes', label: 'Centrale Nantes' },
+  { value: 'em_lyon', label: 'EM Lyon' },
   { value: 'centrale_lille', label: 'Centrale Lille' },
-  { value: 'centrale_marseille', label: 'Centrale Marseille' },
+  { value: 'centrale_mediterranee', label: 'Centrale Méditerranée' },
   { value: 'centrale_lyon', label: 'Centrale Lyon' },
+  { value: 'centrale_pekin', label: 'Centrale Pékin' },
 ];
 
 export const schoolLabels: Record<School, string> = {
   centrale_supelec: 'CentraleSupélec',
-  centrale_nantes: 'Centrale Nantes',
+  em_lyon: 'EM Lyon',
   centrale_lille: 'Centrale Lille',
-  centrale_marseille: 'Centrale Marseille',
+  centrale_mediterranee: 'Centrale Méditerranée',
   centrale_lyon: 'Centrale Lyon',
+  centrale_pekin: 'Centrale Pékin',
 };
 
 export const schoolChoices: SchoolChoiceConfig[] = [
@@ -369,7 +371,7 @@ export const initialize_submission_reactives = (
     program1: '',
     thematicSequence1: '',
     electives1: '',
-    school2: 'centrale_nantes',
+    school2: 'em_lyon',
     program2: '',
     thematicSequence2: '',
     electives2: '',

@@ -2,10 +2,11 @@
 
 export type School =
   | 'centrale_supelec'
-  | 'centrale_nantes'
+  | 'em_lyon'
   | 'centrale_lille'
-  | 'centrale_marseille'
-  | 'centrale_lyon';
+  | 'centrale_mediterranee'
+  | 'centrale_lyon'
+  | 'centrale_pekin';
 
 export interface SubmissionFormMeta {
   firstName: string;
