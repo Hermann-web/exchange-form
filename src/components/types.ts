@@ -1,4 +1,10 @@
-import type { School, SubmissionFormObjectUrls } from '@/types/submissionapi';
+import type {
+  School,
+  SubmissionForm,
+  SubmissionFormMeta,
+  SubmissionFormObject,
+  SubmissionFormObjectUrls,
+} from '@/types/submissionapi';
 
 export interface FieldOption {
   value: string;
@@ -17,6 +23,19 @@ export interface PersonalField<TForm = any> {
   options?: FieldOption[];
   rows?: number;
   validator?: (value: string) => void;
+}
+
+type Extension = '.docx' | '.pdf';
+export type FileExtension = 'docx' | 'pdf';
+
+export interface FileUploadField<Tform = any> {
+  key: keyof Tform;
+  label: string;
+  accept: Extension;
+  extensions: FileExtension[];
+  errorKey: keyof Tform;
+  required: boolean;
+  conditional?: () => boolean;
 }
 
 export interface FileUploadConfig<TForm = any> {
@@ -194,4 +213,218 @@ export const downloadFile = (url: string, filename: string) => {
   document.body.appendChild(link);
   link.click();
   document.body.removeChild(link);
+};
+
+export type SubmissionErrorType = { [K in keyof SubmissionForm]?: string };
+
+// Personal fields configuration factory
+export const createPersonalFieldConfigs = (
+  form: SubmissionForm,
+  errors: SubmissionErrorType
+) => {
+  const personalFields: PersonalField<SubmissionFormMeta>[] = [
+    {
+      key: 'firstName',
+      label: 'First Name',
+      type: 'text',
+      required: true,
+      validator: (value: string) => validateRequired('firstName', value, errors),
+    },
+    {
+      key: 'lastName',
+      label: 'Last Name',
+      type: 'text',
+      required: true,
+      validator: (value: string) => validateRequired('lastName', value, errors),
+    },
+    {
+      key: 'nationality',
+      label: 'Nationality',
+      type: 'select',
+      required: true,
+      options: [
+        { value: 'moroccan', label: 'Moroccan' },
+        { value: 'other', label: 'Other' },
+      ],
+    },
+    {
+      key: 'email',
+      label: 'Email Address',
+      type: 'email',
+      required: true,
+      readonly: true,
+      validator: () => validateEmail(errors, form),
+    },
+  ];
+  return personalFields;
+};
+
+// Document configuration factory
+export const createFileUploadFieldConfigs = (form: SubmissionForm) => {
+  const fileUploadConfigs: FileUploadField<SubmissionFormObject>[] = [
+    {
+      key: 'applicationFormDocx',
+      label: 'Application Form (.docx)',
+      accept: '.docx',
+      extensions: ['docx'],
+      errorKey: 'applicationFormDocx',
+      required: true,
+    },
+    {
+      key: 'resumePdf',
+      label: 'Resume/CV (.pdf)',
+      accept: '.pdf',
+      extensions: ['pdf'],
+      errorKey: 'resumePdf',
+      required: true,
+    },
+    {
+      key: 's5Transcripts',
+      label: 'S5 Transcripts (.pdf)',
+      accept: '.pdf',
+      extensions: ['pdf'],
+      errorKey: 's5Transcripts',
+      required: true,
+    },
+    {
+      key: 's6Transcripts',
+      label: 'S6 Transcripts (.pdf)',
+      accept: '.pdf',
+      extensions: ['pdf'],
+      errorKey: 's6Transcripts',
+      required: true,
+    },
+    {
+      key: 'school1LearningAgreement',
+      label: 'Learning Agreement (School 1) (.pdf)',
+      accept: '.pdf',
+      extensions: ['pdf'],
+      errorKey: 'school1LearningAgreement',
+      required: true,
+    },
+    {
+      key: 'school2LearningAgreement',
+      label: 'Learning Agreement (School 2) (.pdf)',
+      accept: '.pdf',
+      extensions: ['pdf'],
+      errorKey: 'school2LearningAgreement',
+      required: true,
+    },
+    {
+      key: 'passeportPdf',
+      label: 'Passeport (.pdf)',
+      accept: '.pdf',
+      extensions: ['pdf'],
+      errorKey: 'passeportPdf',
+      required: true,
+    },
+    {
+      key: 'residencePermit',
+      label: 'Residence Permit (.pdf)',
+      accept: '.pdf',
+      extensions: ['pdf'],
+      errorKey: 'residencePermit',
+      required: true,
+      conditional: () => form.nationality === 'other',
+    },
+  ];
+
+  return fileUploadConfigs;
+};
+
+// Validation functions
+const validateEmail = (errors: SubmissionErrorType, form: SubmissionForm) => {
+  const emailRegex = /^[a-zA-Z]+\.[a-zA-Z]+@centrale-casablanca\.ma$/;
+  errors.email = !emailRegex.test(form.email)
+    ? 'Email must be in format: firstname.lastname@centrale-casablanca.ma'
+    : '';
+};
+
+export const validateRequired = (
+  field: string,
+  value: string,
+  errors: SubmissionErrorType
+) => {
+  errors[field as keyof typeof errors] = !value.trim() ? 'This field is required' : '';
+};
+
+export const initialize_submission_reactives = (
+  initialEmail?: string
+): { initial_form: SubmissionForm; initial_errors: SubmissionErrorType } => {
+  const initial_form: SubmissionForm = {
+    firstName: '',
+    lastName: '',
+    nationality: 'moroccan',
+    email: initialEmail || '',
+    school1: 'centrale_supelec',
+    program1: '',
+    thematicSequence1: '',
+    electives1: '',
+    school2: 'centrale_nantes',
+    program2: '',
+    thematicSequence2: '',
+    electives2: '',
+    applicationFormDocx: null as any,
+    resumePdf: null as any,
+    s5Transcripts: null as any,
+    s6Transcripts: null as any,
+    residencePermit: undefined,
+    school1LearningAgreement: null as any,
+    school2LearningAgreement: null as any,
+    passeportPdf: null as any,
+  };
+
+  const initial_errors: SubmissionErrorType = {
+    firstName: '',
+    lastName: '',
+    email: '',
+    program1: '',
+    program2: '',
+    applicationFormDocx: '',
+    resumePdf: '',
+    s5Transcripts: '',
+    s6Transcripts: '',
+    residencePermit: '',
+    school1LearningAgreement: '',
+    school2LearningAgreement: '',
+    passeportPdf: '',
+    nationality: '',
+    school1: '',
+    school2: '',
+    thematicSequence1: '',
+    thematicSequence2: '',
+    electives1: '',
+    electives2: '',
+  };
+
+  return { initial_form, initial_errors };
+};
+
+export const validateAllFields = (
+  form: SubmissionForm,
+  errors: SubmissionErrorType
+): boolean => {
+  const requiredFields: any[] = [
+    form.firstName,
+    form.lastName,
+    form.email,
+    form.program1,
+    form.program2,
+    form.applicationFormDocx,
+    form.resumePdf,
+    form.s5Transcripts,
+    form.s6Transcripts,
+    form.school1LearningAgreement,
+    form.school2LearningAgreement,
+    form.passeportPdf,
+  ];
+
+  if (form.nationality === 'other') {
+    requiredFields.push(form.residencePermit);
+  }
+
+  const hasAllRequiredFields = requiredFields.every((field) => field);
+  const hasNoErrors = Object.values(errors).every((error) => !error);
+
+  return hasAllRequiredFields && hasNoErrors;
 };
