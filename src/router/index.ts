@@ -7,11 +7,6 @@ const router = createRouter({
   routes: [
     // Public routes
     {
-      path: '/',
-      name: 'home',
-      redirect: () => '/dashboard',
-    },
-    {
       path: '/login',
       name: 'login',
       component: () => import('@/views/LoginView.vue'),
@@ -23,12 +18,12 @@ const router = createRouter({
       component: () => import('@/views/SignupView.vue'),
       meta: { requiresAuth: false },
     },
-    {
-      path: '/verify',
-      name: 'verify',
-      component: () => import('@/views/VerifyEmailView.vue'),
-      meta: { requiresAuth: false },
-    },
+    // {
+    //   path: '/verify',
+    //   name: 'verify',
+    //   component: () => import('@/views/VerifyEmailView.vue'),
+    //   meta: { requiresAuth: true },
+    // },
     // {
     //   path: '/reset-password',
     //   name: 'reset-password',
@@ -43,9 +38,19 @@ const router = createRouter({
       meta: { requiresAuth: true },
       children: [
         {
+          path: '',
+          name: 'home',
+          component: () => import('@/views/DashboardView.vue'),
+        },
+        {
           path: 'dashboard',
           name: 'dashboard',
           component: () => import('@/views/DashboardView.vue'),
+        },
+        {
+          path: 'verify',
+          name: 'verify',
+          component: () => import('@/views/VerifyEmailView.vue'),
         },
         {
           path: 'add-submission',
@@ -64,41 +69,32 @@ const router = createRouter({
         },
       ],
     },
+    {
+      path: '/:pathMatch(.*)*',
+      name: 'not-found',
+      component: () => import('@/views/NotFoundView.vue'),
+      meta: { requiresAuth: false }, // or true, depending on your app
+    },
   ],
 });
 
 router.beforeEach(async (to, _from, next) => {
   const authStore = useAuthStore();
 
-  if (to.meta.requiresAuth) {
-    // Wait until the store finished initializing
-    if (!authStore.initialized) {
-      await authStore.fetchUser();
-    }
-
-    if (!authStore.isAuthenticated) {
-      return next('/login');
-    }
-
-    if (!authStore.user) {
-      const success = await authStore.fetchUser();
-      if (!success) {
-        return next('/login');
-      }
-    }
-
-    if (!authStore.isVerified) {
-      // Redirect unverified users to a prompt page
-      return next('/verify');
-    }
+  // Ensure store is initialized for everyone
+  // as public routes (eg. login/logup) rely on authStore
+  if (!authStore.initialized) {
+    await authStore.fetchUser();
   }
 
-  // Redirect logged-in users away from auth pages
-  if (
-    !to.meta.requiresAuth &&
-    authStore.isAuthenticated &&
-    ['login', 'signup'].includes(to.name as string)
-  ) {
+  // Then handle protected routes
+  if (to.meta.requiresAuth) {
+    if (!authStore.isAuthenticated) return next('/login');
+    if (!authStore.isVerified && to.name !== 'verify') return next('/verify');
+  }
+
+  // Prevent logged-in users from going back to auth pages
+  else if (authStore.isAuthenticated && ['login', 'signup'].includes(to.name as string)) {
     return next('/dashboard');
   }
 
