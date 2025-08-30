@@ -125,10 +125,11 @@ export const useSubmissionStore = defineStore('submission', () => {
     const total = allSubmissions.value.length;
     const bySchool: Record<School, number> = {
       centrale_supelec: 0,
-      centrale_nantes: 0,
+      em_lyon: 0,
       centrale_lille: 0,
-      centrale_marseille: 0,
+      centrale_mediterranee: 0,
       centrale_lyon: 0,
+      centrale_pekin: 0,
     };
     const byNationality = {
       moroccan: 0,
