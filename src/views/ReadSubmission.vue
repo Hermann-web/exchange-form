@@ -61,6 +61,9 @@ const availableDocuments = computed(() => {
     if (doc.key === 'residencePermit') {
       return submission.value?.residencePermitUrl;
     }
+    if (doc.key === 'school2LearningAgreement') {
+      return submission.value?.school2LearningAgreementUrl;
+    }
     return submission.value?.[doc.urlKey as keyof typeof submission.value];
   });
 });
