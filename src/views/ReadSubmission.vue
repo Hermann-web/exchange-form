@@ -60,6 +60,9 @@ const availableDocuments = computed(() => {
     if (doc.key === 'school2LearningAgreement') {
       return submission.value?.school2LearningAgreementUrl;
     }
+    if (doc.key === 'otherFilesPdf') {
+      return submission.value?.otherFilesPdfUrl;
+    }
     return submission.value?.[doc.urlKey as keyof typeof submission.value];
   });
 });
