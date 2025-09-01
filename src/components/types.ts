@@ -77,6 +77,7 @@ export const schoolOptions: { value: School; label: string }[] = [
   { value: 'centrale_mediterranee', label: 'Centrale Méditerranée' },
   { value: 'centrale_lyon', label: 'Centrale Lyon' },
   { value: 'centrale_pekin', label: 'Centrale Pékin' },
+  { value: 'unset', label: 'Aucun' },
 ];
 
 export const schoolLabels: Record<School, string> = {
@@ -86,6 +87,7 @@ export const schoolLabels: Record<School, string> = {
   centrale_mediterranee: 'Centrale Méditerranée',
   centrale_lyon: 'Centrale Lyon',
   centrale_pekin: 'Centrale Pékin',
+  unset: 'Aucun',
 };
 
 export const schoolChoices: SchoolChoiceConfig[] = [
@@ -311,6 +313,7 @@ export const createFileUploadFieldConfigs = (form: SubmissionForm) => {
       extensions: ['pdf'],
       errorKey: 'school2LearningAgreement',
       required: true,
+      conditional: () => form.school2 !== 'unset',
     },
     {
       key: 'passeportPdf',
@@ -426,12 +429,14 @@ export const validateAllFields = (
     form.s5Transcripts,
     form.s6Transcripts,
     form.school1LearningAgreement,
-    form.school2LearningAgreement,
     form.passeportPdf,
   ];
 
   if (form.nationality === 'other') {
     requiredFields.push(form.residencePermit);
+  }
+  if (form.school2 !== 'unset') {
+    requiredFields.push(form.school2LearningAgreement);
   }
 
   const hasAllRequiredFields = requiredFields.every((field) => field);

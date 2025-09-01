@@ -130,6 +130,7 @@ export const useSubmissionStore = defineStore('submission', () => {
       centrale_mediterranee: 0,
       centrale_lyon: 0,
       centrale_pekin: 0,
+      unset: 0,
     };
     const byNationality = {
       moroccan: 0,

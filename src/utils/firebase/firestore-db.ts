@@ -98,10 +98,12 @@ export const databaseApi: DataBaseApiInterface = {
         : '';
 
       // Prepare submission data with timestamp
-      const { residencePermitUrl, ...others } = submissionData;
+      const { residencePermitUrl, school2LearningAgreementUrl, ...others } =
+        submissionData;
       const submissionWithTimestamp = {
         ...others,
         ...(residencePermitUrl ? { residencePermitUrl } : {}), // only add if defined
+        ...(school2LearningAgreementUrl ? { school2LearningAgreementUrl } : {}), // only add if defined
       };
 
       // Save to Firestore

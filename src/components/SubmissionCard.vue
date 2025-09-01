@@ -49,6 +49,9 @@ const getAvailableDocuments = () => {
     if (doc.key === 'residencePermit') {
       return props.submission.residencePermitUrl;
     }
+    if (doc.key === 'school2LearningAgreement') {
+      return props.submission.school2LearningAgreementUrl;
+    }
     return props.submission[doc.urlKey as keyof SubmissionMetaDb];
   });
 };

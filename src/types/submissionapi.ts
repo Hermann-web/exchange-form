@@ -6,7 +6,8 @@ export type School =
   | 'centrale_lille'
   | 'centrale_mediterranee'
   | 'centrale_lyon'
-  | 'centrale_pekin';
+  | 'centrale_pekin'
+  | 'unset';
 
 export interface SubmissionFormMeta {
   firstName: string;
@@ -38,7 +39,7 @@ export interface SubmissionFormObject {
   s6Transcripts: File; // 2-page PDF
   residencePermit?: File; // required only for non-Moroccans, .pdf
   school1LearningAgreement: File; // pdf
-  school2LearningAgreement: File; // pdf
+  school2LearningAgreement?: File; // pdf
   passeportPdf: File; // pdf
 }
 
@@ -52,7 +53,7 @@ export interface SubmissionFormObjectUrls {
   s6TranscriptsUrl: string; // public download URL for S6 transcripts
   residencePermitUrl?: string; // if applicable
   school1LearningAgreementUrl: string; // pdf
-  school2LearningAgreementUrl: string; // pdf
+  school2LearningAgreementUrl?: string; // pdf
   passeportUrl: string; // pdf
 }
 

@@ -35,7 +35,10 @@ export const fileStorageApi: FileStorageApiInterface = {
           ? uploadFile(formData.residencePermit, `${basePath}/residence_permit.pdf`)
           : Promise.resolve(undefined),
         uploadFile(formData.school1LearningAgreement, `${basePath}/la_school1.pdf`),
-        uploadFile(formData.school2LearningAgreement, `${basePath}/la_school2.pdf`),
+        // Only upload school2LearningAgreement if provided (for non-Moroccans)
+        formData.school2LearningAgreement
+          ? uploadFile(formData.school2LearningAgreement, `${basePath}/la_school2.pdf`)
+          : Promise.resolve(undefined),
         uploadFile(formData.passeportPdf, `${basePath}/passeport.pdf`),
       ]);
 
@@ -46,7 +49,8 @@ export const fileStorageApi: FileStorageApiInterface = {
         s6TranscriptsUrl,
         ...(residencePermitUrl && { residencePermitUrl }),
         school1LearningAgreementUrl,
-        school2LearningAgreementUrl,
+        ...(school2LearningAgreementUrl && { school2LearningAgreementUrl }),
+
         passeportUrl,
       };
 
