@@ -150,7 +150,7 @@ const setMetaField = <K extends keyof SubmissionFormMeta>(
         <DocumentTextIcon class="w-16 h-16 text-blue-300 mx-auto mb-4" />
         <h1 class="text-3xl font-bold text-white mb-2">Submit Exchange Application</h1>
         <p class="text-blue-100">
-          Fill out the form below to submit your S8 exchange application
+          Fill out the form below to submit your exchange application
         </p>
       </div>
     </div>
