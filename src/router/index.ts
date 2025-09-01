@@ -77,6 +77,7 @@ const router = createRouter({
           path: 'admin/all-submissions/in-school',
           name: 'admin-all-submissions-in-school',
           component: () => import('@/views/AllSubmissions.vue'),
+          meta: { requiresAuth: true, requiresAdmin: true },
         },
       ],
     },
@@ -102,6 +103,10 @@ router.beforeEach(async (to, _from, next) => {
   if (to.meta.requiresAuth) {
     if (!authStore.isAuthenticated) return next('/login');
     if (!authStore.isVerified && to.name !== 'verify') return next('/verify');
+  }
+
+  if (to.meta.requiresAdmin) {
+    if (!authStore.isAdmin) return next('/dashboard');
   }
 
   // Prevent logged-in users from going back to auth pages

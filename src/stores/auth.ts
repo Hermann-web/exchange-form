@@ -5,6 +5,13 @@ import { authApi } from '@/utils/api';
 import type { User } from '@/types';
 import type { AuthSession, SignupRequest, UserProfile } from '@/types/authapi';
 
+const ADMIN_EMAILS = import.meta.env.VITE_ADMIN_EMAILS;
+// assert not undefined and not empty
+if (!ADMIN_EMAILS || ADMIN_EMAILS.trim() === '') {
+  throw new Error('VITE_ADMIN_EMAILS is not set');
+}
+const adminEmails = ADMIN_EMAILS.split(',');
+
 export const useAuthStore = defineStore('auth', () => {
   const user = ref<User | null>(null);
   const session = ref<AuthSession | null>(null);
@@ -14,6 +21,8 @@ export const useAuthStore = defineStore('auth', () => {
 
   const isAuthenticated = computed(() => !!session.value && !!user.value);
   const isVerified = computed(() => !!user.value?.is_email_verified);
+
+  const isAdmin = computed(() => adminEmails.includes(user.value?.email || ''));
 
   const setSession = (newSession: AuthSession | null): void => {
     session.value = newSession;
@@ -202,6 +211,7 @@ export const useAuthStore = defineStore('auth', () => {
     initialized,
     isAuthenticated,
     isVerified,
+    isAdmin,
 
     // Actions
     login,
