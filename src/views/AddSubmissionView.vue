@@ -147,9 +147,11 @@ const setMetaField = <K extends keyof SubmissionFormMeta>(
     <div class="glass rounded-2xl p-8 mb-8">
       <div class="text-center">
         <DocumentTextIcon class="w-16 h-16 text-blue-300 mx-auto mb-4" />
-        <h1 class="text-3xl font-bold text-white mb-2">Submit Exchange Application</h1>
+        <h1 class="text-3xl font-bold text-white mb-2">
+          Soumettre une demande de mobilité
+        </h1>
         <p class="text-blue-100">
-          Fill out the form below to submit your exchange application
+          Remplissez le formulaire ci-dessous pour soumettre votre demande de mobilité
         </p>
       </div>
     </div>
@@ -171,7 +173,7 @@ const setMetaField = <K extends keyof SubmissionFormMeta>(
       <div class="glass rounded-xl p-6">
         <h2 class="text-xl font-semibold text-white mb-6 flex items-center">
           <InformationCircleIcon class="w-5 h-5 mr-2" />
-          Personal Information
+          Informations Personnelles
         </h2>
 
         <div class="grid md:grid-cols-2 gap-6">
@@ -189,7 +191,7 @@ const setMetaField = <K extends keyof SubmissionFormMeta>(
 
       <!-- Exchange Choices -->
       <div class="glass rounded-xl p-6">
-        <h2 class="text-xl font-semibold text-white mb-6">Exchange Preferences</h2>
+        <h2 class="text-xl font-semibold text-white mb-6">Préférences de mobilité</h2>
 
         <SchoolChoice
           v-for="(choice, index) in schoolChoices"
@@ -206,7 +208,7 @@ const setMetaField = <K extends keyof SubmissionFormMeta>(
       <div class="glass rounded-xl p-6">
         <h2 class="text-xl font-semibold text-white mb-6 flex items-center">
           <PaperClipIcon class="w-5 h-5 mr-2" />
-          Required Documents
+          Documents Requis
         </h2>
 
         <div class="space-y-6">
@@ -250,9 +252,9 @@ const setMetaField = <K extends keyof SubmissionFormMeta>(
                 d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
               ></path>
             </svg>
-            Submitting Application...
+            Soumission de la demande...
           </span>
-          <span v-else>Submit Application</span>
+          <span v-else>Soumettre la demande</span>
         </button>
       </div>
     </form>
@@ -262,15 +264,20 @@ const setMetaField = <K extends keyof SubmissionFormMeta>(
   <div
     class="bg-yellow-500/10 border border-yellow-400/30 rounded-lg p-4 text-sm text-yellow-200"
   >
-    <p class="mb-2">✅ By submitting, you confirm that:</p>
+    <p class="mb-2">✅ En soumettant, vous confirmez que :</p>
     <ul class="list-disc pl-6 space-y-1">
       <li>
-        All provided information and documents are
-        <strong>accurate and authentic</strong>.
+        Toutes les informations et documents fournis sont
+        <strong>exactes et authentiques</strong>.
       </li>
-      <li>ECTS credits in your Learning Agreement are correctly matched.</li>
-      <li>Electives were checked on the official school websites.</li>
-      <li>Late submissions will not be accepted once the platform closes.</li>
+      <li>
+        Les crédits ECTS dans votre Learning Agreement sont correctement renseignés.
+      </li>
+      <li>Les électifs ont été vérifiés sur les sites officiels des écoles.</li>
+      <li>
+        Les soumissions tardives ne seront pas acceptées après la fermeture de la
+        plateforme.
+      </li>
     </ul>
   </div>
 </template>

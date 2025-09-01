@@ -25,14 +25,14 @@ const handleLogout = async () => {
             <router-link to="/dashboard" class="flex items-center space-x-3">
               <img
                 src="/logo-48x48.png"
-                alt="Student Exchange Logo"
+                alt="Logo Mobilité Étudiant"
                 class="h-8 w-8 rounded-lg"
               />
               <span class="text-white font-semibold text-xl hidden sm:inline">
-                Student Academic Exchange Application
+                Application d'Échange Académique Étudiant
               </span>
               <span class="text-white font-semibold text-xl sm:hidden">
-                Academic Exchange
+                Échange Académique
               </span>
             </router-link>
           </div>
@@ -44,14 +44,14 @@ const handleLogout = async () => {
               class="text-blue-100 hover:text-white px-3 py-2 rounded-md text-sm font-medium transition-colors hidden sm:block"
               :class="{ 'bg-white/20': $route.name === 'dashboard' }"
             >
-              Dashboard
+              Tableau de bord
             </router-link>
             <router-link
               to="/add-submission"
               class="text-blue-100 hover:text-white px-3 py-2 rounded-md text-sm font-medium transition-colors"
               :class="{ 'bg-white/20': $route.name === 'add-submission' }"
             >
-              Submit Application
+              Soumettre une demande
             </router-link>
             <div class="items-center space-x-3 hidden sm:flex">
               <span class="text-blue-100 text-sm">{{ authStore.user?.email }}</span>
@@ -59,7 +59,7 @@ const handleLogout = async () => {
                 @click="handleLogout"
                 class="text-red-200 hover:text-white px-3 py-1 rounded-md text-sm font-medium transition-colors"
               >
-                Logout
+                Se déconnecter
               </button>
             </div>
           </div>
@@ -77,7 +77,8 @@ const handleLogout = async () => {
       <div class="max-w-7xl mx-auto px-4 py-6 sm:px-6 lg:px-8">
         <div class="text-center text-blue-100 text-sm">
           <p>
-            &copy; 2025 Student Academic Exchange Application - Secure Document Submission
+            &copy; 2025 Application d'Échange Académique Étudiant - Soumission de
+            documents sécurisée
           </p>
         </div>
       </div>

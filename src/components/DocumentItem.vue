@@ -53,7 +53,7 @@ const handleDownload = () => {
     </div>
     <button @click="handleDownload" class="btn-secondary flex items-center py-2 px-4">
       <ArrowDownTrayIcon class="w-4 h-4 mr-2" />
-      Download
+      Télécharger
     </button>
   </div>
 </template>

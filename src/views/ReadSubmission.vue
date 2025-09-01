@@ -15,7 +15,6 @@ import {
 } from '@heroicons/vue/24/outline';
 import * as Icons from '@heroicons/vue/24/outline';
 
-// Shared configuration and components
 import {
   schoolChoices,
   createDocumentConfigs,
@@ -29,17 +28,15 @@ const router = useRouter();
 const authStore = useAuthStore();
 const submissionStore = useSubmissionStore();
 
-// Computed properties
 const submission = computed(() => submissionStore.mySubmission);
 const documentConfigs = createDocumentConfigs(Icons);
 
-// Personal information fields configuration
 const personalInfoFields = computed(() => {
   if (!submission.value) return [];
 
   return [
     {
-      label: 'Full Name',
+      label: 'Nom Complet',
       value: `${submission.value.firstName} ${submission.value.lastName}`,
     },
     {
@@ -47,13 +44,12 @@ const personalInfoFields = computed(() => {
       value: submission.value.email,
     },
     {
-      label: 'Nationality',
-      value: submission.value.nationality === 'moroccan' ? 'Moroccan' : 'Other',
+      label: 'Nationalité',
+      value: submission.value.nationality === 'moroccan' ? 'Marocaine' : 'Autre',
     },
   ];
 });
 
-// Get available documents for this submission
 const availableDocuments = computed(() => {
   if (!submission.value) return [];
 
@@ -68,12 +64,10 @@ const availableDocuments = computed(() => {
   });
 });
 
-// Action handlers
 const handleDownloadFile = (url: string, filename: string) => {
   downloadFile(url, filename);
 };
 
-// Initialize data
 onMounted(async () => {
   if (authStore.user?.email) {
     await submissionStore.fetchMySubmission(authStore.user.email);
@@ -109,12 +103,12 @@ onMounted(async () => {
     <!-- No Submission State -->
     <div v-else-if="!submission" class="glass rounded-2xl p-8 text-center">
       <XCircleIcon class="w-16 h-16 text-red-400 mx-auto mb-4" />
-      <h2 class="text-2xl font-bold text-white mb-2">No Submission Found</h2>
+      <h2 class="text-2xl font-bold text-white mb-2">Aucune candidature trouvée</h2>
       <p class="text-blue-100 mb-6">
-        You haven't submitted your exchange application yet.
+        Vous n'avez pas encore soumis votre candidature d'échange.
       </p>
       <router-link to="/add-submission" class="btn-primary">
-        Submit Application
+        Soumettre une candidature
       </router-link>
     </div>
 
@@ -125,10 +119,10 @@ onMounted(async () => {
         <div class="text-center mb-6">
           <CheckCircleIcon class="w-16 h-16 text-green-400 mx-auto mb-4" />
           <h1 class="text-3xl font-bold text-white mb-2">
-            Application Submitted Successfully
+            Candidature soumise avec succès
           </h1>
           <p class="text-blue-100">
-            Your exchange application has been received and is under review.
+            Votre candidature d'échange a été reçue et est en cours de traitement.
           </p>
         </div>
 
@@ -137,7 +131,7 @@ onMounted(async () => {
         >
           <div class="flex items-center">
             <CalendarIcon class="w-4 h-4 mr-2" />
-            Submitted: {{ formatDate(submission.createdAt) }}
+            Soumis le : {{ formatDate(submission.createdAt) }}
           </div>
         </div>
       </div>
@@ -146,7 +140,7 @@ onMounted(async () => {
       <div class="glass rounded-xl p-6">
         <h2 class="text-xl font-semibold text-white mb-6 flex items-center">
           <UserIcon class="w-5 h-5 mr-2" />
-          Personal Information
+          Informations personnelles
         </h2>
 
         <div class="grid md:grid-cols-2 gap-6">
@@ -163,7 +157,7 @@ onMounted(async () => {
       <div class="glass rounded-xl p-6">
         <h2 class="text-xl font-semibold text-white mb-6 flex items-center">
           <GlobeAltIcon class="w-5 h-5 mr-2" />
-          Exchange Preferences
+          Préférences d'échange
         </h2>
 
         <div class="space-y-8">
@@ -180,7 +174,7 @@ onMounted(async () => {
       <div class="glass rounded-xl p-6">
         <h2 class="text-xl font-semibold text-white mb-6 flex items-center">
           <PaperClipIcon class="w-5 h-5 mr-2" />
-          Submitted Documents
+          Documents soumis
         </h2>
 
         <div class="space-y-4">
@@ -190,7 +184,7 @@ onMounted(async () => {
             :document="document"
             :url="
               submission[document.urlKey] ||
-              'internal error: undefined url after filtering'
+              'erreur interne : URL non définie après filtrage'
             "
             @download="handleDownloadFile"
           />
@@ -199,16 +193,16 @@ onMounted(async () => {
 
       <!-- Application Status -->
       <div class="glass rounded-xl p-6">
-        <h2 class="text-xl font-semibold text-white mb-6">Application Status</h2>
+        <h2 class="text-xl font-semibold text-white mb-6">Statut de la candidature</h2>
 
         <div class="bg-yellow-500/20 border border-yellow-400/30 rounded-lg p-4">
           <div class="flex items-center">
             <ExclamationCircleIcon class="h-6 w-6 text-yellow-400 mr-3 flex-shrink-0" />
             <div>
-              <p class="text-yellow-200 font-medium">Under Review</p>
+              <p class="text-yellow-200 font-medium">En cours de traitement</p>
               <p class="text-yellow-100 text-sm mt-1">
-                Your application is currently being reviewed by the admissions committee.
-                You will be notified of the status via email.
+                Votre candidature est actuellement examinée par le comité d'admission.
+                Vous serez informé du statut par email.
               </p>
             </div>
           </div>
@@ -217,7 +211,9 @@ onMounted(async () => {
 
       <!-- Actions -->
       <div class="flex justify-center">
-        <router-link to="/dashboard" class="btn-primary"> Back to Dashboard </router-link>
+        <router-link to="/dashboard" class="btn-primary">
+          Retour au tableau de bord
+        </router-link>
       </div>
     </div>
   </div>

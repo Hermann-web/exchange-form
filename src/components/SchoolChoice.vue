@@ -23,7 +23,6 @@ interface Props {
 }
 
 const props = defineProps<Props>();
-// const { choice, form, errors, schoolOptions } = defineProps<Props>();
 
 // Initialize electives array from semicolon-separated string
 const initializeElectives = () => {
@@ -73,37 +72,39 @@ const updateElective = (index: number, value: string) => {
 // Placeholder suggestions based on choice
 const getPlaceholder = (index: number) => {
   const suggestions =
-    props.choice.title === 'First Choice'
+    props.choice.title === 'first_choice'
       ? [
-          'Machine Learning',
-          'Data Science',
-          'AI Ethics',
-          'Computer Vision',
-          'Natural Language Processing',
+          'Apprentissage automatique',
+          'Science des données',
+          'Éthique de l’IA',
+          'Vision par ordinateur',
+          'Traitement du langage naturel',
         ]
       : [
-          'Software Engineering',
-          'Web Development',
-          'Mobile Apps',
+          'Génie logiciel',
+          'Développement web',
+          'Applications mobiles',
           'DevOps',
-          'Cybersecurity',
+          'Cybersécurité',
         ];
 
-  return suggestions[index % suggestions.length] || 'Enter elective';
+  return suggestions[index % suggestions.length] || 'Saisir un cours optionnel';
 };
 </script>
 
 <template>
   <div>
-    <h3 class="text-lg font-medium text-blue-200 mb-4">{{ choice.title }}</h3>
+    <h3 class="text-lg font-medium text-blue-200 mb-4">
+      {{ choice.title === 'first_choice' ? 'Premier Choix' : 'Deuxième Choix' }}
+    </h3>
 
     <div class="grid md:grid-cols-2 gap-6">
       <!-- School Selection -->
       <div>
-        <label class="block text-blue-100 text-sm font-medium mb-2">School *</label>
+        <label class="block text-blue-100 text-sm font-medium mb-2">École *</label>
         <select v-model="form[choice.schoolKey]" class="input-field">
           <option
-            v-for="school in props.choice.title === 'First Choice'
+            v-for="school in props.choice.title === 'first_choice'
               ? props.schoolOptions.filter((s) => s.value !== 'unset')
               : props.schoolOptions"
             :key="school.value"
@@ -124,7 +125,7 @@ const getPlaceholder = (index: number) => {
         <label class="block text-blue-100 text-sm font-medium mb-2">
           {{
             form[choice.schoolKey] === 'centrale_supelec'
-              ? 'Thematic Sequence'
+              ? 'Séquence Thématique'
               : 'Parcours'
           }}
         </label>
@@ -134,23 +135,22 @@ const getPlaceholder = (index: number) => {
           class="input-field"
           :placeholder="
             form[choice.schoolKey] === 'centrale_supelec'
-              ? 'Enter thematic sequence'
-              : 'Enter parcours'
+              ? 'Saisir la séquence thématique'
+              : 'Saisir le parcours'
           "
         />
       </div>
 
-      <!-- Dynamic Electives -->
-
+      <!-- Dynamic Électifs -->
       <div v-if="form[choice.schoolKey] !== 'unset'" class="md:col-span-2">
         <div class="flex items-center justify-between mb-2">
-          <label class="block text-blue-100 text-sm font-medium"> Electives </label>
+          <label class="block text-blue-100 text-sm font-medium"> Electifs </label>
           <button
             type="button"
             @click="addElective"
             class="text-blue-300 hover:text-blue-100 text-sm font-medium transition-colors"
           >
-            + Add Elective
+            + Ajouter un cours
           </button>
         </div>
 
@@ -171,7 +171,7 @@ const getPlaceholder = (index: number) => {
               type="button"
               @click="removeElective(index)"
               class="text-red-300 hover:text-red-100 px-2 py-1 transition-colors"
-              title="Remove elective"
+              title="Supprimer le cours"
             >
               ×
             </button>
@@ -184,7 +184,7 @@ const getPlaceholder = (index: number) => {
               @click="addElective"
               class="text-blue-300 hover:text-blue-100 text-sm transition-colors border border-blue-400 hover:border-blue-300 px-4 py-2 rounded"
             >
-              Add First Elective
+              Ajouter le premier cours
             </button>
           </div>
         </div>

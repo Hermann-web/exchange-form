@@ -91,7 +91,7 @@ export const schoolLabels: Record<School, string> = {
 
 export const schoolChoices: SchoolChoiceConfig[] = [
   {
-    title: 'First Choice',
+    title: 'first_choice',
     schoolKey: 'school1',
     thematicKey: 'thematicSequence1',
     electivesKey: 'electives1',
@@ -99,7 +99,7 @@ export const schoolChoices: SchoolChoiceConfig[] = [
     bgClass: 'bg-green-500/10 border-green-400/20',
   },
   {
-    title: 'Second Choice',
+    title: 'second_choice',
     schoolKey: 'school2',
     thematicKey: 'thematicSequence2',
     electivesKey: 'electives2',
@@ -113,48 +113,49 @@ export const createDocumentConfigs = (icons: any) => {
   const documentConfigs: DocumentDisplay<SubmissionFormObjectUrls>[] = [
     {
       key: 'applicationForm',
-      label: 'Application Form',
-      description: 'Microsoft Word Document (.docx)',
+      label: 'Formulaire de dossier de candidature pour la mobilité S8',
+      description: 'Document Microsoft Word (.docx)',
       icon: icons.DocumentTextIcon,
       filename: 'application-form.docx',
       urlKey: 'applicationFormUrl',
     },
     {
       key: 'resume',
-      label: 'Resume/CV',
-      description: 'PDF Document (.pdf)',
+      label:
+        'Curriculum Vitae (CV) actualisé en y indiquant le lien de votre profil LinkedIn',
+      description: 'Document PDF (.pdf)',
       icon: icons.AcademicCapIcon,
       filename: 'resume.pdf',
       urlKey: 'resumeUrl',
     },
     {
       key: 's5Transcripts',
-      label: 'S5 Transcripts',
-      description: 'PDF Document (.pdf)',
+      label: 'Relevés de notes S5 (2 pages)',
+      description: 'Document PDF (.pdf)',
       icon: icons.DocumentTextIcon,
       filename: 's5-transcripts.pdf',
       urlKey: 's5TranscriptsUrl',
     },
     {
       key: 's6Transcripts',
-      label: 'S6 Transcripts',
-      description: 'PDF Document (.pdf)',
+      label: 'Relevés de notes S6 (2 pages)',
+      description: 'Document PDF (.pdf)',
       icon: icons.DocumentTextIcon,
       filename: 's6-transcripts.pdf',
       urlKey: 's6TranscriptsUrl',
     },
     {
       key: 'school1LearningAgreement',
-      label: 'Learning Agreement (School 1)',
-      description: 'PDF Document (.pdf)',
+      label: 'Learning Agreement (École 1)',
+      description: 'Document PDF (.pdf)',
       icon: icons.DocumentTextIcon,
       filename: 'learning-agreement-school1.pdf',
       urlKey: 'school1LearningAgreementUrl',
     },
     {
       key: 'school2LearningAgreement',
-      label: 'Learning Agreement (School 2)',
-      description: 'PDF Document (.pdf)',
+      label: 'Learning Agreement (École 2)',
+      description: 'Document PDF (.pdf)',
       icon: icons.DocumentTextIcon,
       filename: 'learning-agreement-school2.pdf',
       urlKey: 'school2LearningAgreementUrl',
@@ -162,15 +163,15 @@ export const createDocumentConfigs = (icons: any) => {
     {
       key: 'passeport',
       label: 'Passeport',
-      description: 'PDF Document (.pdf)',
+      description: 'Document PDF (.pdf)',
       icon: icons.DocumentTextIcon,
       filename: 'passeport.pdf',
       urlKey: 'passeportUrl',
     },
     {
       key: 'residencePermit',
-      label: 'Residence Permit',
-      description: 'PDF Document (.pdf)',
+      label: 'Titre de séjour',
+      description: 'Document PDF (.pdf)',
       icon: icons.DocumentTextIcon,
       filename: 'residence-permit.pdf',
       urlKey: 'residencePermitUrl',
@@ -182,7 +183,7 @@ export const createDocumentConfigs = (icons: any) => {
 
 // Utility functions
 export const formatDate = (dateString: string) => {
-  return new Date(dateString).toLocaleDateString('en-US', {
+  return new Date(dateString).toLocaleDateString('fr-FR', {
     year: 'numeric',
     month: 'long',
     day: 'numeric',

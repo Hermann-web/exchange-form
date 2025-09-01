@@ -24,28 +24,29 @@ const { choice, submission, compact } = defineProps<Props>();
           : 'text-lg font-medium mb-4'
       "
     >
-      {{ choice.emoji }} {{ choice.title }}
+      {{ choice.emoji }}
+      {{ choice.title === 'first_choice' ? 'Premier Choix' : 'Deuxième Choix' }}
     </h4>
 
     <div class="space-y-2 text-sm" v-if="compact">
       <div class="flex justify-between">
-        <span class="text-blue-300">School:</span>
+        <span class="text-blue-300">École:</span>
         <span class="text-white font-medium">
           {{ schoolLabels[submission[choice.schoolKey]] }}
         </span>
       </div>
       <div v-if="submission[choice.thematicKey]" class="flex justify-between">
-        <span class="text-blue-300">Sequence:</span>
+        <span class="text-blue-300">Séquence Thématique:</span>
         <span class="text-white">{{ submission[choice.thematicKey] }}</span>
       </div>
       <div v-if="submission[choice.electivesKey]" class="mt-3">
-        <span class="text-blue-300 text-xs">Electives:</span>
+        <span class="text-blue-300 text-xs">Électifs:</span>
         <div class="flex flex-wrap gap-1 mt-1">
           <span
             v-for="elective in getElectives(submission[choice.electivesKey])"
             :key="elective"
             :class="
-              choice.title.includes('First')
+              choice.title === 'first_choice'
                 ? 'bg-green-500/20 text-green-200'
                 : 'bg-yellow-500/20 text-yellow-200'
             "
@@ -60,7 +61,7 @@ const { choice, submission, compact } = defineProps<Props>();
     <div v-else class="space-y-3">
       <div class="grid md:grid-cols-2 gap-4">
         <div>
-          <label class="block text-blue-300 text-sm font-medium mb-1">School</label>
+          <label class="block text-blue-300 text-sm font-medium mb-1">École</label>
           <p class="text-white font-medium">
             {{ schoolLabels[submission[choice.schoolKey]] }}
           </p>
@@ -69,13 +70,13 @@ const { choice, submission, compact } = defineProps<Props>();
 
       <div v-if="submission[choice.thematicKey]" class="pt-2">
         <label class="block text-blue-300 text-sm font-medium mb-1">
-          Thematic Sequence
+          Thematic Séquence Thématique
         </label>
         <p class="text-white">{{ submission[choice.thematicKey] }}</p>
       </div>
 
       <div v-if="submission[choice.electivesKey]" class="pt-2">
-        <label class="block text-blue-300 text-sm font-medium mb-2">Electives</label>
+        <label class="block text-blue-300 text-sm font-medium mb-2">Électifs</label>
         <div class="flex flex-wrap gap-2">
           <span
             v-for="elective in getElectives(submission[choice.electivesKey])"

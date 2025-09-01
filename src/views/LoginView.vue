@@ -20,7 +20,7 @@ const isSubmitting = ref(false);
 
 const emailError = computed(() => {
   if (!form.email) return '';
-  return !testEmail(form.email) ? 'Please enter a valid email' : '';
+  return !testEmail(form.email) ? 'Veuillez entrer un email valide' : '';
 });
 
 const isFormValid = computed(() => {
@@ -30,14 +30,14 @@ const isFormValid = computed(() => {
 const handleSubmit = async () => {
   if (!isFormValid.value) return;
   isSubmitting.value = true;
-  authStore.clearError(); // Clear any previous errors
+  authStore.clearError(); // Effacer les erreurs précédentes
   try {
     const success = await authStore.login(form.email, form.password);
     if (success) {
       router.push('/dashboard');
     }
   } catch (err) {
-    // Error handled in auth store
+    // Erreur gérée dans le store
   } finally {
     isSubmitting.value = false;
   }
@@ -49,8 +49,10 @@ const handleSubmit = async () => {
     <div class="w-full max-w-md">
       <!-- Header -->
       <div class="text-center mb-8">
-        <h1 class="text-3xl font-bold text-white mb-2">Welcome Back</h1>
-        <p class="text-blue-100">Sign in to access your exchange portal</p>
+        <h1 class="text-3xl font-bold text-white mb-2">Bienvenue</h1>
+        <p class="text-blue-100">
+          Connectez-vous pour accéder à votre portail d'échange académique
+        </p>
       </div>
 
       <!-- Login Form -->
@@ -58,7 +60,7 @@ const handleSubmit = async () => {
         <form @submit.prevent="handleSubmit" class="space-y-6">
           <div>
             <label for="email" class="block text-blue-100 text-sm font-medium mb-2">
-              Email Address
+              Adresse Email
             </label>
             <input
               id="email"
@@ -66,7 +68,7 @@ const handleSubmit = async () => {
               type="email"
               required
               class="input-field"
-              placeholder="student@university.edu"
+              placeholder="etudiant@universite.ma"
               :class="{ 'border-red-400': emailError }"
             />
             <p v-if="emailError" class="text-red-300 text-xs mt-1">
@@ -77,13 +79,13 @@ const handleSubmit = async () => {
           <div>
             <div class="flex justify-between items-center mb-2">
               <label for="password" class="block text-blue-100 text-sm font-medium">
-                Password
+                Mot de Passe
               </label>
               <router-link
                 to="/forgot-password"
                 class="text-blue-200 hover:text-white text-xs transition-colors"
               >
-                Forgot password?
+                Mot de passe oublié ?
               </router-link>
             </div>
             <div class="relative">
@@ -93,7 +95,7 @@ const handleSubmit = async () => {
                 :type="showPassword ? 'text' : 'password'"
                 required
                 class="input-field pr-12"
-                placeholder="Enter your password"
+                placeholder="Entrez votre mot de passe"
               />
               <button
                 type="button"
@@ -139,20 +141,20 @@ const handleSubmit = async () => {
                   d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
                 ></path>
               </svg>
-              Signing in...
+              Connexion en cours...
             </span>
-            <span v-else>Sign In</span>
+            <span v-else>Se Connecter</span>
           </button>
         </form>
 
         <div class="mt-6 text-center">
           <p class="text-blue-100 text-sm">
-            Don't have an account?
+            Vous n'avez pas de compte ?
             <router-link
               to="/signup"
               class="text-white font-semibold hover:underline ml-1"
             >
-              Create one
+              Créez-en un
             </router-link>
           </p>
         </div>

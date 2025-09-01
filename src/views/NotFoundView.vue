@@ -21,11 +21,11 @@ const goHome = () => {
 
         <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
           <button @click="goHome" class="btn-primary w-full sm:w-auto">
-            Back to Dashboard
+            Retour sur le Dashboard
           </button>
 
           <router-link to="/login" class="btn-secondary w-full sm:w-auto text-center">
-            Go to Login
+            Aller à la connection
           </router-link>
         </div>
       </div>

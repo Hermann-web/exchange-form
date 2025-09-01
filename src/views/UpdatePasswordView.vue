@@ -39,13 +39,15 @@ onMounted(() => {
 
 const passwordError = computed(() => {
   if (!form.newPassword) return '';
-  if (form.newPassword.length < 8) return 'Password must be at least 8 characters';
+  if (form.newPassword.length < 8)
+    return 'Le mot de passe doit contenir au moins 8 caractères';
   return '';
 });
 
 const confirmPasswordError = computed(() => {
   if (!form.confirmPassword) return '';
-  if (form.newPassword !== form.confirmPassword) return 'Passwords do not match';
+  if (form.newPassword !== form.confirmPassword)
+    return 'Les mots de passe ne correspondent pas';
   return '';
 });
 
@@ -103,30 +105,36 @@ const handleSubmit = async () => {
 
 <template>
   <div class="max-w-4xl mx-auto px-4 py-8 sm:px-6 lg:px-8">
-    <!-- Page Header -->
+    <!-- En-tête de la page -->
     <div class="mb-8">
       <h1 class="text-3xl font-bold text-white mb-2">
-        {{ isResetFlow ? 'Reset Your Password' : 'Update Password' }}
+        {{
+          isResetFlow
+            ? 'Réinitialiser votre mot de passe'
+            : 'Mettre à jour le mot de passe'
+        }}
       </h1>
       <p class="text-blue-100">
         {{
           isResetFlow
-            ? 'Enter your new password below'
-            : 'Change your current password to a new one'
+            ? 'Saisissez votre nouveau mot de passe ci-dessous'
+            : 'Changez votre mot de passe actuel pour un nouveau'
         }}
       </p>
     </div>
 
-    <!-- Success State -->
+    <!-- État de succès -->
     <div v-if="success" class="glass rounded-2xl p-8 text-center mb-8">
       <CheckCircleIcon class="h-16 w-16 text-green-400 mx-auto mb-4" />
-      <h2 class="text-xl font-semibold text-white mb-2">Password Updated Successfully</h2>
+      <h2 class="text-xl font-semibold text-white mb-2">
+        Mot de passe mis à jour avec succès
+      </h2>
       <p class="text-blue-100 mb-4">
-        Your password has been updated.
+        Votre mot de passe a été mis à jour.
         {{
           isResetFlow
-            ? 'You will be redirected to login shortly.'
-            : 'You will be redirected to dashboard shortly.'
+            ? 'Vous serez redirigé vers la page de connexion sous peu.'
+            : 'Vous serez redirigé vers le tableau de bord sous peu.'
         }}
       </p>
       <div
@@ -143,7 +151,7 @@ const handleSubmit = async () => {
             for="currentPassword"
             class="block text-blue-100 text-sm font-medium mb-2"
           >
-            Current Password
+            Mot de passe actuel
           </label>
           <div class="relative">
             <input
@@ -152,7 +160,7 @@ const handleSubmit = async () => {
               :type="showCurrentPassword ? 'text' : 'password'"
               required
               class="input-field pr-12"
-              placeholder="Enter your current password"
+              placeholder="Entrez votre mot de passe actuel"
             />
             <button
               type="button"
@@ -168,7 +176,7 @@ const handleSubmit = async () => {
         <!-- New Password -->
         <div>
           <label for="newPassword" class="block text-blue-100 text-sm font-medium mb-2">
-            New Password
+            Nouveau mot de passe
           </label>
           <div class="relative">
             <input
@@ -177,7 +185,7 @@ const handleSubmit = async () => {
               :type="showNewPassword ? 'text' : 'password'"
               required
               class="input-field pr-12"
-              placeholder="Enter your new password"
+              placeholder="Entrez votre nouveau mot de passe"
               :class="{ 'border-red-400': passwordError }"
             />
             <button
@@ -193,7 +201,7 @@ const handleSubmit = async () => {
             {{ passwordError }}
           </p>
           <p class="text-blue-200 text-xs mt-1">
-            Password must be at least 8 characters long
+            Le mot de passe doit contenir au moins 8 caractères
           </p>
         </div>
 
@@ -203,7 +211,7 @@ const handleSubmit = async () => {
             for="confirmPassword"
             class="block text-blue-100 text-sm font-medium mb-2"
           >
-            Confirm New Password
+            Confirmer le nouveau mot de passe
           </label>
           <div class="relative">
             <input
@@ -212,7 +220,7 @@ const handleSubmit = async () => {
               :type="showConfirmPassword ? 'text' : 'password'"
               required
               class="input-field pr-12"
-              placeholder="Confirm your new password"
+              placeholder="Confirmez votre nouveau mot de passe"
               :class="{ 'border-red-400': confirmPasswordError }"
             />
             <button
@@ -265,9 +273,9 @@ const handleSubmit = async () => {
                 d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
               ></path>
             </svg>
-            Updating...
+            Mise à jour...
           </span>
-          <span v-else>Update Password</span>
+          <span v-else>Mettre à jour le mot de passe</span>
         </button>
       </form>
 
@@ -277,8 +285,9 @@ const handleSubmit = async () => {
         class="mt-6 p-4 bg-blue-500/20 border border-blue-400/30 rounded-lg"
       >
         <p class="text-blue-100 text-sm">
-          <strong>Note:</strong> After updating your password, you'll be redirected to the
-          login page to sign in with your new credentials.
+          <strong>Note :</strong> Après avoir mis à jour votre mot de passe, vous serez
+          redirigé vers la page de connexion pour vous connecter avec vos nouvelles
+          informations.
         </p>
       </div>
     </div>
