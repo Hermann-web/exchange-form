@@ -103,7 +103,9 @@ const getPlaceholder = (index: number) => {
         <label class="block text-blue-100 text-sm font-medium mb-2">School *</label>
         <select v-model="form[choice.schoolKey]" class="input-field">
           <option
-            v-for="school in props.schoolOptions"
+            v-for="school in props.choice.title === 'First Choice'
+              ? props.schoolOptions.filter((s) => s.value !== 'unset')
+              : props.schoolOptions"
             :key="school.value"
             :value="school.value"
           >
