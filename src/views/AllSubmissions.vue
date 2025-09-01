@@ -50,8 +50,6 @@ const filteredAndSortedSubmissions = computed(() => {
         sub.firstName.toLowerCase().includes(query) ||
         sub.lastName.toLowerCase().includes(query) ||
         sub.email.toLowerCase().includes(query) ||
-        sub.program1.toLowerCase().includes(query) ||
-        sub.program2.toLowerCase().includes(query)
     );
   }
 
