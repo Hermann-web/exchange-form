@@ -97,7 +97,6 @@ const getAvailableDocuments = () => {
             <div class="text-sm font-medium text-white">
               {{ schoolLabels[submission.school1] }}
             </div>
-            <div class="text-xs text-blue-300">{{ submission.program1 }}</div>
           </div>
           <button @click="toggleExpanded" class="btn-secondary p-2 text-sm">
             <EyeIcon class="w-4 h-4" />
@@ -110,7 +109,6 @@ const getAvailableDocuments = () => {
         <div class="text-sm font-medium text-white">
           {{ schoolLabels[submission.school1] }}
         </div>
-        <div class="text-xs text-blue-300">{{ submission.program1 }}</div>
       </div>
     </div>
 
