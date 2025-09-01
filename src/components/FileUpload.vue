@@ -38,13 +38,23 @@ const handleFileChange = (event: Event) => {
       {{ config.label }}{{ config.required ? ' *' : '' }}
     </label>
 
-    <input
-      :accept="config.accept"
-      type="file"
-      class="file-input"
-      :class="{ 'border-red-400': error }"
-      @change="handleFileChange"
-    />
+    <!-- Styled button -->
+    <label
+      :class="[
+        'inline-flex items-center px-4 py-2 text-sm font-medium rounded-md cursor-pointer transition-colors',
+        error
+          ? 'bg-red-600 text-white hover:bg-red-700'
+          : 'bg-blue-600 text-white hover:bg-blue-700',
+      ]"
+    >
+      Choose File
+      <input
+        :accept="config.accept"
+        type="file"
+        class="hidden"
+        @change="handleFileChange"
+      />
+    </label>
 
     <!-- Error Message -->
     <p v-if="error" class="text-red-300 text-xs mt-1">
