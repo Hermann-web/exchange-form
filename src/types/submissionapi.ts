@@ -39,6 +39,7 @@ export interface SubmissionFormObject {
   school1LearningAgreement: File; // pdf
   school2LearningAgreement?: File; // pdf
   passeportPdf: File; // pdf
+  otherFilesPdf?: File; // pdf
 }
 
 export type SubmissionForm = SubmissionFormMeta & SubmissionFormObject;
@@ -53,6 +54,7 @@ export interface SubmissionFormObjectUrls {
   school1LearningAgreementUrl: string; // pdf
   school2LearningAgreementUrl?: string; // pdf
   passeportUrl: string; // pdf
+  otherFilesPdfUrl?: string; // pdf
 }
 
 export interface SubmissionData extends SubmissionFormMeta, SubmissionFormObjectUrls {

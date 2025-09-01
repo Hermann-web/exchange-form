@@ -52,6 +52,9 @@ const getAvailableDocuments = () => {
     if (doc.key === 'school2LearningAgreement') {
       return props.submission.school2LearningAgreementUrl;
     }
+    if (doc.key === 'otherFilesPdf') {
+      return props.submission.otherFilesPdfUrl;
+    }
     return props.submission[doc.urlKey as keyof SubmissionMetaDb];
   });
 };

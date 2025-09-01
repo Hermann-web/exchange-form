@@ -176,6 +176,14 @@ export const createDocumentConfigs = (icons: any) => {
       filename: 'residence-permit.pdf',
       urlKey: 'residencePermitUrl',
     },
+    {
+      key: 'otherFilesPdf',
+      label: 'Supporting Attachments',
+      description: 'Document PDF (.pdf)',
+      icon: icons.DocumentTextIcon,
+      filename: 'other-files.pdf',
+      urlKey: 'otherFilesPdfUrl',
+    },
   ];
 
   return documentConfigs;
@@ -330,6 +338,14 @@ export const createFileUploadFieldConfigs = (form: SubmissionForm) => {
       required: true,
       conditional: () => form.nationality === 'other',
     },
+    {
+      key: 'otherFilesPdf',
+      label: 'More Supporting Documents (onefile, optional) (.pdf)',
+      accept: '.pdf',
+      extensions: ['pdf'],
+      errorKey: 'otherFilesPdf',
+      required: true,
+    },
   ];
 
   return fileUploadConfigs;
@@ -382,6 +398,7 @@ export const initialize_submission_reactives = (
     school1LearningAgreement: null as any,
     school2LearningAgreement: null as any,
     passeportPdf: null as any,
+    otherFilesPdf: null as any,
   };
 
   const initial_errors: SubmissionErrorType = {
@@ -403,6 +420,7 @@ export const initialize_submission_reactives = (
     thematicSequence2: '',
     electives1: '',
     electives2: '',
+    otherFilesPdf: '',
   };
 
   return { initial_form, initial_errors };
