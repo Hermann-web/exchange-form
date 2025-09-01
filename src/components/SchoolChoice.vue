@@ -113,15 +113,27 @@ const getPlaceholder = (index: number) => {
       </div>
 
       <!-- Thematic Sequence (conditional) -->
-      <div v-if="form[choice.schoolKey] === 'centrale_supelec'">
+      <div
+        v-if="
+          ['centrale_supelec', 'centrale_mediterranee'].includes(form[choice.schoolKey])
+        "
+      >
         <label class="block text-blue-100 text-sm font-medium mb-2">
-          Thematic Sequence
+          {{
+            form[choice.schoolKey] === 'centrale_supelec'
+              ? 'Thematic Sequence'
+              : 'Parcours'
+          }}
         </label>
         <input
           v-model="form[choice.thematicKey]"
           type="text"
           class="input-field"
-          placeholder="Enter thematic sequence"
+          :placeholder="
+            form[choice.schoolKey] === 'centrale_supelec'
+              ? 'Enter thematic sequence'
+              : 'Enter parcours'
+          "
         />
       </div>
 
