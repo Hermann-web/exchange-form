@@ -28,7 +28,6 @@ import {
   schoolChoices,
   createPersonalFieldConfigs,
   createFileUploadFieldConfigs,
-  validateRequired,
   initialize_submission_reactives,
   validateAllFields,
 } from '@/components/types';
@@ -200,7 +199,6 @@ const setMetaField = <K extends keyof SubmissionFormMeta>(
           :errors="errors"
           :school-options="schoolOptions"
           :class="{ 'mb-8': index === 0 }"
-          @validate-program="validateRequired(choice.programKey, $event, errors)"
         />
       </div>
 

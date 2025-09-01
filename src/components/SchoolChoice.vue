@@ -11,7 +11,6 @@ interface SchoolOption {
 interface Choice {
   title: string;
   schoolKey: string;
-  programKey: string;
   thematicKey: string;
   electivesKey: string;
 }
@@ -25,14 +24,6 @@ interface Props {
 
 const props = defineProps<Props>();
 // const { choice, form, errors, schoolOptions } = defineProps<Props>();
-
-const emit = defineEmits<{
-  'validate-program': [value: string];
-}>();
-
-const handleProgramBlur = () => {
-  emit('validate-program', props.form[props.choice.programKey]);
-};
 
 // Initialize electives array from semicolon-separated string
 const initializeElectives = () => {
@@ -119,22 +110,6 @@ const getPlaceholder = (index: number) => {
             {{ school.label }}
           </option>
         </select>
-      </div>
-
-      <!-- Program -->
-      <div>
-        <label class="block text-blue-100 text-sm font-medium mb-2">Program *</label>
-        <input
-          v-model="form[choice.programKey]"
-          @blur="handleProgramBlur"
-          type="text"
-          class="input-field"
-          :class="{ 'border-red-400': props.errors[choice.programKey] }"
-          placeholder="e.g., Qualité et statistique en production, Engineering..."
-        />
-        <p v-if="props.errors[choice.programKey]" class="text-red-300 text-xs mt-1">
-          {{ props.errors[choice.programKey] }}
-        </p>
       </div>
 
       <!-- Thematic Sequence (conditional) -->
