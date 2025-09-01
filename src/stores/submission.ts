@@ -45,6 +45,14 @@ export const useSubmissionStore = defineStore('submission', () => {
     isSubmitting.value = true;
     error.value = null;
 
+    // some check
+    // if choice is unset, empty some fields
+    if (formData.school2 == 'unset') {
+      formData.electives2 = '';
+      formData.school2LearningAgreement = undefined;
+      formData.thematicSequence2 = '';
+    }
+
     try {
       // Step 1: Upload files to storage and get URLs
       console.log('Upload files to storage and get URLs');
