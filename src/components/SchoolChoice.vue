@@ -117,6 +117,7 @@ const getPlaceholder = (index: number) => {
       <!-- Thematic Sequence (conditional) -->
       <div
         v-if="
+          form[choice.schoolKey] !== 'unset' &&
           ['centrale_supelec', 'centrale_mediterranee'].includes(form[choice.schoolKey])
         "
       >
@@ -140,7 +141,8 @@ const getPlaceholder = (index: number) => {
       </div>
 
       <!-- Dynamic Electives -->
-      <div class="md:col-span-2">
+
+      <div v-if="form[choice.schoolKey] !== 'unset'" class="md:col-span-2">
         <div class="flex items-center justify-between mb-2">
           <label class="block text-blue-100 text-sm font-medium"> Electives </label>
           <button
