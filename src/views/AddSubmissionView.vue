@@ -57,12 +57,18 @@ const fileUploadConfigs: FileUploadField<SubmissionFormObject>[] =
 
 const validateFile = (
   field: keyof SubmissionFormObject,
+  required: boolean,
   file: File | null,
   extensions: FileExtension[]
 ): void => {
   if (!file) {
-    errors[field] = 'This file is required';
-    return;
+    if (required) {
+      errors[field] = 'This file is required';
+      return;
+    } else {
+      errors[field] = '';
+      return;
+    }
   }
 
   const extension = file.name.split('.').pop()?.toLowerCase();
@@ -91,7 +97,7 @@ const handleFileChange = (
 ) => {
   if (file) {
     form[fileConfig.key] = file;
-    validateFile(fileConfig.errorKey, file, fileConfig.extensions);
+    validateFile(fileConfig.errorKey, fileConfig.required, file, fileConfig.extensions);
   }
 };
 
@@ -111,7 +117,7 @@ const handleSubmit = async () => {
   fileUploadConfigs.forEach((fileConfig) => {
     if (!fileConfig.conditional || fileConfig.conditional()) {
       const file = form[fileConfig.key] as File | null;
-      validateFile(fileConfig.errorKey, file, fileConfig.extensions);
+      validateFile(fileConfig.errorKey, fileConfig.required, file, fileConfig.extensions);
     }
   });
 

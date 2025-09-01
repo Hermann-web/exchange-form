@@ -89,6 +89,22 @@ export const schoolLabels: Record<School, string> = {
   unset: 'Aucun',
 };
 
+interface ElectiveConstraints {
+  min: number;
+  max?: number;
+}
+
+// some have a max others min=max>0
+export const schoolElectiveConstraints: Record<School, ElectiveConstraints> = {
+  centrale_supelec: { min: 1 },
+  em_lyon: { min: 1 },
+  centrale_lille: { min: 1 },
+  centrale_mediterranee: { min: 1 },
+  centrale_lyon: { min: 1 },
+  centrale_pekin: { min: 1 },
+  unset: { min: 0 }, // could set max=0
+};
+
 export const schoolChoices: SchoolChoiceConfig[] = [
   {
     title: 'first_choice',
@@ -344,7 +360,7 @@ export const createFileUploadFieldConfigs = (form: SubmissionForm) => {
       accept: '.pdf',
       extensions: ['pdf'],
       errorKey: 'otherFilesPdf',
-      required: true,
+      required: false,
     },
   ];
 
@@ -438,14 +454,26 @@ export const validateAllFields = (
     form.resumePdf,
     form.s5Transcripts,
     form.s6Transcripts,
-    form.school1LearningAgreement,
     form.passeportPdf,
   ];
+
+  if (form.school1 === 'centrale_supelec' || form.school1 == 'centrale_mediterranee') {
+    requiredFields.push(form.thematicSequence1);
+  }
+
+  if (form.school2 === 'centrale_supelec' || form.school2 == 'centrale_mediterranee') {
+    requiredFields.push(form.thematicSequence2);
+  }
 
   if (form.nationality === 'other') {
     requiredFields.push(form.residencePermit);
   }
+  if (form.school1 !== 'unset') {
+    requiredFields.push(form.electives1);
+    requiredFields.push(form.school1LearningAgreement);
+  }
   if (form.school2 !== 'unset') {
+    requiredFields.push(form.electives2);
     requiredFields.push(form.school2LearningAgreement);
   }
 
