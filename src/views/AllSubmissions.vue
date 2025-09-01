@@ -25,16 +25,16 @@ const sortOrder = ref<'asc' | 'desc'>('desc');
 
 // Filter options configuration
 const filterOptions = {
-  schools: [{ value: 'all' as const, label: 'All Schools' }, ...schoolOptions],
+  schools: [{ value: 'all' as const, label: 'Toutes les écoles' }, ...schoolOptions],
   nationalities: [
-    { value: 'all' as const, label: 'All Nationalities' },
-    { value: 'moroccan' as const, label: 'Moroccan' },
-    { value: 'other' as const, label: 'International' },
+    { value: 'all' as const, label: 'Toutes les nationalités' },
+    { value: 'moroccan' as const, label: 'Marocaine' },
+    { value: 'other' as const, label: 'Internationale' },
   ],
   sortBy: [
-    { value: 'date' as const, label: 'Sort by Date' },
-    { value: 'name' as const, label: 'Sort by Name' },
-    { value: 'school' as const, label: 'Sort by School' },
+    { value: 'date' as const, label: 'Trier par Date' },
+    { value: 'name' as const, label: 'Trier par Nom' },
+    { value: 'school' as const, label: 'Trier par École' },
   ],
 };
 
@@ -125,10 +125,10 @@ onMounted(async () => {
         <div class="mb-4 lg:mb-0">
           <h1 class="text-2xl sm:text-3xl font-bold text-white mb-2 flex items-center">
             <UsersIcon class="w-6 sm:w-8 h-6 sm:h-8 mr-3" />
-            Submissions Dashboard
+            Tableau de Bord des Soumissions
           </h1>
           <p class="text-blue-100 text-sm sm:text-base">
-            Manage and review all student mobility applications
+            Gérez et examinez toutes les demandes de mobilité étudiante
           </p>
         </div>
         <button
@@ -137,7 +137,7 @@ onMounted(async () => {
           :disabled="filteredAndSortedSubmissions.length === 0"
         >
           <ArrowDownTrayIcon class="w-4 h-4 mr-2" />
-          Export All ({{ filteredAndSortedSubmissions.length }})
+          Exporter Tout ({{ filteredAndSortedSubmissions.length }})
         </button>
       </div>
     </div>
@@ -177,19 +177,19 @@ onMounted(async () => {
           <div class="text-2xl font-bold text-green-300 mb-1">
             {{ statistics.byNationality.moroccan }}
           </div>
-          <div class="text-blue-200 text-xs sm:text-sm">Moroccan</div>
+          <div class="text-blue-200 text-xs sm:text-sm">Marocaine</div>
         </div>
         <div class="glass rounded-lg p-4 text-center">
           <div class="text-2xl font-bold text-yellow-300 mb-1">
             {{ statistics.byNationality.other }}
           </div>
-          <div class="text-blue-200 text-xs sm:text-sm">International</div>
+          <div class="text-blue-200 text-xs sm:text-sm">Internationale</div>
         </div>
         <div class="glass rounded-lg p-4 text-center">
           <div class="text-2xl font-bold text-purple-300 mb-1">
             {{ Object.values(statistics.bySchool).filter((count) => count > 0).length }}
           </div>
-          <div class="text-blue-200 text-xs sm:text-sm">Schools</div>
+          <div class="text-blue-200 text-xs sm:text-sm">Écoles</div>
         </div>
       </div>
 
@@ -204,7 +204,7 @@ onMounted(async () => {
             <input
               v-model="searchQuery"
               type="text"
-              placeholder="Search by name, email, or program..."
+              placeholder="Rechercher par nom ou email..."
               class="input-field pl-10 w-full"
             />
           </div>
@@ -263,8 +263,10 @@ onMounted(async () => {
           class="glass rounded-xl p-8 text-center"
         >
           <ExclamationCircleIcon class="w-12 h-12 text-yellow-400 mx-auto mb-4" />
-          <h3 class="text-lg font-medium text-white mb-2">No submissions found</h3>
-          <p class="text-blue-200">Try adjusting your search or filter criteria.</p>
+          <h3 class="text-lg font-medium text-white mb-2">Aucune soumission trouvée</h3>
+          <p class="text-blue-200">
+            Essayez d’ajuster vos critères de recherche ou de filtre.
+          </p>
         </div>
 
         <!-- Submissions List -->

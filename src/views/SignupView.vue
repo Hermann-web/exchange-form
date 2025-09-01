@@ -1,4 +1,4 @@
-// src/views/SignupView.vue
+<!-- src/views/SignupView.vue -->
 
 <script setup lang="ts">
 import { RouterLink } from 'vue-router';
@@ -7,9 +7,9 @@ import { ref, reactive, computed } from 'vue';
 import type { LogupForm } from '@/types';
 import { testEmail } from '@/components/types';
 import router from '@/router';
+
 const isSubmitting = ref(false);
 const authStore = useAuthStore();
-
 const error = ref('');
 
 const form = reactive<LogupForm>({
@@ -22,23 +22,27 @@ const form = reactive<LogupForm>({
 
 const emailError = computed(() => {
   if (!form.email) return '';
-  return !testEmail(form.email) ? 'Please enter a valid email' : '';
+  return !testEmail(form.email) ? 'Veuillez entrer un email valide' : '';
 });
 const firstNameError = computed(() => {
-  return !form.first_name ? 'First name is required' : '';
+  return !form.first_name ? 'Le prénom est requis' : '';
 });
 
 const lastNameError = computed(() => {
-  return !form.last_name ? 'Last name is required' : '';
+  return !form.last_name ? 'Le nom de famille est requis' : '';
 });
 const passwordError = computed(() => {
   if (!form.password) return '';
-  return form.password.length < 6 ? 'Password must be at least 6 characters' : '';
+  return form.password.length < 6
+    ? 'Le mot de passe doit contenir au moins 6 caractères'
+    : '';
 });
 
 const confirmPasswordError = computed(() => {
   if (!form.confirmPassword) return '';
-  return form.password !== form.confirmPassword ? 'Passwords do not match' : '';
+  return form.password !== form.confirmPassword
+    ? 'Les mots de passe ne correspondent pas'
+    : '';
 });
 
 const isFormValid = computed(() => {
@@ -56,8 +60,6 @@ const isFormValid = computed(() => {
   );
 });
 
-// const showPassword = ref(false);
-// const showConfirmPassword = ref(false);
 const success = ref(false);
 
 const handleSubmit = async () => {
@@ -66,7 +68,7 @@ const handleSubmit = async () => {
   isSubmitting.value = true;
   try {
     if (form.password !== form.confirmPassword) {
-      authStore.error = 'Passwords do not match';
+      authStore.error = 'Les mots de passe ne correspondent pas';
       return;
     }
 
@@ -94,34 +96,16 @@ const handleSubmit = async () => {
     <div class="w-full max-w-md">
       <!-- Header -->
       <div class="text-center mb-8">
-        <h1 class="text-3xl font-bold text-white mb-2">Create Account</h1>
-        <p class="text-blue-100">Join the Exchange Program</p>
+        <h1 class="text-3xl font-bold text-white mb-2">Créer un compte</h1>
+        <p class="text-blue-100">Rejoignez le programme de mobilité</p>
       </div>
 
       <!-- Signup Form -->
       <div class="glass rounded-2xl p-8">
         <form @submit.prevent="handleSubmit" class="space-y-6">
           <div>
-            <label for="email" class="block text-blue-100 text-sm font-medium mb-2">
-              Email Address
-            </label>
-            <input
-              id="email"
-              v-model="form.email"
-              type="email"
-              required
-              class="input-field"
-              placeholder="student@university.edu"
-              :class="{ 'border-red-400': emailError }"
-            />
-            <p v-if="emailError" class="text-red-300 text-xs mt-1">
-              {{ emailError }}
-            </p>
-          </div>
-          <!-- Add these inside the <form> before the email field -->
-          <div>
             <label for="first_name" class="block text-blue-100 text-sm font-medium mb-2">
-              First Name
+              Prénom
             </label>
             <input
               id="first_name"
@@ -129,13 +113,13 @@ const handleSubmit = async () => {
               type="text"
               required
               class="input-field"
-              placeholder="John"
+              placeholder="Jean"
             />
           </div>
 
           <div>
             <label for="last_name" class="block text-blue-100 text-sm font-medium mb-2">
-              Last Name
+              Nom de famille
             </label>
             <input
               id="last_name"
@@ -143,13 +127,31 @@ const handleSubmit = async () => {
               type="text"
               required
               class="input-field"
-              placeholder="Doe"
+              placeholder="Dupont"
             />
           </div>
 
           <div>
+            <label for="email" class="block text-blue-100 text-sm font-medium mb-2">
+              Adresse e-mail
+            </label>
+            <input
+              id="email"
+              v-model="form.email"
+              type="email"
+              required
+              class="input-field"
+              placeholder="etudiant@universite.edu"
+              :class="{ 'border-red-400': emailError }"
+            />
+            <p v-if="emailError" class="text-red-300 text-xs mt-1">
+              {{ emailError }}
+            </p>
+          </div>
+
+          <div>
             <label for="password" class="block text-blue-100 text-sm font-medium mb-2">
-              Password
+              Mot de passe
             </label>
             <input
               id="password"
@@ -157,7 +159,7 @@ const handleSubmit = async () => {
               type="password"
               required
               class="input-field"
-              placeholder="Minimum 6 characters"
+              placeholder="Minimum 6 caractères"
               :class="{ 'border-red-400': passwordError }"
             />
             <p v-if="passwordError" class="text-red-300 text-xs mt-1">
@@ -170,7 +172,7 @@ const handleSubmit = async () => {
               for="confirmPassword"
               class="block text-blue-100 text-sm font-medium mb-2"
             >
-              Confirm Password
+              Confirmer le mot de passe
             </label>
             <input
               id="confirmPassword"
@@ -178,7 +180,7 @@ const handleSubmit = async () => {
               type="password"
               required
               class="input-field"
-              placeholder="Confirm your password"
+              placeholder="Confirmez votre mot de passe"
               :class="{ 'border-red-400': confirmPasswordError }"
             />
             <p v-if="confirmPasswordError" class="text-red-300 text-xs mt-1">
@@ -216,20 +218,20 @@ const handleSubmit = async () => {
                   d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
                 ></path>
               </svg>
-              Creating account...
+              Création du compte...
             </span>
-            <span v-else>Create Account</span>
+            <span v-else>Créer un compte</span>
           </button>
         </form>
 
         <div class="mt-6 text-center">
           <p class="text-blue-100 text-sm">
-            Already have an account?
+            Vous avez déjà un compte ?
             <router-link
               to="/login"
               class="text-white font-semibold hover:underline ml-1"
             >
-              Sign in
+              Connectez-vous
             </router-link>
           </p>
         </div>

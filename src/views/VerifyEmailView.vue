@@ -1,15 +1,17 @@
-// src/views/VerifyEmail.vue
+<!-- src/views/VerifyEmail.vue -->
 
 <script setup lang="ts">
 import { useAuthStore } from '@/stores/auth';
 import { DocumentTextIcon } from '@heroicons/vue/24/outline';
+
 const authStore = useAuthStore();
+
 const sendVerificationEmail = async () => {
   try {
     await authStore.sendVerificationEmail();
-    alert('Verification email sent! Please check your inbox.');
+    alert('Email de vérification envoyé ! Veuillez vérifier votre boîte de réception.');
   } catch (err: any) {
-    alert(err.message || 'Failed to send verification email.');
+    alert(err.message || "Échec de l'envoi de l'email de vérification.");
   }
 };
 </script>
@@ -21,11 +23,12 @@ const sendVerificationEmail = async () => {
       class="glass rounded-2xl p-6 mb-8 text-center"
     >
       <p class="text-red-500 text-lg font-medium mb-4">
-        Your email ({{ authStore.user?.email }}) is not verified. Please check your inbox.
+        Votre email ({{ authStore.user?.email }}) n'est pas vérifié. Veuillez vérifier
+        votre boîte de réception.
       </p>
       <button @click="sendVerificationEmail" class="btn-primary inline-flex items-center">
         <DocumentTextIcon class="w-5 h-5 mr-2" />
-        Resend Verification Email
+        Renvoyer l'email de vérification
       </button>
     </div>
   </div>

@@ -154,7 +154,7 @@ const getAvailableDocuments = () => {
           class="flex flex-col sm:flex-row justify-between items-start sm:items-center pt-4 border-t border-white/10 gap-3"
         >
           <div class="text-xs text-blue-400">
-            <div>Submitted: {{ formatDate(submission.createdAt) }}</div>
+            <div>Soumis: {{ formatDate(submission.createdAt) }}</div>
           </div>
           <div class="flex gap-2">
             <button
@@ -162,7 +162,7 @@ const getAvailableDocuments = () => {
               class="btn-secondary text-xs py-2 px-3 flex items-center"
             >
               <ArrowDownTrayIcon class="w-3 h-3 mr-1" />
-              Export
+              Exporter
             </button>
             <button
               v-if="submission.metadataUrl"
@@ -174,7 +174,7 @@ const getAvailableDocuments = () => {
               "
               class="btn-secondary text-xs py-2 px-3"
             >
-              Metadata
+              Metadonnées
             </button>
           </div>
         </div>
