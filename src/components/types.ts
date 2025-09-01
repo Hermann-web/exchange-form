@@ -62,7 +62,6 @@ export interface DocumentDisplay<T = any> {
 export interface SchoolChoiceConfig {
   title: string;
   schoolKey: 'school1' | 'school2';
-  programKey: 'program1' | 'program2';
   thematicKey: 'thematicSequence1' | 'thematicSequence2';
   electivesKey: 'electives1' | 'electives2';
   emoji?: string;
@@ -94,7 +93,6 @@ export const schoolChoices: SchoolChoiceConfig[] = [
   {
     title: 'First Choice',
     schoolKey: 'school1',
-    programKey: 'program1',
     thematicKey: 'thematicSequence1',
     electivesKey: 'electives1',
     emoji: '🥇',
@@ -103,7 +101,6 @@ export const schoolChoices: SchoolChoiceConfig[] = [
   {
     title: 'Second Choice',
     schoolKey: 'school2',
-    programKey: 'program2',
     thematicKey: 'thematicSequence2',
     electivesKey: 'electives2',
     emoji: '🥈',
