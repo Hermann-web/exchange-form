@@ -1,6 +1,6 @@
-# S8 Student Exchange Application
+# Student Academic Exchange Application
 
-This is a web application designed to streamline the application process for the S8 student exchange program. It provides a user-friendly interface for students to submit their applications and for administrators to review and manage them.
+This is a web application designed to streamline the application process for a student exchange program. It provides a user-friendly interface for students to submit their applications and for administrators to review and manage them.
 
 ## Overview
 

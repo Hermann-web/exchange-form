@@ -3,7 +3,7 @@
   <div class="max-w-6xl mx-auto px-4 py-8 sm:px-6 lg:px-8">
     <div class="glass rounded-2xl p-8 mb-8">
       <div class="text-center">
-        <h1 class="text-4xl font-bold text-white mb-4">Welcome to S8 Exchange</h1>
+        <h1 class="text-4xl font-bold text-white mb-4">Welcome to Academic Exchange</h1>
         <p class="text-blue-100 text-lg mb-8">
           Ready to take your studies abroad? Submit your exchange application below.
         </p>

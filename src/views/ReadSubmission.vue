@@ -125,7 +125,7 @@ onMounted(async () => {
             Application Submitted Successfully
           </h1>
           <p class="text-blue-100">
-            Your S8 exchange application has been received and is under review.
+            Your exchange application has been received and is under review.
           </p>
         </div>
 
