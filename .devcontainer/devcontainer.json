@@ -19,6 +19,6 @@
       }
     }
   },
-  "postCreateCommand": "npm install"
-  // "remoteUser": "node"
+  "postCreateCommand": "npm install",
+  "remoteUser": "node" // equivalent of `-u "$(id -u):$(id -g)`
 }

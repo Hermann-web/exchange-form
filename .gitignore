@@ -23,3 +23,6 @@ dist-ssr
 *.sln
 *.sw?
 .env
+
+# more
+tools/liste-eleves-S7-2A-25-26-copy.xlsx
