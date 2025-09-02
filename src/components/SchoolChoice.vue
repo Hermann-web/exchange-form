@@ -126,7 +126,7 @@ const validateThematicSequence = () => {
 };
 
 // Watch for school changes and empty all fields
-watch(selectedSchool, (newSchool) => {
+watch(selectedSchool, () => {
   // If switching to 'unset', clear all fields
   electives.value = [];
   props.form[props.choice.thematicKey] = '';

@@ -41,7 +41,10 @@ export const useSubmissionStore = defineStore('submission', () => {
   };
 
   // Upload files and create submission
-  const submitApplication = async (formData: SubmissionForm): Promise<boolean> => {
+  const submitApplication = async (
+    email: string,
+    formData: SubmissionForm
+  ): Promise<boolean> => {
     isSubmitting.value = true;
     error.value = null;
 
@@ -52,6 +55,8 @@ export const useSubmissionStore = defineStore('submission', () => {
       formData.school2LearningAgreement = undefined;
       formData.thematicSequence2 = '';
     }
+
+    formData.email = email;
 
     try {
       // Step 1: Upload files to storage and get URLs
