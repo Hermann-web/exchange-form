@@ -106,6 +106,12 @@ const isFormValid = computed(() => validateAllFields(form, errors));
 
 // Submit handler
 const handleSubmit = async () => {
+  // Vérifier que l'utilisateur est connecté
+  if (!authStore.user?.email) {
+    alert('Impossible de soumettre le formulaire : aucun utilisateur identifié.');
+    return;
+  }
+
   // Validate all personal fields
   personalFields.forEach((field) => {
     if (field.validator) {
@@ -123,7 +129,7 @@ const handleSubmit = async () => {
 
   if (!isFormValid.value) return;
 
-  const success = await submissionStore.submitApplication(form);
+  const success = await submissionStore.submitApplication(authStore.user.email, form);
   if (success) {
     router.push('/read-submission');
   }
@@ -181,6 +187,33 @@ const setMetaField = <K extends keyof SubmissionFormMeta>(
           <InformationCircleIcon class="w-5 h-5 mr-2" />
           Informations Personnelles
         </h2>
+
+        <div
+          class="mb-6 bg-yellow-500/10 border border-yellow-400/30 rounded-lg p-4 text-sm text-yellow-200"
+        >
+          <p class="mb-2">⚠️ Attention :</p>
+          <ul class="list-disc pl-6 space-y-1">
+            <li>
+              L’adresse mail utilisée pour identifier votre dossier est
+              <strong>celle avec laquelle vous êtes connecté(e)</strong>.
+            </li>
+            <li>
+              Modifier le champ e-mail dans ce formulaire
+              <strong>n’aura aucun effet</strong>.
+            </li>
+            <li>
+              Le nom et le prénom saisis ici ne remplaceront pas vos données
+              administratives officielles. Ils sont enregistrés à titre indicatif
+              uniquement.
+            </li>
+            <li>
+              Seules les demandes <strong>éligibles</strong> seront traitées. <br />Pour
+              ceux qui ont un doute, si vous avez reçu un e‑mail d’invitation émanant du
+              Service Mobilité de la Direction des Études pour remplir ce formulaire sur
+              le site, votre demande sera considérée comme recevable
+            </li>
+          </ul>
+        </div>
 
         <div class="grid md:grid-cols-2 gap-6">
           <FormField
@@ -281,7 +314,7 @@ const setMetaField = <K extends keyof SubmissionFormMeta>(
       </li>
       <li>Les électifs ont été vérifiés sur les sites officiels des écoles.</li>
       <li>
-        Les soumissions tardives ne seront pas acceptées après la fermeture de la
+        Les soumissions tardives ne seront ni acceptées ni lues après la fermeture de la
         plateforme.
       </li>
     </ul>
