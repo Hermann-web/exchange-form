@@ -13,7 +13,7 @@ import type {
   DataBaseApiInterface,
   SubmissionMetaDb,
   SubmissionData,
-} from '@/types/submissionapi';
+} from '../../types/submissionapi';
 
 // Initialize Firebase services
 const firestore = getFirestore();
