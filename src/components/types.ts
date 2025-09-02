@@ -69,7 +69,11 @@ export interface SchoolChoiceConfig {
 }
 
 // School configuration
-export const schoolOptions: { value: School; label: string }[] = [
+export interface SchoolOption {
+  value: School;
+  label: string;
+}
+export const schoolOptions: SchoolOption[] = [
   { value: 'centrale_supelec', label: 'CentraleSupélec' },
   { value: 'em_lyon', label: 'EM Lyon' },
   { value: 'centrale_lille', label: 'Centrale Lille' },
@@ -102,7 +106,7 @@ export const schoolElectiveConstraints: Record<School, ElectiveConstraints> = {
   centrale_mediterranee: { min: 1 },
   centrale_lyon: { min: 1 },
   centrale_pekin: { min: 1 },
-  unset: { min: 0 }, // could set max=0
+  unset: { min: 0, max: 0 }, // could set max=0
 };
 
 export const schoolChoices: SchoolChoiceConfig[] = [

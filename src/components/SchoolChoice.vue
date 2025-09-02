@@ -1,25 +1,18 @@
 <!-- SchoolChoice.vue -->
 <script setup lang="ts">
 import { ref, watch, computed } from 'vue';
-import type { School } from '@/types/submissionapi';
+import type { School, SubmissionForm } from '@/types/submissionapi';
 import { schoolElectiveConstraints } from '@/components/types';
-
-interface SchoolOption {
-  value: School;
-  label: string;
-}
-
-interface Choice {
-  title: string;
-  schoolKey: string;
-  thematicKey: string;
-  electivesKey: string;
-}
+import type {
+  SchoolChoiceConfig,
+  SchoolOption,
+  SubmissionErrorType,
+} from '@/components/types';
 
 interface Props {
-  choice: Choice;
-  form: any;
-  errors: any;
+  choice: SchoolChoiceConfig;
+  form: SubmissionForm;
+  errors: SubmissionErrorType;
   schoolOptions: SchoolOption[];
 }
 
@@ -47,13 +40,16 @@ watch(
   }
 );
 
-// Update form when electives array changes
+// Update form when electives array changes and validate
 watch(
   electives,
   (newElectives) => {
     props.form[props.choice.electivesKey] = newElectives
       .filter((e) => e.trim().length > 0)
       .join('; ');
+
+    // Validate electives and update errors object
+    validateElectives();
   },
   { deep: true }
 );
@@ -96,43 +92,53 @@ const constraintMessage = computed(() => {
   return min > 0 ? `Au moins ${min} cours requis` : '';
 });
 
-const validationError = computed(() => {
-  if (selectedSchool.value === 'unset') return null;
+// Validation function that updates the errors object
+const validateElectives = () => {
+  const electivesKey = props.choice.electivesKey;
 
   if (!isMinRequirementMet.value) {
-    return `Minimum ${currentConstraints.value.min} cours électifs requis`;
-  }
-
-  if (!isMaxRequirementMet.value) {
-    return `Maximum ${currentConstraints.value.max} cours électifs autorisés`;
-  }
-
-  return null;
-});
-
-// Watch for school changes and adjust electives if needed
-watch(selectedSchool, (newSchool) => {
-  const constraints = schoolElectiveConstraints[newSchool];
-
-  // If switching to 'unset', clear all electives
-  if (newSchool === 'unset') {
-    electives.value = [];
+    props.errors[electivesKey] =
+      `Minimum ${currentConstraints.value.min} cours électifs requis`;
     return;
   }
 
-  // If there's a max constraint and we exceed it, trim electives
-  if (constraints.max !== undefined && electiveCount.value > constraints.max) {
-    electives.value = electives.value.slice(0, constraints.max);
+  if (!isMaxRequirementMet.value) {
+    props.errors[electivesKey] =
+      `Maximum ${currentConstraints.value.max} cours électifs autorisés`;
+    return;
   }
 
-  // If we don't meet minimum requirements, add empty slots
-  if (electiveCount.value < constraints.min) {
-    const needed = constraints.min - electiveCount.value;
-    for (let i = 0; i < needed; i++) {
-      electives.value.push('');
-    }
+  props.errors[electivesKey] = '';
+};
+
+// Validate thematic sequence
+const validateThematicSequence = () => {
+  const thematicKey = props.choice.thematicKey;
+  const schoolKey = props.choice.schoolKey;
+  const school = props.form[schoolKey];
+
+  if (['centrale_supelec', 'centrale_mediterranee'].includes(school)) {
+    const thematicValue = props.form[thematicKey];
+    props.errors[thematicKey] = !thematicValue?.trim() ? 'Ce champ est requis' : '';
+  } else {
+    props.errors[thematicKey] = '';
   }
+};
+
+// Watch for school changes and empty all fields
+watch(selectedSchool, (newSchool) => {
+  // If switching to 'unset', clear all fields
+  electives.value = [];
+  props.form[props.choice.thematicKey] = '';
+
+  // Revalidate after school change to be ultra safe
+  validateSchool();
+  validateElectives();
+  validateThematicSequence();
 });
+
+// Watch for thematic sequence changes
+watch(() => props.form[props.choice.thematicKey], validateThematicSequence);
 
 const addElective = () => {
   if (canAddMore.value) {
@@ -162,7 +168,7 @@ const getPlaceholder = (index: number) => {
       ? [
           'Apprentissage automatique',
           'Science des données',
-          'Éthique de l’IA',
+          "Éthique de l'IA",
           'Vision par ordinateur',
           'Traitement du langage naturel',
         ]
@@ -181,11 +187,35 @@ const isRemovalAllowed = () => {
   const constraints = currentConstraints.value;
   return electiveCount.value > constraints.min;
 };
+
+const validateSchool = () => {
+  const schoolKey = props.choice.schoolKey;
+  const school = props.form[schoolKey];
+
+  if (schoolKey === 'school1' && school == 'unset') {
+    props.errors[schoolKey] = 'Le premier choix doit être mentionné';
+    return;
+  }
+  props.errors[schoolKey] = '';
+};
+watch(() => props.form[props.choice.schoolKey], validateSchool);
+
+// Initialize validation on mount
+watch(
+  () => props.form,
+  () => {
+    validateSchool();
+    validateElectives();
+    validateThematicSequence();
+  },
+  { immediate: true }
+);
 </script>
 
 <template>
-  <div>
-    <h3 class="text-lg font-medium text-blue-200 mb-4">
+  <div :class="choice.bgClass" class="rounded-lg border p-6">
+    <h3 class="text-lg font-medium text-blue-200 mb-4 flex items-center">
+      <span class="mr-2">{{ choice.emoji }}</span>
       {{ choice.title === 'first_choice' ? 'Premier Choix' : 'Deuxième Choix' }}
     </h3>
 
@@ -193,23 +223,27 @@ const isRemovalAllowed = () => {
       <!-- School Selection -->
       <div>
         <label class="block text-blue-100 text-sm font-medium mb-2">École *</label>
-        <select v-model="form[choice.schoolKey]" class="input-field">
+        <select
+          v-model="form[choice.schoolKey]"
+          class="input-field"
+          :class="{ 'border-red-500 focus:border-red-400': errors[choice.schoolKey] }"
+        >
           <option
-            v-for="school in props.choice.title === 'first_choice'
-              ? props.schoolOptions.filter((s) => s.value !== 'unset')
-              : props.schoolOptions"
+            v-for="school in props.schoolOptions"
             :key="school.value"
             :value="school.value"
           >
             {{ school.label }}
           </option>
         </select>
+        <p v-if="errors[choice.schoolKey]" class="text-red-300 text-xs mt-1">
+          {{ errors[choice.schoolKey] }}
+        </p>
       </div>
 
       <!-- Thematic Sequence (conditional) -->
       <div
         v-if="
-          form[choice.schoolKey] !== 'unset' &&
           ['centrale_supelec', 'centrale_mediterranee'].includes(form[choice.schoolKey])
         "
       >
@@ -221,22 +255,28 @@ const isRemovalAllowed = () => {
           }}
         </label>
         <input
-          v-model="form[choice.thematicKey]"
+          :value="form[choice.thematicKey]"
           type="text"
           class="input-field"
+          :class="{ 'border-red-500 focus:border-red-400': errors[choice.thematicKey] }"
           :placeholder="
             form[choice.schoolKey] === 'centrale_supelec'
               ? 'Saisir la séquence thématique'
               : 'Saisir le parcours'
           "
         />
+        <p v-if="errors[choice.thematicKey]" class="text-red-300 text-xs mt-1">
+          {{ errors[choice.thematicKey] }}
+        </p>
       </div>
 
       <!-- Dynamic Électifs -->
-      <div v-if="form[choice.schoolKey] !== 'unset'" class="md:col-span-2">
+      <div class="md:col-span-2">
         <div class="flex items-center justify-between mb-2">
           <div class="flex items-center gap-3">
-            <label class="block text-blue-100 text-sm font-medium"> Electifs </label>
+            <label class="block text-blue-100 text-sm font-medium">
+              Electifs{{ currentConstraints.min > 0 ? ' *' : '' }}
+            </label>
             <span v-if="constraintMessage" class="text-xs text-blue-300">
               ({{ constraintMessage }})
             </span>
@@ -251,12 +291,12 @@ const isRemovalAllowed = () => {
           </button>
         </div>
 
-        <!-- Validation Error Message -->
+        <!-- Validation Error Message from errors object -->
         <div
-          v-if="validationError"
+          v-if="errors[choice.electivesKey]"
           class="mb-3 p-2 bg-red-900/20 border border-red-500/30 rounded text-red-300 text-sm"
         >
-          {{ validationError }}
+          {{ errors[choice.electivesKey] }}
         </div>
 
         <!-- Electives Count Info -->
@@ -284,9 +324,9 @@ const isRemovalAllowed = () => {
               type="text"
               class="input-field flex-1"
               :class="{
-                'border-red-500 focus:border-red-400': validationError,
+                'border-red-500 focus:border-red-400': errors[choice.electivesKey],
                 'border-green-500 focus:border-green-400':
-                  !validationError && isMinRequirementMet,
+                  !errors[choice.electivesKey] && isMinRequirementMet,
               }"
               :placeholder="getPlaceholder(index)"
             />
@@ -304,10 +344,7 @@ const isRemovalAllowed = () => {
           </div>
 
           <!-- Show add button if no electives -->
-          <div
-            v-if="electives.length === 0 && selectedSchool !== 'unset'"
-            class="text-center py-4"
-          >
+          <div v-if="electives.length === 0" class="text-center py-4">
             <button
               type="button"
               @click="addElective"
