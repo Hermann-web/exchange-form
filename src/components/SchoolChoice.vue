@@ -119,6 +119,7 @@ const validateThematicSequence = () => {
 
   if (['centrale_supelec', 'centrale_mediterranee'].includes(school)) {
     const thematicValue = props.form[thematicKey];
+    console.log('thematicValue = ', thematicValue);
     props.errors[thematicKey] = !thematicValue?.trim() ? 'Ce champ est requis' : '';
   } else {
     props.errors[thematicKey] = '';
@@ -255,7 +256,7 @@ watch(
           }}
         </label>
         <input
-          :value="form[choice.thematicKey]"
+          v-model="form[choice.thematicKey]"
           type="text"
           class="input-field"
           :class="{ 'border-red-500 focus:border-red-400': errors[choice.thematicKey] }"
