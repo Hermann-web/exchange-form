@@ -14,6 +14,7 @@ interface ImportMetaEnv {
   readonly VITE_SUPABASE_ANON_KEY: string;
   readonly VITE_ALLOWED_EMAIL_DOMAIN: string; // e.g., "centrale-casablanca.ma" or "gmail.com"
   readonly VITE_ADMIN_EMAILS: string; // comma-separated list of admin emails
+  readonly VITE_FASTAPI_BASE_URL: string;
 }
 
 interface ImportMeta {
