@@ -2,6 +2,7 @@
 import { authApi as FirebaseAuthApi } from './firebase/auth';
 import { fileStorageApi as FirebaseStorageFileStorageApi } from './firebase/firebase-storage';
 import { fileStorageApi as SupabaseStorageFileStorageApi } from './supabase/filestorage';
+import { fileStorageApi as FastApiStorageFileStorageApi } from './fastapi/filestorage';
 import { databaseApi as FirebaseFileBasedDataBaseApi } from './firebase/firebase-storage-db';
 import { databaseApi as FirestoreDataBaseApi } from './firebase/firestore-db';
 
@@ -12,7 +13,7 @@ import type {
 } from '@/types/submissionapi';
 
 const DATABASE_STRATEGY: string = 'firestore';
-const FILE_STORAGE_STRATEGY: string = 'supabase';
+const FILE_STORAGE_STRATEGY: string = 'fastapi';
 
 // Strategy selection logic
 function getApiImplementation(): {
@@ -25,7 +26,9 @@ function getApiImplementation(): {
     fileStorageApi:
       FILE_STORAGE_STRATEGY == 'firebase'
         ? FirebaseStorageFileStorageApi
-        : SupabaseStorageFileStorageApi,
+        : FILE_STORAGE_STRATEGY == 'fastapi'
+          ? FastApiStorageFileStorageApi
+          : SupabaseStorageFileStorageApi,
     databaseApi:
       DATABASE_STRATEGY == 'firestore'
         ? FirestoreDataBaseApi
