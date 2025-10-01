@@ -19,8 +19,6 @@ import type {
 const firestore = getFirestore();
 // const auth = getAuth();
 
-const USING_FIRESTORE = true;
-
 //   // Helper function to get current user email
 //   const getCurrentUserEmail = (): string => {
 //     const user = auth.currentUser;
@@ -93,9 +91,7 @@ export const databaseApi: DataBaseApiInterface = {
   saveSubmission: async (submissionData: SubmissionData): Promise<SubmissionMetaDb> => {
     try {
       // Generate database ID
-      const databaseId = USING_FIRESTORE
-        ? doc(collection(firestore, 'submissions')).id
-        : '';
+      const databaseId = doc(collection(firestore, 'submissions')).id;
 
       // Prepare submission data with timestamp
       const {

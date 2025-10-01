@@ -56,17 +56,40 @@ export type EmailVerificationStrategy = 'provider-hosted' | 'app-hosted';
 export interface AuthApiInterface {
   login(email: string, password: string): Promise<LoginResponse>;
 
+  // email verification handling
   emailVerificationStrategy: EmailVerificationStrategy;
+  // email verification request (user is authenticated)
+  // a mail will get sent along with a token (in url or not)
   sendVerificationEmail(): Promise<void>;
-  verifyEmailByToken(token: string): Promise<void>;
+  // the user send the token on the interface here (copy or url click)
+  // user not authenticated (if token define the user)
+  // some backend handled redirect user to their own url so this would not be needed
+  verifyEmailWithoutSession(token: string): Promise<void>;
 
   signup(userData: SignupRequest): Promise<SignupResponse>;
   me(): Promise<UserProfile>;
   logout(): Promise<void>;
 
+  // password update handling
   passwordResetStrategy: PasswordResetStrategy;
+  // password update request (user is not authenticated)
+  // a mail will get sent along with a token (in url or not)
   resetPasswordRequest(email: string): Promise<void>;
+
+  // if PasswordResetStrategy = "provider-hosted"
+  // i assume the backend handled redirect user to their own url
+  // so handling the update would not be needed
+  // if PasswordResetStrategy==app-hosted
+  // the user send the token on the interface here (copy or url click)
+  // user not authenticated (username + tokenFromMail + newpassw) or (tokenFromMail + newpassw)
+  updatePasswordWithoutSession(
+    newPassword: string,
+    token: string,
+    username?: string
+  ): Promise<void>;
+
+  // user authenticated (session + oldpassw (exra safety) + newpassw)
   updatePassword(newPassword: string, token?: string): Promise<void>;
+
   getSession(): Promise<AuthSession | null>;
-  //   onAuthStateChange(callback: AuthStateChangeCallback): { data: { subscription: any } };
 }

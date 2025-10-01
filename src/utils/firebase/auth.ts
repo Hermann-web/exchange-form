@@ -81,18 +81,13 @@ export const authApi: AuthApiInterface = {
     return { user, session };
   },
 
-  // sendVerificationEmail: async (_token: string): Promise<void> => {
-  //   onAuthStateChanged(function(user) {
-  //     user.sendEmailVerification();
-  //   });
-  // },
   sendVerificationEmail: async (): Promise<void> => {
     if (!auth.currentUser) throw new Error('No authenticated user');
     console.log('authenticated user: sending verification email');
     await sendEmailVerification(auth.currentUser);
   },
 
-  verifyEmailByToken: async (): Promise<void> => {
+  verifyEmailWithoutSession: async (): Promise<void> => {
     throw new Error('Already handled by firebase');
   },
 
@@ -126,6 +121,10 @@ export const authApi: AuthApiInterface = {
       throw new Error('No authenticated user found.');
     }
     await updatePassword(user, newPassword);
+  },
+
+  updatePasswordWithoutSession: async (): Promise<void> => {
+    throw new Error('Already handled by firebase');
   },
 
   getSession: async (): Promise<AuthSession | null> => {
