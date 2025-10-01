@@ -4,12 +4,12 @@ import { getAuth } from 'firebase/auth';
 import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 
 const firebaseConfig = {
-  apiKey: 'AIzaSyCbhEUbQSntk3BWpGgjE7_z8HC7Vp_8TgI',
-  authDomain: 'mobility-ecc.firebaseapp.com',
-  projectId: 'mobility-ecc',
-  storageBucket: 'mobility-ecc.firebasestorage.app',
-  messagingSenderId: '910871183745',
-  appId: '1:910871183745:web:bee0d77d358e83d0de6880',
+  apiKey: import.meta.env.FIREBASE_API_KEY!,
+  authDomain: import.meta.env.FIREBASE_AUTH_DOMAIN!,
+  projectId: import.meta.env.FIREBASE_PROJECT_ID!,
+  storageBucket: import.meta.env.FIREBASE_STORAGE_BUCKET!,
+  messagingSenderId: import.meta.env.FIREBASE_MESSAGING_SENDER_ID!,
+  appId: import.meta.env.FIREBASE_APP_ID!,
 };
 // Initialize Firebase services
 const app = initializeApp(firebaseConfig);
