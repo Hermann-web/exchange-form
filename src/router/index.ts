@@ -24,18 +24,6 @@ const router = createRouter({
       component: () => import('@/views/ForgotPasswordView.vue'),
       meta: { requiresAuth: false },
     },
-    // {
-    //   path: '/verify',
-    //   name: 'verify',
-    //   component: () => import('@/views/VerifyEmailView.vue'),
-    //   meta: { requiresAuth: true },
-    // },
-    // {
-    //   path: '/reset-password',
-    //   name: 'reset-password',
-    //   component: () => import('@/views/auth/ResetPasswordView.vue'),
-    //   meta: { requiresAuth: false },
-    // },
 
     // Protected routes (all wrapped by AppLayout)
     {
