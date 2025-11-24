@@ -7,7 +7,6 @@ interface FileConfig {
   label: string;
   accept: string;
   extensions: string[];
-  errorKey: string;
   required: boolean;
   conditional?: () => boolean;
 }

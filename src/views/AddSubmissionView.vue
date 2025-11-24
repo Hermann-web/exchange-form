@@ -97,7 +97,7 @@ const handleFileChange = (
 ) => {
   if (file) {
     form[fileConfig.key] = file;
-    validateFile(fileConfig.errorKey, fileConfig.required, file, fileConfig.extensions);
+    validateFile(fileConfig.key, fileConfig.required, file, fileConfig.extensions);
   }
 };
 
@@ -123,7 +123,7 @@ const handleSubmit = async () => {
   fileUploadConfigs.forEach((fileConfig) => {
     if (!fileConfig.conditional || fileConfig.conditional()) {
       const file = form[fileConfig.key] as File | null;
-      validateFile(fileConfig.errorKey, fileConfig.required, file, fileConfig.extensions);
+      validateFile(fileConfig.key, fileConfig.required, file, fileConfig.extensions);
     }
   });
 
@@ -257,7 +257,7 @@ const setMetaField = <K extends keyof SubmissionFormMeta>(
             v-show="!fileConfig.conditional || fileConfig.conditional()"
             :config="fileConfig"
             :file="form[fileConfig.key] || null"
-            :error="errors[fileConfig.errorKey]"
+            :error="errors[fileConfig.key]"
             @file-change="handleFileChange(fileConfig, $event)"
           />
         </div>

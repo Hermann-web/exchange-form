@@ -3,7 +3,6 @@ import type {
   SubmissionForm,
   SubmissionFormMeta,
   SubmissionFormObject,
-  SubmissionFormObjectUrls,
 } from '@/types/submissionapi';
 
 export interface FieldOption {
@@ -33,30 +32,16 @@ export interface FileUploadField<Tform = any> {
   label: string;
   accept: Extension;
   extensions: FileExtension[];
-  errorKey: keyof Tform;
   required: boolean;
   conditional?: () => boolean;
-}
-
-export interface FileUploadConfig<TForm = any> {
-  key: keyof TForm;
-  label: string;
-  accept: string;
-  extensions: string[];
-  errorKey: keyof TForm;
-  required: boolean;
-  conditional?: () => boolean;
-  icon?: any;
-  description?: string;
 }
 
 export interface DocumentDisplay<T = any> {
-  key: string;
+  key: keyof T;
   label: string;
   description: string;
   icon: any;
   filename: string;
-  urlKey: keyof T;
 }
 
 export interface SchoolChoiceConfig {
@@ -130,23 +115,21 @@ export const schoolChoices: SchoolChoiceConfig[] = [
 
 // Document configuration factory
 export const createDocumentConfigs = (icons: any) => {
-  const documentConfigs: DocumentDisplay<SubmissionFormObjectUrls>[] = [
+  const documentConfigs: DocumentDisplay<SubmissionFormObject>[] = [
     {
-      key: 'applicationForm',
+      key: 'applicationFormDocx',
       label: 'Formulaire de dossier de candidature pour la mobilité S8',
       description: 'Document Microsoft Word (.docx)',
       icon: icons.DocumentTextIcon,
       filename: 'application-form.docx',
-      urlKey: 'applicationFormUrl',
     },
     {
-      key: 'resume',
+      key: 'resumePdf',
       label:
         'Curriculum Vitae (CV) actualisé en y indiquant le lien de votre profil LinkedIn',
       description: 'Document PDF (.pdf)',
       icon: icons.AcademicCapIcon,
-      filename: 'resume.pdf',
-      urlKey: 'resumeUrl',
+      filename: 'resumePdf.pdf',
     },
     {
       key: 's5Transcripts',
@@ -154,7 +137,6 @@ export const createDocumentConfigs = (icons: any) => {
       description: 'Document PDF (.pdf)',
       icon: icons.DocumentTextIcon,
       filename: 's5-transcripts.pdf',
-      urlKey: 's5TranscriptsUrl',
     },
     {
       key: 's6Transcripts',
@@ -162,7 +144,6 @@ export const createDocumentConfigs = (icons: any) => {
       description: 'Document PDF (.pdf)',
       icon: icons.DocumentTextIcon,
       filename: 's6-transcripts.pdf',
-      urlKey: 's6TranscriptsUrl',
     },
     {
       key: 'school1LearningAgreement',
@@ -170,7 +151,6 @@ export const createDocumentConfigs = (icons: any) => {
       description: 'Document PDF (.pdf)',
       icon: icons.DocumentTextIcon,
       filename: 'learning-agreement-school1.pdf',
-      urlKey: 'school1LearningAgreementUrl',
     },
     {
       key: 'school2LearningAgreement',
@@ -178,15 +158,13 @@ export const createDocumentConfigs = (icons: any) => {
       description: 'Document PDF (.pdf)',
       icon: icons.DocumentTextIcon,
       filename: 'learning-agreement-school2.pdf',
-      urlKey: 'school2LearningAgreementUrl',
     },
     {
-      key: 'passeport',
+      key: 'passeportPdf',
       label: 'Passeport',
       description: 'Document PDF (.pdf)',
       icon: icons.DocumentTextIcon,
-      filename: 'passeport.pdf',
-      urlKey: 'passeportUrl',
+      filename: 'passeportPdf.pdf',
     },
     {
       key: 'residencePermit',
@@ -194,7 +172,6 @@ export const createDocumentConfigs = (icons: any) => {
       description: 'Document PDF (.pdf)',
       icon: icons.DocumentTextIcon,
       filename: 'residence-permit.pdf',
-      urlKey: 'residencePermitUrl',
     },
     {
       key: 'otherFilesPdf',
@@ -202,7 +179,6 @@ export const createDocumentConfigs = (icons: any) => {
       description: 'Document PDF (.pdf)',
       icon: icons.DocumentTextIcon,
       filename: 'other-files.pdf',
-      urlKey: 'otherFilesPdfUrl',
     },
   ];
 
@@ -297,7 +273,6 @@ export const createFileUploadFieldConfigs = (form: SubmissionForm) => {
       label: 'Application Form (.docx)',
       accept: '.docx',
       extensions: ['docx'],
-      errorKey: 'applicationFormDocx',
       required: true,
     },
     {
@@ -305,7 +280,6 @@ export const createFileUploadFieldConfigs = (form: SubmissionForm) => {
       label: 'Resume/CV (.pdf)',
       accept: '.pdf',
       extensions: ['pdf'],
-      errorKey: 'resumePdf',
       required: true,
     },
     {
@@ -313,7 +287,6 @@ export const createFileUploadFieldConfigs = (form: SubmissionForm) => {
       label: 'S5 Transcripts (.pdf)',
       accept: '.pdf',
       extensions: ['pdf'],
-      errorKey: 's5Transcripts',
       required: true,
     },
     {
@@ -321,7 +294,6 @@ export const createFileUploadFieldConfigs = (form: SubmissionForm) => {
       label: 'S6 Transcripts (.pdf)',
       accept: '.pdf',
       extensions: ['pdf'],
-      errorKey: 's6Transcripts',
       required: true,
     },
     {
@@ -329,7 +301,6 @@ export const createFileUploadFieldConfigs = (form: SubmissionForm) => {
       label: 'Learning Agreement (School 1) (.pdf)',
       accept: '.pdf',
       extensions: ['pdf'],
-      errorKey: 'school1LearningAgreement',
       required: true,
     },
     {
@@ -337,7 +308,6 @@ export const createFileUploadFieldConfigs = (form: SubmissionForm) => {
       label: 'Learning Agreement (School 2) (.pdf)',
       accept: '.pdf',
       extensions: ['pdf'],
-      errorKey: 'school2LearningAgreement',
       required: true,
       conditional: () => form.school2 !== 'unset',
     },
@@ -346,7 +316,6 @@ export const createFileUploadFieldConfigs = (form: SubmissionForm) => {
       label: 'Passeport (.pdf)',
       accept: '.pdf',
       extensions: ['pdf'],
-      errorKey: 'passeportPdf',
       required: true,
     },
     {
@@ -354,7 +323,6 @@ export const createFileUploadFieldConfigs = (form: SubmissionForm) => {
       label: 'Residence Permit (.pdf)',
       accept: '.pdf',
       extensions: ['pdf'],
-      errorKey: 'residencePermit',
       required: true,
       conditional: () => form.nationality === 'other',
     },
@@ -363,7 +331,6 @@ export const createFileUploadFieldConfigs = (form: SubmissionForm) => {
       label: 'More Supporting Documents (onefile, optional) (.pdf)',
       accept: '.pdf',
       extensions: ['pdf'],
-      errorKey: 'otherFilesPdf',
       required: false,
     },
   ];
@@ -486,3 +453,34 @@ export const validateAllFields = (
 
   return hasAllRequiredFields && hasNoErrors;
 };
+
+// export const validateAllFields = (
+//   form: SubmissionForm,
+//   errors: SubmissionErrorType
+// ): boolean => {
+//   const personalFieldConfigs = createPersonalFieldConfigs(form, errors);
+//   const fileUploadConfigs = createFileUploadFieldConfigs(form);
+
+//     const hasAllRequiredPersonalFields = personalFieldConfigs.every(
+//     (field) => field.validator? field.validator(form[field.key]) : field.required && form[field.key]
+//   );
+
+//   const hasAllRequiredFileUploadFields = fileUploadConfigs.every(
+//     (field) => field.conditional? field.conditional() : field.required && form[field.key]
+//   );
+
+//   // const hasAllRequiredPersonalFields = personalFieldConfigs.every(
+//   //   (field) => field.required && form[field.key]
+//   // );
+
+//   // const hasAllRequiredFileUploadFields = fileUploadConfigs.every(
+//   //   (field) => field.required && form[field.key]
+//   // );
+
+//   const hasAllRequiredFields =
+//     hasAllRequiredPersonalFields && hasAllRequiredFileUploadFields;
+
+//   const hasNoErrors = Object.values(errors).every((error) => !error);
+
+//   return hasAllRequiredFields && hasNoErrors;
+// };

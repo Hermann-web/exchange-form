@@ -18,14 +18,14 @@ const MOCK_SUBMISSION_DATA: SubmissionData = {
   thematicSequence2: 'thematicSequence2',
   electives2: 'electives2',
   applicationFormUrl: 'https://mock-db.com/application-form.pdf',
-  resumeUrl: 'https://mock-db.com/resume.pdf',
+  resumeUrl: 'https://mock-db.com/resumePdf.pdf',
   s5TranscriptsUrl: 'https://mock-db.com/s5-transcripts.pdf',
   s6TranscriptsUrl: 'https://mock-db.com/s6-transcripts.pdf',
   school1LearningAgreementUrl: 'https://mock-db.com/school1-learning-agreement.pdf',
   residencePermitUrl: 'https://mock-db.com/residence-permit.pdf',
   school2LearningAgreementUrl: 'https://mock-db.com/school2-learning-agreement.pdf',
   otherFilesPdfUrl: 'https://mock-db.com/other-files.pdf',
-  passeportUrl: 'https://mock-db.com/passeport.pdf',
+  passeportUrl: 'https://mock-db.com/passeportPdf.pdf',
   createdAt: new Date().toISOString(),
 };
 

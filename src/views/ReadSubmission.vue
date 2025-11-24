@@ -23,6 +23,7 @@ import {
 } from '@/components/types';
 import SchoolChoiceDisplay from '@/components/SchoolChoiceDisplay.vue';
 import DocumentItem from '@/components/DocumentItem.vue';
+import { SubmissionFormObjectUrlsMap } from '@/types/submissionapi';
 
 const router = useRouter();
 const authStore = useAuthStore();
@@ -54,16 +55,7 @@ const availableDocuments = computed(() => {
   if (!submission.value) return [];
 
   return documentConfigs.filter((doc) => {
-    if (doc.key === 'residencePermit') {
-      return submission.value?.residencePermitUrl;
-    }
-    if (doc.key === 'school2LearningAgreement') {
-      return submission.value?.school2LearningAgreementUrl;
-    }
-    if (doc.key === 'otherFilesPdf') {
-      return submission.value?.otherFilesPdfUrl;
-    }
-    return submission.value?.[doc.urlKey as keyof typeof submission.value];
+    return submission.value?.[SubmissionFormObjectUrlsMap[doc.key]];
   });
 });
 
@@ -186,7 +178,7 @@ onMounted(async () => {
             :key="document.key"
             :document="document"
             :url="
-              submission[document.urlKey] ||
+              submission?.[SubmissionFormObjectUrlsMap[document.key]] ||
               'erreur interne : URL non définie après filtrage'
             "
             @download="handleDownloadFile"

@@ -2,7 +2,13 @@
 import { defineStore } from 'pinia';
 import { ref, computed } from 'vue';
 import { databaseApi, fileStorageApi } from '@/utils/api';
-import type { SubmissionForm, SubmissionMetaDb, School } from '@/types/submissionapi';
+import {
+  type SubmissionForm,
+  type SubmissionMetaDb,
+  type School,
+  type SubmissionData,
+  type SubmissionFormObject,
+} from '@/types/submissionapi';
 
 // // Helper function to generate unique storage ID
 // const generateStorageId = (email: string): string => {
@@ -57,11 +63,47 @@ export const useSubmissionStore = defineStore('submission', () => {
     }
 
     formData.email = email;
+    const submissionId = `${Date.now()}`;
+
+    const uploadSingleFile = async (
+      key: keyof SubmissionFormObject,
+      file: File
+    ): Promise<string> => {
+      return await fileStorageApi.uploadSingleFile(email, key, submissionId, file);
+    };
 
     try {
       // Step 1: Upload files to storage and get URLs
       console.log('Upload files to storage and get URLs');
-      const submissionData = await fileStorageApi.uploadFiles(formData);
+
+      const submissionData: SubmissionData = {
+        ...formData,
+        applicationFormUrl: await uploadSingleFile(
+          'applicationFormDocx',
+          formData.applicationFormDocx
+        ),
+        resumeUrl: await uploadSingleFile('resumePdf', formData.resumePdf),
+        s5TranscriptsUrl: await uploadSingleFile('s5Transcripts', formData.s5Transcripts),
+        s6TranscriptsUrl: await uploadSingleFile('s6Transcripts', formData.s6Transcripts),
+        residencePermitUrl: formData.residencePermit
+          ? await uploadSingleFile('residencePermit', formData.residencePermit)
+          : undefined,
+        school1LearningAgreementUrl: await uploadSingleFile(
+          'school1LearningAgreement',
+          formData.school1LearningAgreement
+        ),
+        school2LearningAgreementUrl: formData.school2LearningAgreement
+          ? await uploadSingleFile(
+              'school2LearningAgreement',
+              formData.school2LearningAgreement
+            )
+          : undefined,
+        passeportUrl: await uploadSingleFile('passeportPdf', formData.passeportPdf),
+        otherFilesPdfUrl: formData.otherFilesPdf
+          ? await uploadSingleFile('otherFilesPdf', formData.otherFilesPdf)
+          : undefined,
+        createdAt: new Date().toISOString(),
+      };
 
       // Step 2: Save submission metadata to database
       console.log('Save submission metadata to database');

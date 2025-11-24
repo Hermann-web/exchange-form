@@ -57,6 +57,22 @@ export interface SubmissionFormObjectUrls {
   otherFilesPdfUrl?: string; // pdf
 }
 
+// map from SubmissionFormObject to SubmissionFormObjectUrls
+export const SubmissionFormObjectUrlsMap: Record<
+  keyof SubmissionFormObject,
+  keyof SubmissionFormObjectUrls
+> = {
+  applicationFormDocx: 'applicationFormUrl',
+  resumePdf: 'resumeUrl',
+  s5Transcripts: 's5TranscriptsUrl',
+  s6Transcripts: 's6TranscriptsUrl',
+  residencePermit: 'residencePermitUrl',
+  school1LearningAgreement: 'school1LearningAgreementUrl',
+  school2LearningAgreement: 'school2LearningAgreementUrl',
+  passeportPdf: 'passeportUrl',
+  otherFilesPdf: 'otherFilesPdfUrl',
+};
+
 export interface SubmissionData extends SubmissionFormMeta, SubmissionFormObjectUrls {
   // storageId: string; // unique ID for submission (e.g., folder ID in Firebase)
   createdAt: string; // timestamp
@@ -71,7 +87,13 @@ export interface SubmissionMetaDb extends SubmissionData {
 
 export interface FileStorageApiInterface {
   // Upload a new submission (files + json object)
-  uploadFiles(formData: SubmissionForm): Promise<SubmissionData>;
+  // async func to upload a single SubmissionFormObject
+  uploadSingleFile(
+    email: string,
+    key: keyof SubmissionFormObject,
+    submissionId: string,
+    file: File
+  ): Promise<string>;
 }
 
 export interface DataBaseApiInterface {

@@ -7,7 +7,10 @@ import {
   EyeIcon,
   ArrowDownTrayIcon,
 } from '@heroicons/vue/24/outline';
-import type { SubmissionMetaDb } from '@/types/submissionapi';
+import {
+  SubmissionFormObjectUrlsMap,
+  type SubmissionMetaDb,
+} from '@/types/submissionapi';
 import {
   schoolLabels,
   formatDate,
@@ -46,16 +49,8 @@ const handleDownloadFile = (url: string, filename: string) => {
 
 const getAvailableDocuments = () => {
   return documentConfigs.filter((doc) => {
-    if (doc.key === 'residencePermit') {
-      return props.submission.residencePermitUrl;
-    }
-    if (doc.key === 'school2LearningAgreement') {
-      return props.submission.school2LearningAgreementUrl;
-    }
-    if (doc.key === 'otherFilesPdf') {
-      return props.submission.otherFilesPdfUrl;
-    }
-    return props.submission[doc.urlKey as keyof SubmissionMetaDb];
+    const urlKey = SubmissionFormObjectUrlsMap[doc.key];
+    return props.submission[urlKey];
   });
 };
 </script>
@@ -141,7 +136,7 @@ const getAvailableDocuments = () => {
               :key="document.key"
               :document="document"
               :url="
-                submission[document.urlKey] ||
+                submission[SubmissionFormObjectUrlsMap[document.key]] ||
                 'internal error: undefined url after filtering'
               "
               :first-name="submission.firstName"
