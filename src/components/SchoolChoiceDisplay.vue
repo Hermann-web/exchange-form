@@ -1,7 +1,7 @@
 <!-- SchoolChoiceDisplay.vue -->
 <script setup lang="ts">
 import type { SchoolChoiceConfig } from '@/components/types';
-import { schoolLabels, getElectives } from '@/components/types';
+import { schoolLabels } from '@/components/types';
 import type { SubmissionMetaDb } from '@/types/submissionapi';
 
 interface Props {
@@ -39,23 +39,6 @@ const { choice, submission, compact } = defineProps<Props>();
         <span class="text-blue-300">Séquence Thématique:</span>
         <span class="text-white">{{ submission[choice.thematicKey] }}</span>
       </div>
-      <div v-if="submission[choice.electivesKey]" class="mt-3">
-        <span class="text-blue-300 text-xs">Électifs:</span>
-        <div class="flex flex-wrap gap-1 mt-1">
-          <span
-            v-for="elective in getElectives(submission[choice.electivesKey])"
-            :key="elective"
-            :class="
-              choice.title === 'first_choice'
-                ? 'bg-green-500/20 text-green-200'
-                : 'bg-yellow-500/20 text-yellow-200'
-            "
-            class="px-2 py-1 rounded text-xs"
-          >
-            {{ elective }}
-          </span>
-        </div>
-      </div>
     </div>
 
     <div v-else class="space-y-3">
@@ -73,19 +56,6 @@ const { choice, submission, compact } = defineProps<Props>();
           Thematic Séquence Thématique
         </label>
         <p class="text-white">{{ submission[choice.thematicKey] }}</p>
-      </div>
-
-      <div v-if="submission[choice.electivesKey]" class="pt-2">
-        <label class="block text-blue-300 text-sm font-medium mb-2">Électifs</label>
-        <div class="flex flex-wrap gap-2">
-          <span
-            v-for="elective in getElectives(submission[choice.electivesKey])"
-            :key="elective"
-            class="bg-blue-500/20 text-blue-200 px-3 py-1 rounded-full text-sm"
-          >
-            {{ elective }}
-          </span>
-        </div>
       </div>
     </div>
   </div>

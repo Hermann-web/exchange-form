@@ -65,10 +65,8 @@ export const UpdateToColMap: Record<keyof SubmissionFormMeta, string> = {
   email: 'Q',
   school1: 'J',
   thematicSequence1: 'K',
-  electives1: 'K',
   school2: 'L',
   thematicSequence2: 'M',
-  electives2: 'M',
 };
 
 /**
@@ -101,10 +99,8 @@ export async function updateSubmissionForm(
   const sep: string = '\n- ';
   updates[`J${rowNumber}`] = metadata.school1;
   updates[`K${rowNumber}`] = metadata.thematicSequence1 + '\n';
-  updates[`K${rowNumber}`] += sep + metadata.electives1.split(';').join(sep);
   updates[`L${rowNumber}`] = metadata.school2;
   updates[`M${rowNumber}`] = metadata.thematicSequence2 + '\n';
-  updates[`M${rowNumber}`] += sep + metadata.electives2.split(';').join(sep);
 
   // 3. Apply updates
   await updateExcel(filePath, updates, sheetName);
@@ -142,10 +138,8 @@ async function testUpdate() {
     email: 'zakariae.achemlal@centrale-casablanca.ma',
     school1: 'centrale_supelec',
     thematicSequence1: 'TS1',
-    electives1: 'Math;Physics',
     school2: 'em_lyon',
     thematicSequence2: '',
-    electives2: 'Economics;Management',
   };
 
   try {

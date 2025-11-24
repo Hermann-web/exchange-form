@@ -48,7 +48,6 @@ export interface SchoolChoiceConfig {
   title: string;
   schoolKey: 'school1' | 'school2';
   thematicKey: 'thematicSequence1' | 'thematicSequence2';
-  electivesKey: 'electives1' | 'electives2';
   emoji?: string;
   bgClass?: string;
 }
@@ -78,28 +77,11 @@ export const schoolLabels: Record<School, string> = {
   unset: 'Aucun',
 };
 
-interface ElectiveConstraints {
-  min: number;
-  max?: number;
-}
-
-// some have a max others min=max>0
-export const schoolElectiveConstraints: Record<School, ElectiveConstraints> = {
-  centrale_supelec: { min: 1 },
-  em_lyon: { min: 1 },
-  centrale_lille: { min: 1 },
-  centrale_mediterranee: { min: 1 },
-  centrale_lyon: { min: 1 },
-  centrale_pekin: { min: 1 },
-  unset: { min: 0, max: 0 }, // could set max=0
-};
-
 export const schoolChoices: SchoolChoiceConfig[] = [
   {
     title: 'first_choice',
     schoolKey: 'school1',
     thematicKey: 'thematicSequence1',
-    electivesKey: 'electives1',
     emoji: '🥇',
     bgClass: 'bg-green-500/10 border-green-400/20',
   },
@@ -107,7 +89,6 @@ export const schoolChoices: SchoolChoiceConfig[] = [
     title: 'second_choice',
     schoolKey: 'school2',
     thematicKey: 'thematicSequence2',
-    electivesKey: 'electives2',
     emoji: '🥈',
     bgClass: 'bg-yellow-500/10 border-yellow-400/20',
   },
@@ -201,14 +182,6 @@ export const formatDateShort = (dateString: string) => {
     month: 'short',
     day: 'numeric',
   });
-};
-
-export const getElectives = (electivesString: string): string[] => {
-  if (!electivesString) return [];
-  return electivesString
-    .split(';')
-    .map((e) => e.trim())
-    .filter((e) => e.length > 0);
 };
 
 export const downloadFile = (url: string, filename: string) => {
@@ -373,10 +346,8 @@ export const initialize_submission_reactives = (
     email: initialEmail || '',
     school1: 'centrale_supelec',
     thematicSequence1: '',
-    electives1: '',
     school2: 'em_lyon',
     thematicSequence2: '',
-    electives2: '',
     applicationFormDocx: null as any,
     resumePdf: null as any,
     s5Transcripts: null as any,
@@ -405,8 +376,6 @@ export const initialize_submission_reactives = (
     school2: '',
     thematicSequence1: '',
     thematicSequence2: '',
-    electives1: '',
-    electives2: '',
     otherFilesPdf: '',
   };
 
@@ -440,11 +409,9 @@ export const validateAllFields = (
     requiredFields.push(form.residencePermit);
   }
   if (form.school1 !== 'unset') {
-    requiredFields.push(form.electives1);
     requiredFields.push(form.school1LearningAgreement);
   }
   if (form.school2 !== 'unset') {
-    requiredFields.push(form.electives2);
     requiredFields.push(form.school2LearningAgreement);
   }
 

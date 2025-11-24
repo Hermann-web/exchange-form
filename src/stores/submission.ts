@@ -57,7 +57,6 @@ export const useSubmissionStore = defineStore('submission', () => {
     // some check
     // if choice is unset, empty some fields
     if (formData.school2 == 'unset') {
-      formData.electives2 = '';
       formData.school2LearningAgreement = undefined;
       formData.thematicSequence2 = '';
     }

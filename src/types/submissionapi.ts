@@ -22,11 +22,9 @@ export interface SubmissionFormMeta {
   // Exchange choices
   school1: School;
   thematicSequence1: string; // only if school = centrale_supelec
-  electives1: string; // electives ";" separated
 
   school2: School;
   thematicSequence2: string; // only if school = centrale_supelec
-  electives2: string; // electives ";" separated
 }
 
 export interface SubmissionFormObject {
