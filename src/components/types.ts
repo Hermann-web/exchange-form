@@ -384,7 +384,7 @@ export const testEmail = (email: string): boolean => {
 // Validation functions
 const validateEmail = (errors: SubmissionErrorType, form: SubmissionForm) => {
   errors.email = !testEmail(form.email)
-    ? 'Email must be in format: firstname.lastname@etu.univh2c.ma'
+    ? `Email must be in format: firstname.lastname@${import.meta.env.VITE_ALLOWED_EMAIL_DOMAIN}`
     : '';
 };
 

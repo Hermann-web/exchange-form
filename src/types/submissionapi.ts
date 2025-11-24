@@ -16,7 +16,7 @@ export interface SubmissionFormMeta {
   // Nationality: only 2 values allowed
   nationality: 'moroccan' | 'other';
 
-  // Email must end with @etu.univh2c.ma (checked in validation)
+  // Email must end with @domain (checked in validation)
   email: string;
 
   // Exchange choices

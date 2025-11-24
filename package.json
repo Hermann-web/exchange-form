@@ -10,6 +10,7 @@
     "preview": "vite preview",
     "prod": "npm run build && vite",
     "export": "ts-node tools/export.ts",
+    "lint": "vue-tsc -b --noEmit",
     "format": "prettier --write --list-different ."
   },
   "dependencies": {
