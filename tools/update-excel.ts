@@ -96,9 +96,9 @@ export async function updateSubmissionForm(
   const updates: Updates = {};
   const sep: string = '\n- ';
   updates[`J${rowNumber}`] =
-    metadata.choice1.schoolName + sep + metadata.choice1.thematicSequence;
+    metadata.choice1.schoolName + sep + metadata.choice1.academicPath;
   updates[`L${rowNumber}`] =
-    metadata.choice2.schoolName + sep + metadata.choice2.thematicSequence;
+    metadata.choice2.schoolName + sep + metadata.choice2.academicPath;
 
   // 3. Apply updates
   await updateExcel(filePath, updates, sheetName);
@@ -134,8 +134,8 @@ async function testUpdate() {
     lastName: 'Doe',
     nationality: 'other',
     email: 'zakariae.achemlal@centrale-casablanca.ma',
-    choice1: { schoolName: 'centrale_supelec', thematicSequence: 'TS1' },
-    choice2: { schoolName: 'em_lyon', thematicSequence: 'TS2' },
+    choice1: { schoolName: 'centrale_supelec', academicPath: 'TS1' },
+    choice2: { schoolName: 'em_lyon', academicPath: 'TS2' },
   };
 
   try {

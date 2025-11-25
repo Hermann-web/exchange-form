@@ -26,7 +26,7 @@ const validateThematicSequence = () => {
   const schoolObj = props.form[choiceKey];
 
   if (['centrale_supelec', 'centrale_mediterranee'].includes(schoolObj.schoolName)) {
-    const thematicValue = schoolObj.thematicSequence;
+    const thematicValue = schoolObj.academicPath;
     console.log('thematicValue = ', thematicValue);
     props.errors[choiceKey] = !thematicValue?.trim() ? 'Séquence thématique requise' : '';
   } else {
@@ -37,7 +37,7 @@ const validateThematicSequence = () => {
 // Watch for school changes and empty all fields
 watch(selectedSchool, () => {
   // If switching to 'unset', clear all fields
-  props.form[props.choice.choiceKey].thematicSequence = '';
+  props.form[props.choice.choiceKey].academicPath = '';
 
   // Revalidate after school change to be ultra safe
   validateSchool();
@@ -45,10 +45,7 @@ watch(selectedSchool, () => {
 });
 
 // Watch for thematic sequence changes
-watch(
-  () => props.form[props.choice.choiceKey].thematicSequence,
-  validateThematicSequence
-);
+watch(() => props.form[props.choice.choiceKey].academicPath, validateThematicSequence);
 
 const validateSchool = () => {
   const choiceKey = props.choice.choiceKey;
@@ -117,7 +114,7 @@ watch(
           }}
         </label>
         <input
-          v-model="form[choice.choiceKey].thematicSequence"
+          v-model="form[choice.choiceKey].academicPath"
           type="text"
           class="input-field"
           :class="{ 'border-red-500 focus:border-red-400': errors[choice.choiceKey] }"

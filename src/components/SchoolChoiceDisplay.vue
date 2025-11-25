@@ -35,14 +35,9 @@ const { choice, submission, compact } = defineProps<Props>();
           {{ schoolLabels[submission[choice.choiceKey].schoolName] }}
         </span>
       </div>
-      <div
-        v-if="submission[choice.choiceKey].thematicSequence"
-        class="flex justify-between"
-      >
+      <div v-if="submission[choice.choiceKey].academicPath" class="flex justify-between">
         <span class="text-blue-300">Séquence Thématique:</span>
-        <span class="text-white">{{
-          submission[choice.choiceKey].thematicSequence
-        }}</span>
+        <span class="text-white">{{ submission[choice.choiceKey].academicPath }}</span>
       </div>
     </div>
 
@@ -56,11 +51,11 @@ const { choice, submission, compact } = defineProps<Props>();
         </div>
       </div>
 
-      <div v-if="submission[choice.choiceKey].thematicSequence" class="pt-2">
+      <div v-if="submission[choice.choiceKey].academicPath" class="pt-2">
         <label class="block text-blue-300 text-sm font-medium mb-1">
           Séquence Thématique
         </label>
-        <p class="text-white">{{ submission[choice.choiceKey].thematicSequence }}</p>
+        <p class="text-white">{{ submission[choice.choiceKey].academicPath }}</p>
       </div>
     </div>
   </div>

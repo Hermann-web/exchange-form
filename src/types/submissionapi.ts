@@ -20,7 +20,7 @@ export type Nationality = keyof typeof nationalityLabels;
 
 export interface SchoolChoice {
   schoolName: School;
-  thematicSequence: string; // only if school = centrale_supelec or centrale_mediterranee
+  academicPath: string; // only if school = centrale_supelec or centrale_mediterranee
 }
 
 export interface PersonalSubmissionFormMeta {
@@ -86,11 +86,13 @@ export const SubmissionFormObjectUrlsMap: Record<
   otherFilesPdf: 'otherFilesPdfUrl',
 };
 
-// Helper function to map school key to learning agreement field name
-export const getSchoolLearningAgreementKey = (
-  choiceKey: 'choice1' | 'choice2'
-): keyof SubmissionFormObject => {
-  return `${choiceKey}LearningAgreement` as keyof SubmissionFormObject;
+// map from choice key to learning agreement field name
+export const SchoolLearningAgreementKeyMap: Record<
+  keyof SchoolSubmissionFormMeta,
+  keyof SubmissionFormObject
+> = {
+  choice1: 'choice1LearningAgreement',
+  choice2: 'choice2LearningAgreement',
 };
 
 export interface SubmissionData extends SubmissionFormMeta, SubmissionFormObjectUrls {

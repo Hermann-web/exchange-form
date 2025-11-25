@@ -7,6 +7,7 @@ import {
   type SubmissionForm,
   type SubmissionFormObject,
   type PersonalSubmissionFormMeta,
+  type SchoolSubmissionFormMeta,
 } from '@/types/submissionapi';
 
 export interface FieldOption {
@@ -51,7 +52,7 @@ export interface DocumentDisplay<T = any> {
 export interface SchoolChoiceConfig {
   title: string;
   text: string;
-  choiceKey: 'choice1' | 'choice2';
+  choiceKey: keyof SchoolSubmissionFormMeta;
   emoji?: string;
   bgClass?: string;
 }
@@ -355,8 +356,8 @@ export const initialize_submission_reactives = (
     lastName: '',
     nationality: 'moroccan',
     email: initialEmail || '',
-    choice1: { schoolName: 'centrale_supelec', thematicSequence: '' },
-    choice2: { schoolName: 'em_lyon', thematicSequence: '' },
+    choice1: { schoolName: 'centrale_supelec', academicPath: '' },
+    choice2: { schoolName: 'em_lyon', academicPath: '' },
     applicationFormDocx: null as any,
     resumePdf: null as any,
     s5Transcripts: null as any,
@@ -419,14 +420,14 @@ export const validateAllFields = (
     form.choice1.schoolName === 'centrale_supelec' ||
     form.choice1.schoolName == 'centrale_mediterranee'
   ) {
-    requiredFields.push(form.choice1.thematicSequence);
+    requiredFields.push(form.choice1.academicPath);
   }
 
   if (
     form.choice2.schoolName === 'centrale_supelec' ||
     form.choice2.schoolName == 'centrale_mediterranee'
   ) {
-    requiredFields.push(form.choice2.thematicSequence);
+    requiredFields.push(form.choice2.academicPath);
   }
 
   if (form.nationality === 'other') {
