@@ -1,4 +1,4 @@
-<!-- FormField.vue -->
+<!-- src/components/FormField.vue -->
 <script setup lang="ts">
 import type { PersonalSubmissionFormMeta } from '@/types/submissionapi';
 import type { PersonalField } from './types';

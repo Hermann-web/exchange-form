@@ -1,3 +1,4 @@
+// src/mockup/filestorage.ts
 import type {
   FileStorageApiInterface,
   SubmissionFormObject,

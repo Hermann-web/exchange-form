@@ -1,4 +1,4 @@
-<!-- SchoolChoiceDisplay.vue -->
+<!-- src/components/SchoolChoiceDisplay.vue -->
 <script setup lang="ts">
 import type { SchoolChoiceConfig } from '@/components/types';
 import { schoolLabels } from '@/types/submissionapi';

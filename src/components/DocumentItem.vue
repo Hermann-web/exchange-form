@@ -1,4 +1,4 @@
-<!-- DocumentItem.vue -->
+<!-- src/components/DocumentItem.vue -->
 <script setup lang="ts">
 import { ArrowDownTrayIcon } from '@heroicons/vue/24/outline';
 import type { DocumentDisplay } from '@/components/types';

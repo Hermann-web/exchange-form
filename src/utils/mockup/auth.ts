@@ -1,3 +1,5 @@
+// src/mockup/auth.ts
+
 import type {
   AuthApiInterface,
   LoginResponse,

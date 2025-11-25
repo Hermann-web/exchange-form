@@ -1,4 +1,4 @@
-<!-- SubmissionCard.vue -->
+<!-- src/components/SubmissionCard.vue -->
 <script setup lang="ts">
 import { ref } from 'vue';
 import {

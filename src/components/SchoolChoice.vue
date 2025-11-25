@@ -1,4 +1,4 @@
-<!-- SchoolChoice.vue -->
+<!-- src/components/SchoolChoice.vue -->
 <script setup lang="ts">
 import { watch, computed } from 'vue';
 import type { SubmissionForm } from '@/types/submissionapi';

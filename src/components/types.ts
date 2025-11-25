@@ -1,3 +1,4 @@
+// src/components/types.ts
 import {
   schoolLabels,
   nationalityLabels,
