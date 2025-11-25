@@ -11,12 +11,8 @@ import {
   SubmissionFormObjectUrlsMap,
   type SubmissionMetaDb,
 } from '@/types/submissionapi';
-import {
-  schoolLabels,
-  formatDate,
-  formatDateShort,
-  createDocumentConfigs,
-} from '@/components/types';
+import { schoolLabels } from '@/types/submissionapi';
+import { formatDate, formatDateShort, createDocumentConfigs } from '@/components/types';
 import DocumentItem from '@/components/DocumentItem.vue';
 import SchoolChoiceDisplay from '@/components/SchoolChoiceDisplay.vue';
 import { schoolChoices } from '@/components/types';

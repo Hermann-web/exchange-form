@@ -1,7 +1,7 @@
 <!-- SchoolChoiceDisplay.vue -->
 <script setup lang="ts">
 import type { SchoolChoiceConfig } from '@/components/types';
-import { schoolLabels } from '@/components/types';
+import { schoolLabels } from '@/types/submissionapi';
 import type { SubmissionMetaDb } from '@/types/submissionapi';
 
 interface Props {
@@ -25,7 +25,7 @@ const { choice, submission, compact } = defineProps<Props>();
       "
     >
       {{ choice.emoji }}
-      {{ choice.title === 'first_choice' ? 'Premier Choix' : 'Deuxième Choix' }}
+      {{ choice.text }}
     </h4>
 
     <div class="space-y-2 text-sm" v-if="compact">
@@ -53,7 +53,7 @@ const { choice, submission, compact } = defineProps<Props>();
 
       <div v-if="submission[choice.thematicKey]" class="pt-2">
         <label class="block text-blue-300 text-sm font-medium mb-1">
-          Thematic Séquence Thématique
+          Séquence Thématique
         </label>
         <p class="text-white">{{ submission[choice.thematicKey] }}</p>
       </div>

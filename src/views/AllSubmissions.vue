@@ -10,9 +10,9 @@ import {
   ArrowDownTrayIcon,
 } from '@heroicons/vue/24/outline';
 
-// Shared configuration and components
-import { schoolOptions, schoolLabels, downloadFile } from '@/components/types';
+import { schoolOptions, downloadFile, nationalityOptions } from '@/components/types';
 import SubmissionCard from '@/components/SubmissionCard.vue';
+import { schoolLabels } from '@/types/submissionapi';
 
 const submissionStore = useSubmissionStore();
 
@@ -28,8 +28,7 @@ const filterOptions = {
   schools: [{ value: 'all' as const, label: 'Toutes les écoles' }, ...schoolOptions],
   nationalities: [
     { value: 'all' as const, label: 'Toutes les nationalités' },
-    { value: 'moroccan' as const, label: 'Marocaine' },
-    { value: 'other' as const, label: 'Internationale' },
+    ...nationalityOptions,
   ],
   sortBy: [
     { value: 'date' as const, label: 'Trier par Date' },

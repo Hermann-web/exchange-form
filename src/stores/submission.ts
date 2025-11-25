@@ -8,6 +8,7 @@ import {
   type School,
   type SubmissionData,
   type SubmissionFormObject,
+  type Nationality,
 } from '@/types/submissionapi';
 
 // // Helper function to generate unique storage ID
@@ -186,7 +187,7 @@ export const useSubmissionStore = defineStore('submission', () => {
       centrale_pekin: 0,
       unset: 0,
     };
-    const byNationality = {
+    const byNationality: Record<Nationality, number> = {
       moroccan: 0,
       other: 0,
     };

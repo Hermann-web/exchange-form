@@ -1,8 +1,11 @@
-import type {
-  School,
-  SubmissionForm,
-  SubmissionFormMeta,
-  SubmissionFormObject,
+import {
+  schoolLabels,
+  nationalityLabels,
+  type School,
+  type Nationality,
+  type SubmissionForm,
+  type SubmissionFormMeta,
+  type SubmissionFormObject,
 } from '@/types/submissionapi';
 
 export interface FieldOption {
@@ -46,6 +49,7 @@ export interface DocumentDisplay<T = any> {
 
 export interface SchoolChoiceConfig {
   title: string;
+  text: string;
   schoolKey: 'school1' | 'school2';
   thematicKey: 'thematicSequence1' | 'thematicSequence2';
   emoji?: string;
@@ -57,29 +61,36 @@ export interface SchoolOption {
   value: School;
   label: string;
 }
-export const schoolOptions: SchoolOption[] = [
-  { value: 'centrale_supelec', label: 'CentraleSupélec' },
-  { value: 'em_lyon', label: 'EM Lyon' },
-  { value: 'centrale_lille', label: 'Centrale Lille' },
-  { value: 'centrale_mediterranee', label: 'Centrale Méditerranée' },
-  { value: 'centrale_lyon', label: 'Centrale Lyon' },
-  { value: 'centrale_pekin', label: 'Centrale Pékin' },
-  { value: 'unset', label: 'Aucun' },
-];
 
-export const schoolLabels: Record<School, string> = {
-  centrale_supelec: 'CentraleSupélec',
-  em_lyon: 'EM Lyon',
-  centrale_lille: 'Centrale Lille',
-  centrale_mediterranee: 'Centrale Méditerranée',
-  centrale_lyon: 'Centrale Lyon',
-  centrale_pekin: 'Centrale Pékin',
-  unset: 'Aucun',
-};
+export interface NationalityOption {
+  value: Nationality;
+  label: string;
+}
+
+function entries<T extends Record<string, unknown>>(
+  obj: T
+): { [K in keyof T]: [K, T[K]] }[keyof T][] {
+  return Object.entries(obj) as any;
+}
+
+export const schoolOptions: SchoolOption[] = entries(schoolLabels).map(
+  ([value, label]) => ({
+    value,
+    label,
+  })
+);
+
+export const nationalityOptions: NationalityOption[] = entries(nationalityLabels).map(
+  ([value, label]) => ({
+    value,
+    label,
+  })
+);
 
 export const schoolChoices: SchoolChoiceConfig[] = [
   {
     title: 'first_choice',
+    text: 'Premier Choix',
     schoolKey: 'school1',
     thematicKey: 'thematicSequence1',
     emoji: '🥇',
@@ -87,6 +98,7 @@ export const schoolChoices: SchoolChoiceConfig[] = [
   },
   {
     title: 'second_choice',
+    text: 'Deuxième Choix',
     schoolKey: 'school2',
     thematicKey: 'thematicSequence2',
     emoji: '🥈',
@@ -274,14 +286,15 @@ export const createFileUploadFieldConfigs = (form: SubmissionForm) => {
       label: 'Learning Agreement (School 1) (.pdf)',
       accept: '.pdf',
       extensions: ['pdf'],
-      required: true,
+      required: false,
+      conditional: () => form.school1 !== 'unset',
     },
     {
       key: 'school2LearningAgreement',
       label: 'Learning Agreement (School 2) (.pdf)',
       accept: '.pdf',
       extensions: ['pdf'],
-      required: true,
+      required: false,
       conditional: () => form.school2 !== 'unset',
     },
     {
@@ -296,7 +309,7 @@ export const createFileUploadFieldConfigs = (form: SubmissionForm) => {
       label: 'Residence Permit (.pdf)',
       accept: '.pdf',
       extensions: ['pdf'],
-      required: true,
+      required: false,
       conditional: () => form.nationality === 'other',
     },
     {
@@ -386,16 +399,27 @@ export const validateAllFields = (
   form: SubmissionForm,
   errors: SubmissionErrorType
 ): boolean => {
-  const requiredFields: any[] = [
-    form.firstName,
-    form.lastName,
-    form.email,
-    form.applicationFormDocx,
-    form.resumePdf,
-    form.s5Transcripts,
-    form.s6Transcripts,
-    form.passeportPdf,
-  ];
+  const personalFieldConfigs = createPersonalFieldConfigs(form, errors);
+  const fileUploadConfigs = createFileUploadFieldConfigs(form);
+
+  const requiredPersonalFields = personalFieldConfigs.map((field) => field.required);
+  const requiredFileUploadFields = fileUploadConfigs.map((field) =>
+    field.conditional ? field.conditional() : field.required
+  );
+
+  const requiredFields: any[] = [...requiredPersonalFields, ...requiredFileUploadFields];
+
+  // const requiredFields: any[] = [
+  //   form.firstName,
+  //   form.lastName,
+  //   form.nationality,
+  //   form.email,
+  //   form.applicationFormDocx,
+  //   form.resumePdf,
+  //   form.s5Transcripts,
+  //   form.s6Transcripts,
+  //   form.passeportPdf,
+  // ];
 
   if (form.school1 === 'centrale_supelec' || form.school1 == 'centrale_mediterranee') {
     requiredFields.push(form.thematicSequence1);
@@ -405,15 +429,15 @@ export const validateAllFields = (
     requiredFields.push(form.thematicSequence2);
   }
 
-  if (form.nationality === 'other') {
-    requiredFields.push(form.residencePermit);
-  }
-  if (form.school1 !== 'unset') {
-    requiredFields.push(form.school1LearningAgreement);
-  }
-  if (form.school2 !== 'unset') {
-    requiredFields.push(form.school2LearningAgreement);
-  }
+  // if (form.nationality === 'other') {
+  //   requiredFields.push(form.residencePermit);
+  // }
+  // if (form.school1 !== 'unset') {
+  //   requiredFields.push(form.school1LearningAgreement);
+  // }
+  // if (form.school2 !== 'unset') {
+  //   requiredFields.push(form.school2LearningAgreement);
+  // }
 
   const hasAllRequiredFields = requiredFields.every((field) => field);
   const hasNoErrors = Object.values(errors).every((error) => !error);

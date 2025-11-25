@@ -1,20 +1,29 @@
 // src/types/submissionapi.ts
 
-export type School =
-  | 'centrale_supelec'
-  | 'em_lyon'
-  | 'centrale_lille'
-  | 'centrale_mediterranee'
-  | 'centrale_lyon'
-  | 'centrale_pekin'
-  | 'unset';
+export const schoolLabels = {
+  centrale_supelec: 'CentraleSupélec',
+  em_lyon: 'EM Lyon',
+  centrale_lille: 'Centrale Lille',
+  centrale_mediterranee: 'Centrale Méditerranée',
+  centrale_lyon: 'Centrale Lyon',
+  centrale_pekin: 'Centrale Pékin',
+  unset: 'Aucun',
+} as const;
+
+export const nationalityLabels = {
+  moroccan: 'Moroccan',
+  other: 'Other',
+} as const;
+
+export type School = keyof typeof schoolLabels;
+export type Nationality = keyof typeof nationalityLabels;
 
 export interface SubmissionFormMeta {
   firstName: string;
   lastName: string;
 
   // Nationality: only 2 values allowed
-  nationality: 'moroccan' | 'other';
+  nationality: Nationality;
 
   // Email must end with @domain (checked in validation)
   email: string;

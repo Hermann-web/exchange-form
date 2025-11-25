@@ -75,7 +75,7 @@ watch(
   <div :class="choice.bgClass" class="rounded-lg border p-6">
     <h3 class="text-lg font-medium text-blue-200 mb-4 flex items-center">
       <span class="mr-2">{{ choice.emoji }}</span>
-      {{ choice.title === 'first_choice' ? 'Premier Choix' : 'Deuxième Choix' }}
+      {{ choice.text }}
     </h3>
 
     <div class="grid md:grid-cols-2 gap-6">
