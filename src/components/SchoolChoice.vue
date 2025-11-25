@@ -1,7 +1,7 @@
 <!-- SchoolChoice.vue -->
 <script setup lang="ts">
 import { watch, computed } from 'vue';
-import type { School, SubmissionForm } from '@/types/submissionapi';
+import type { SubmissionForm } from '@/types/submissionapi';
 import type {
   SchoolChoiceConfig,
   SchoolOption,
@@ -18,27 +18,26 @@ interface Props {
 const props = defineProps<Props>();
 
 // Computed properties for constraints validation
-const selectedSchool = computed(() => props.form[props.choice.schoolKey] as School);
+const selectedSchool = computed(() => props.form[props.choice.schoolKey].schoolName);
 
 // Validate thematic sequence
 const validateThematicSequence = () => {
-  const thematicKey = props.choice.thematicKey;
   const schoolKey = props.choice.schoolKey;
-  const school = props.form[schoolKey];
+  const schoolObj = props.form[schoolKey];
 
-  if (['centrale_supelec', 'centrale_mediterranee'].includes(school)) {
-    const thematicValue = props.form[thematicKey];
+  if (['centrale_supelec', 'centrale_mediterranee'].includes(schoolObj.schoolName)) {
+    const thematicValue = schoolObj.thematicSequence;
     console.log('thematicValue = ', thematicValue);
-    props.errors[thematicKey] = !thematicValue?.trim() ? 'Ce champ est requis' : '';
+    props.errors[schoolKey] = !thematicValue?.trim() ? 'Séquence thématique requise' : '';
   } else {
-    props.errors[thematicKey] = '';
+    props.errors[schoolKey] = '';
   }
 };
 
 // Watch for school changes and empty all fields
 watch(selectedSchool, () => {
   // If switching to 'unset', clear all fields
-  props.form[props.choice.thematicKey] = '';
+  props.form[props.choice.schoolKey].thematicSequence = '';
 
   // Revalidate after school change to be ultra safe
   validateSchool();
@@ -46,19 +45,22 @@ watch(selectedSchool, () => {
 });
 
 // Watch for thematic sequence changes
-watch(() => props.form[props.choice.thematicKey], validateThematicSequence);
+watch(
+  () => props.form[props.choice.schoolKey].thematicSequence,
+  validateThematicSequence
+);
 
 const validateSchool = () => {
   const schoolKey = props.choice.schoolKey;
-  const school = props.form[schoolKey];
+  const schoolObj = props.form[schoolKey];
 
-  if (schoolKey === 'school1' && school == 'unset') {
+  if (schoolKey === 'school1' && schoolObj.schoolName == 'unset') {
     props.errors[schoolKey] = 'Le premier choix doit être mentionné';
     return;
   }
   props.errors[schoolKey] = '';
 };
-watch(() => props.form[props.choice.schoolKey], validateSchool);
+watch(() => props.form[props.choice.schoolKey].schoolName, validateSchool);
 
 // Initialize validation on mount
 watch(
@@ -83,7 +85,7 @@ watch(
       <div>
         <label class="block text-blue-100 text-sm font-medium mb-2">École *</label>
         <select
-          v-model="form[choice.schoolKey]"
+          v-model="form[choice.schoolKey].schoolName"
           class="input-field"
           :class="{ 'border-red-500 focus:border-red-400': errors[choice.schoolKey] }"
         >
@@ -100,32 +102,33 @@ watch(
         </p>
       </div>
 
-      <!-- Thematic Sequence (conditional) -->
       <div
         v-if="
-          ['centrale_supelec', 'centrale_mediterranee'].includes(form[choice.schoolKey])
+          ['centrale_supelec', 'centrale_mediterranee'].includes(
+            form[choice.schoolKey].schoolName
+          )
         "
       >
         <label class="block text-blue-100 text-sm font-medium mb-2">
           {{
-            form[choice.schoolKey] === 'centrale_supelec'
+            form[choice.schoolKey].schoolName === 'centrale_supelec'
               ? 'Séquence Thématique *'
               : 'Parcours *'
           }}
         </label>
         <input
-          v-model="form[choice.thematicKey]"
+          v-model="form[choice.schoolKey].thematicSequence"
           type="text"
           class="input-field"
-          :class="{ 'border-red-500 focus:border-red-400': errors[choice.thematicKey] }"
+          :class="{ 'border-red-500 focus:border-red-400': errors[choice.schoolKey] }"
           :placeholder="
-            form[choice.schoolKey] === 'centrale_supelec'
+            form[choice.schoolKey].schoolName === 'centrale_supelec'
               ? 'Saisir la séquence thématique'
               : 'Saisir le parcours'
           "
         />
-        <p v-if="errors[choice.thematicKey]" class="text-red-300 text-xs mt-1">
-          {{ errors[choice.thematicKey] }}
+        <p v-if="errors[choice.schoolKey]" class="text-red-300 text-xs mt-1">
+          {{ errors[choice.schoolKey] }}
         </p>
       </div>
     </div>

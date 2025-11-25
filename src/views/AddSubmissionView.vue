@@ -6,7 +6,7 @@ import { useSubmissionStore } from '@/stores/submission';
 import type {
   SubmissionForm,
   SubmissionFormObject,
-  SubmissionFormMeta,
+  PersonalSubmissionFormMeta,
 } from '@/types/submissionapi';
 import {
   DocumentTextIcon,
@@ -47,10 +47,8 @@ const form = reactive<SubmissionForm>(initial_form);
 const errors: SubmissionErrorType = reactive(initial_errors);
 
 // Configuration objects
-const personalFields: PersonalField<SubmissionFormMeta>[] = createPersonalFieldConfigs(
-  form,
-  errors
-);
+const personalFields: PersonalField<PersonalSubmissionFormMeta>[] =
+  createPersonalFieldConfigs(form, errors);
 
 const fileUploadConfigs: FileUploadField<SubmissionFormObject>[] =
   createFileUploadFieldConfigs(form);
@@ -145,11 +143,11 @@ onMounted(async () => {
   }
 });
 
-const setMetaField = <K extends keyof SubmissionFormMeta>(
+const setMetaField = <K extends keyof SubmissionForm>(
   key: K,
-  value: SubmissionFormMeta[K]
+  value: SubmissionForm[K]
 ) => {
-  (form as SubmissionFormMeta)[key] = value;
+  form[key] = value;
 };
 </script>
 
@@ -220,7 +218,7 @@ const setMetaField = <K extends keyof SubmissionFormMeta>(
             v-for="field in personalFields"
             :key="field.key"
             :field="field"
-            :value="form[field.key]"
+            :value="form[field.key] as string"
             :error="errors[field.key]"
             @update:value="setMetaField(field.key, $event)"
             @validate="field.validator && field.validator($event)"

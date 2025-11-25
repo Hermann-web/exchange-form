@@ -1,10 +1,10 @@
 <!-- FormField.vue -->
 <script setup lang="ts">
-import type { SubmissionFormMeta } from '@/types/submissionapi';
+import type { PersonalSubmissionFormMeta } from '@/types/submissionapi';
 import type { PersonalField } from './types';
 
 interface Props {
-  field: PersonalField<SubmissionFormMeta>;
+  field: PersonalField<PersonalSubmissionFormMeta>;
   value: string;
   error?: string;
 }

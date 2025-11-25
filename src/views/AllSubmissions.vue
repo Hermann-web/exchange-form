@@ -55,7 +55,8 @@ const filteredAndSortedSubmissions = computed(() => {
   if (selectedSchool.value !== 'all') {
     filtered = filtered.filter(
       (sub) =>
-        sub.school1 === selectedSchool.value || sub.school2 === selectedSchool.value
+        sub.school1.schoolName === selectedSchool.value ||
+        sub.school2.schoolName === selectedSchool.value
     );
   }
 
@@ -77,7 +78,9 @@ const filteredAndSortedSubmissions = computed(() => {
         );
         break;
       case 'school':
-        comparison = schoolLabels[a.school1].localeCompare(schoolLabels[b.school1]);
+        comparison = schoolLabels[a.school1.schoolName].localeCompare(
+          schoolLabels[b.school1.schoolName]
+        );
         break;
     }
 

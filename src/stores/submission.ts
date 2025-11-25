@@ -57,9 +57,9 @@ export const useSubmissionStore = defineStore('submission', () => {
 
     // some check
     // if choice is unset, empty some fields
-    if (formData.school2 == 'unset') {
+    if (formData.school2.schoolName == 'unset') {
       formData.school2LearningAgreement = undefined;
-      formData.thematicSequence2 = '';
+      formData.school2.thematicSequence = '';
     }
 
     formData.email = email;
@@ -171,7 +171,7 @@ export const useSubmissionStore = defineStore('submission', () => {
   // Filter submissions by school
   const getSubmissionsBySchool = (school: School): SubmissionMetaDb[] => {
     return allSubmissions.value.filter(
-      (sub) => sub.school1 === school || sub.school2 === school
+      (sub) => sub.school1.schoolName === school || sub.school2.schoolName === school
     );
   };
 
@@ -195,7 +195,7 @@ export const useSubmissionStore = defineStore('submission', () => {
     allSubmissions.value.forEach((submission) => {
       // Count by first choice school
       if (submission.school1) {
-        bySchool[submission.school1]++;
+        bySchool[submission.school1.schoolName]++;
       }
 
       // Count by nationality

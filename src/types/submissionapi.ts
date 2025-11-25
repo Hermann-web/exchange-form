@@ -18,7 +18,12 @@ export const nationalityLabels = {
 export type School = keyof typeof schoolLabels;
 export type Nationality = keyof typeof nationalityLabels;
 
-export interface SubmissionFormMeta {
+export interface SchoolChoice {
+  schoolName: School;
+  thematicSequence: string; // only if school = centrale_supelec or centrale_mediterranee
+}
+
+export interface PersonalSubmissionFormMeta {
   firstName: string;
   lastName: string;
 
@@ -27,14 +32,15 @@ export interface SubmissionFormMeta {
 
   // Email must end with @domain (checked in validation)
   email: string;
-
-  // Exchange choices
-  school1: School;
-  thematicSequence1: string; // only if school = centrale_supelec
-
-  school2: School;
-  thematicSequence2: string; // only if school = centrale_supelec
 }
+
+export interface SchoolSubmissionFormMeta {
+  // Exchange choices (vertical structure)
+  school1: SchoolChoice;
+  school2: SchoolChoice;
+}
+
+export type SubmissionFormMeta = PersonalSubmissionFormMeta & SchoolSubmissionFormMeta;
 
 export interface SubmissionFormObject {
   // File uploads
@@ -78,6 +84,13 @@ export const SubmissionFormObjectUrlsMap: Record<
   school2LearningAgreement: 'school2LearningAgreementUrl',
   passeportPdf: 'passeportUrl',
   otherFilesPdf: 'otherFilesPdfUrl',
+};
+
+// Helper function to map school key to learning agreement field name
+export const getSchoolLearningAgreementKey = (
+  schoolKey: 'school1' | 'school2'
+): keyof SubmissionFormObject => {
+  return `${schoolKey}LearningAgreement` as keyof SubmissionFormObject;
 };
 
 export interface SubmissionData extends SubmissionFormMeta, SubmissionFormObjectUrls {
