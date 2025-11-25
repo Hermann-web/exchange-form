@@ -356,8 +356,8 @@ export const initialize_submission_reactives = (
     lastName: '',
     nationality: 'moroccan',
     email: initialEmail || '',
-    choice1: { schoolName: 'centrale_supelec', academicPath: '' },
-    choice2: { schoolName: 'em_lyon', academicPath: '' },
+    choice1: { schoolName: 's9_centrale_supelec_gif', academicPath: '', careerPath: '' },
+    choice2: { schoolName: 's9_centrale_nantes', academicPath: '', careerPath: '' },
     applicationFormDocx: null as any,
     resumePdf: null as any,
     s5Transcripts: null as any,
@@ -417,15 +417,15 @@ export const validateAllFields = (
   ];
 
   if (
-    form.choice1.schoolName === 'centrale_supelec' ||
-    form.choice1.schoolName == 'centrale_mediterranee'
+    form.choice1.schoolName === 's9_centrale_supelec_gif' ||
+    form.choice1.schoolName == 's9_centrale_mediterranee'
   ) {
     requiredFields.push(form.choice1.academicPath);
   }
 
   if (
-    form.choice2.schoolName === 'centrale_supelec' ||
-    form.choice2.schoolName == 'centrale_mediterranee'
+    form.choice2.schoolName === 's9_centrale_supelec_gif' ||
+    form.choice2.schoolName == 's9_centrale_mediterranee'
   ) {
     requiredFields.push(form.choice2.academicPath);
   }

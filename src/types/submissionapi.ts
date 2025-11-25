@@ -1,12 +1,14 @@
 // src/types/submissionapi.ts
 
 export const schoolLabels = {
-  centrale_supelec: 'CentraleSupélec',
-  em_lyon: 'EM Lyon',
-  centrale_lille: 'Centrale Lille',
-  centrale_mediterranee: 'Centrale Méditerranée',
-  centrale_lyon: 'Centrale Lyon',
-  centrale_pekin: 'Centrale Pékin',
+  s9_centrale_supelec_gif: 'CentraleSupélec (Gif)',
+  s9_centrale_supelec_metz: 'CentraleSupélec (Metz)',
+  s9_centrale_supelec_rennes: 'CentraleSupélec (Rennes)',
+  s9_centrale_nantes: 'EM Lyon',
+  s9_centrale_lille: 'Centrale Lille',
+  s9_centrale_mediterranee: 'Centrale Méditerranée',
+  s9_centrale_lyon: 'Centrale Lyon',
+  s9_centrale_pekin: 'Centrale Pékin',
   unset: 'Aucun',
 } as const;
 
@@ -20,8 +22,25 @@ export type Nationality = keyof typeof nationalityLabels;
 
 export interface SchoolChoice {
   schoolName: School;
-  academicPath: string; // only if school = centrale_supelec or centrale_mediterranee
+  academicPath: string; // option ou voie de spécialisation
+  careerPath: string; // filière Métier ou parcours
 }
+
+// for each school, naming of academicPath and careerPath is different
+export const schoolAcademicPathKeyMap: Record<
+  School,
+  { academicPath: string; careerPath: string }
+> = {
+  s9_centrale_supelec_rennes: { academicPath: 'Option', careerPath: 'Filière Métier' },
+  s9_centrale_supelec_metz: { academicPath: 'Option', careerPath: 'Filière Métier' },
+  s9_centrale_supelec_gif: { academicPath: 'Option', careerPath: 'Filière Métier' },
+  s9_centrale_mediterranee: { academicPath: 'Option', careerPath: 'Filière Métier' },
+  s9_centrale_nantes: { academicPath: 'Option', careerPath: 'Filière Métier' },
+  s9_centrale_lille: { academicPath: 'Option', careerPath: 'Filière Métier' },
+  s9_centrale_lyon: { academicPath: 'Option', careerPath: 'Filière Métier' },
+  s9_centrale_pekin: { academicPath: 'Option', careerPath: 'Filière Métier' },
+  unset: { academicPath: '', careerPath: '' },
+};
 
 export interface PersonalSubmissionFormMeta {
   firstName: string;

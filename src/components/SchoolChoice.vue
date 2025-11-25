@@ -25,7 +25,9 @@ const validateThematicSequence = () => {
   const choiceKey = props.choice.choiceKey;
   const schoolObj = props.form[choiceKey];
 
-  if (['centrale_supelec', 'centrale_mediterranee'].includes(schoolObj.schoolName)) {
+  if (
+    ['s9_centrale_supelec_gif', 's9_centrale_mediterranee'].includes(schoolObj.schoolName)
+  ) {
     const thematicValue = schoolObj.academicPath;
     console.log('thematicValue = ', thematicValue);
     props.errors[choiceKey] = !thematicValue?.trim() ? 'Séquence thématique requise' : '';
@@ -101,14 +103,14 @@ watch(
 
       <div
         v-if="
-          ['centrale_supelec', 'centrale_mediterranee'].includes(
+          ['s9_centrale_supelec_gif', 's9_centrale_mediterranee'].includes(
             form[choice.choiceKey].schoolName
           )
         "
       >
         <label class="block text-blue-100 text-sm font-medium mb-2">
           {{
-            form[choice.choiceKey].schoolName === 'centrale_supelec'
+            form[choice.choiceKey].schoolName === 's9_centrale_supelec_gif'
               ? 'Séquence Thématique *'
               : 'Parcours *'
           }}
@@ -119,7 +121,7 @@ watch(
           class="input-field"
           :class="{ 'border-red-500 focus:border-red-400': errors[choice.choiceKey] }"
           :placeholder="
-            form[choice.choiceKey].schoolName === 'centrale_supelec'
+            form[choice.choiceKey].schoolName === 's9_centrale_supelec_gif'
               ? 'Saisir la séquence thématique'
               : 'Saisir le parcours'
           "

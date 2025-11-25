@@ -179,12 +179,14 @@ export const useSubmissionStore = defineStore('submission', () => {
   const getStatistics = computed(() => {
     const total = allSubmissions.value.length;
     const bySchool: Record<School, number> = {
-      centrale_supelec: 0,
-      em_lyon: 0,
-      centrale_lille: 0,
-      centrale_mediterranee: 0,
-      centrale_lyon: 0,
-      centrale_pekin: 0,
+      s9_centrale_supelec_gif: 0,
+      s9_centrale_supelec_metz: 0,
+      s9_centrale_supelec_rennes: 0,
+      s9_centrale_nantes: 0,
+      s9_centrale_lille: 0,
+      s9_centrale_mediterranee: 0,
+      s9_centrale_lyon: 0,
+      s9_centrale_pekin: 0,
       unset: 0,
     };
     const byNationality: Record<Nationality, number> = {

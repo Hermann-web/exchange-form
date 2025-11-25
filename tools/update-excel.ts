@@ -134,8 +134,8 @@ async function testUpdate() {
     lastName: 'Doe',
     nationality: 'other',
     email: 'zakariae.achemlal@centrale-casablanca.ma',
-    choice1: { schoolName: 'centrale_supelec', academicPath: 'TS1' },
-    choice2: { schoolName: 'em_lyon', academicPath: 'TS2' },
+    choice1: { schoolName: '3a_centrale_supelec', academicPath: 'TS1' },
+    choice2: { schoolName: '3a_em_lyon', academicPath: 'TS2' },
   };
 
   try {

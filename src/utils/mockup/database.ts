@@ -13,8 +13,16 @@ const MOCK_SUBMISSION_DATA: SubmissionData = {
   lastName: 'User',
   nationality: 'moroccan',
   email: `mock.mock@${import.meta.env.VITE_ALLOWED_EMAIL_DOMAIN}`,
-  choice1: { schoolName: 'centrale_supelec', academicPath: 'thematic Sequence 1' },
-  choice2: { schoolName: 'centrale_lyon', academicPath: 'thematic Sequence 2' },
+  choice1: {
+    schoolName: 's9_centrale_supelec_gif',
+    academicPath: 'Artificial Intelligence',
+    careerPath: '',
+  },
+  choice2: {
+    schoolName: 's9_centrale_lyon',
+    academicPath: 'Cybersecurity',
+    careerPath: '',
+  },
   applicationFormUrl: 'https://mock-db.com/application-form.pdf',
   resumeUrl: 'https://mock-db.com/resumePdf.pdf',
   s5TranscriptsUrl: 'https://mock-db.com/s5-transcripts.pdf',
