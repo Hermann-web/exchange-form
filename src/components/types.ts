@@ -395,27 +395,30 @@ export const validateAllFields = (
   form: SubmissionForm,
   errors: SubmissionErrorType
 ): boolean => {
-  // const personalFieldConfigs = createPersonalFieldConfigs(form, errors);
-  // const fileUploadConfigs = createFileUploadFieldConfigs(form);
+  const personalFieldConfigs = createPersonalFieldConfigs(form, errors);
+  const fileUploadConfigs = createFileUploadFieldConfigs(form);
 
-  // const requiredPersonalFields = personalFieldConfigs.map((field) => field.required);
-  // const requiredFileUploadFields = fileUploadConfigs.map((field) =>
-  //   field.conditional ? field.conditional() : field.required
-  // );
+  const requiredPersonalFields = personalFieldConfigs
+    .filter((field) => field.required)
+    .map((field) => form[field.key]);
+  const requiredFileUploadFields = fileUploadConfigs
+    .filter((field) => (field.conditional ? field.conditional() : field.required))
+    .map((field) => form[field.key]);
 
-  // const requiredFields: any[] = [...requiredPersonalFields, ...requiredFileUploadFields];
-
-  const requiredFields: any[] = [
-    form.firstName,
-    form.lastName,
-    form.nationality,
-    form.email,
-    form.applicationFormDocx,
-    form.resumePdf,
-    form.s5Transcripts,
-    form.s6Transcripts,
-    form.passeportPdf,
-  ];
+  // extract the required fields from the form
+  // for exemple,
+  // const requiredFields: any[] = [
+  //   form.firstName,
+  //   form.lastName,
+  //   form.nationality,
+  //   form.email,
+  //   form.applicationFormDocx,
+  //   form.resumePdf,
+  //   form.s5Transcripts,
+  //   form.s6Transcripts,
+  //   form.passeportPdf,
+  // ];
+  const requiredFields: any[] = [...requiredPersonalFields, ...requiredFileUploadFields];
 
   if (
     schoolAcademicPathKeyAndRequiredMap[form.choice1.schoolName].academicPath.required
@@ -437,50 +440,9 @@ export const validateAllFields = (
     requiredFields.push(form.choice2.careerPath);
   }
 
-  if (form.nationality === 'other') {
-    requiredFields.push(form.residencePermit);
-  }
-  if (form.choice1.schoolName !== 'unset') {
-    requiredFields.push(form.choice1LearningAgreement);
-  }
-  if (form.choice2.schoolName !== 'unset') {
-    requiredFields.push(form.choice2LearningAgreement);
-  }
-
   const hasSetTheFirstChoice = form.choice1.schoolName !== 'unset';
   const hasAllRequiredFields = requiredFields.every((field) => field);
   const hasNoErrors = Object.values(errors).every((error) => !error);
 
   return hasSetTheFirstChoice && hasAllRequiredFields && hasNoErrors;
 };
-
-// export const validateAllFields = (
-//   form: SubmissionForm,
-//   errors: SubmissionErrorType
-// ): boolean => {
-//   const personalFieldConfigs = createPersonalFieldConfigs(form, errors);
-//   const fileUploadConfigs = createFileUploadFieldConfigs(form);
-
-//     const hasAllRequiredPersonalFields = personalFieldConfigs.every(
-//     (field) => field.validator? field.validator(form[field.key]) : field.required && form[field.key]
-//   );
-
-//   const hasAllRequiredFileUploadFields = fileUploadConfigs.every(
-//     (field) => field.conditional? field.conditional() : field.required && form[field.key]
-//   );
-
-//   // const hasAllRequiredPersonalFields = personalFieldConfigs.every(
-//   //   (field) => field.required && form[field.key]
-//   // );
-
-//   // const hasAllRequiredFileUploadFields = fileUploadConfigs.every(
-//   //   (field) => field.required && form[field.key]
-//   // );
-
-//   const hasAllRequiredFields =
-//     hasAllRequiredPersonalFields && hasAllRequiredFileUploadFields;
-
-//   const hasNoErrors = Object.values(errors).every((error) => !error);
-
-//   return hasAllRequiredFields && hasNoErrors;
-// };
