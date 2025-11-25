@@ -8,6 +8,7 @@ import {
   type SubmissionFormObject,
   type PersonalSubmissionFormMeta,
   type SchoolSubmissionFormMeta,
+  schoolAcademicPathKeyAndRequiredMap,
 } from '@/types/submissionapi';
 
 export interface FieldOption {
@@ -417,17 +418,23 @@ export const validateAllFields = (
   ];
 
   if (
-    form.choice1.schoolName === 's9_centrale_supelec_gif' ||
-    form.choice1.schoolName == 's9_centrale_mediterranee'
+    schoolAcademicPathKeyAndRequiredMap[form.choice1.schoolName].academicPath.required
   ) {
     requiredFields.push(form.choice1.academicPath);
   }
 
   if (
-    form.choice2.schoolName === 's9_centrale_supelec_gif' ||
-    form.choice2.schoolName == 's9_centrale_mediterranee'
+    schoolAcademicPathKeyAndRequiredMap[form.choice2.schoolName].academicPath.required
   ) {
     requiredFields.push(form.choice2.academicPath);
+  }
+
+  if (schoolAcademicPathKeyAndRequiredMap[form.choice1.schoolName].careerPath.required) {
+    requiredFields.push(form.choice1.careerPath);
+  }
+
+  if (schoolAcademicPathKeyAndRequiredMap[form.choice2.schoolName].careerPath.required) {
+    requiredFields.push(form.choice2.careerPath);
   }
 
   if (form.nationality === 'other') {
@@ -440,10 +447,11 @@ export const validateAllFields = (
     requiredFields.push(form.choice2LearningAgreement);
   }
 
+  const hasSetTheFirstChoice = form.choice1.schoolName !== 'unset';
   const hasAllRequiredFields = requiredFields.every((field) => field);
   const hasNoErrors = Object.values(errors).every((error) => !error);
 
-  return hasAllRequiredFields && hasNoErrors;
+  return hasSetTheFirstChoice && hasAllRequiredFields && hasNoErrors;
 };
 
 // export const validateAllFields = (

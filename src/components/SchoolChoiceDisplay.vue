@@ -1,8 +1,9 @@
 <!-- src/components/SchoolChoiceDisplay.vue -->
 <script setup lang="ts">
 import type { SchoolChoiceConfig } from '@/components/types';
-import { schoolLabels } from '@/types/submissionapi';
+import { schoolAcademicPathKeyAndRequiredMap, schoolLabels } from '@/types/submissionapi';
 import type { SubmissionMetaDb } from '@/types/submissionapi';
+import { computed } from 'vue';
 
 interface Props {
   choice: SchoolChoiceConfig;
@@ -11,6 +12,13 @@ interface Props {
 }
 
 const { choice, submission, compact } = defineProps<Props>();
+
+// Computed properties for constraints validation
+const selectedSchool = computed(() => submission[choice.choiceKey].schoolName);
+
+const schoolConfig = computed(
+  () => schoolAcademicPathKeyAndRequiredMap[selectedSchool.value]
+);
 </script>
 
 <template>
@@ -35,9 +43,21 @@ const { choice, submission, compact } = defineProps<Props>();
           {{ schoolLabels[submission[choice.choiceKey].schoolName] }}
         </span>
       </div>
-      <div v-if="submission[choice.choiceKey].academicPath" class="flex justify-between">
+      <div
+        v-if="
+          schoolConfig.academicPath.required && submission[choice.choiceKey].academicPath
+        "
+        class="flex justify-between"
+      >
         <span class="text-blue-300">Séquence Thématique:</span>
         <span class="text-white">{{ submission[choice.choiceKey].academicPath }}</span>
+      </div>
+      <div
+        v-if="schoolConfig.careerPath.required && submission[choice.choiceKey].careerPath"
+        class="flex justify-between"
+      >
+        <span class="text-blue-300">Filière Métier:</span>
+        <span class="text-white">{{ submission[choice.choiceKey].careerPath }}</span>
       </div>
     </div>
 
@@ -51,11 +71,25 @@ const { choice, submission, compact } = defineProps<Props>();
         </div>
       </div>
 
-      <div v-if="submission[choice.choiceKey].academicPath" class="pt-2">
+      <div
+        v-if="
+          schoolConfig.academicPath.required && submission[choice.choiceKey].academicPath
+        "
+        class="pt-2"
+      >
         <label class="block text-blue-300 text-sm font-medium mb-1">
-          Séquence Thématique
+          {{ schoolConfig.academicPath.text }}
         </label>
         <p class="text-white">{{ submission[choice.choiceKey].academicPath }}</p>
+      </div>
+      <div
+        v-if="schoolConfig.careerPath.required && submission[choice.choiceKey].careerPath"
+        class="pt-2"
+      >
+        <label class="block text-blue-300 text-sm font-medium mb-1">
+          {{ schoolConfig.careerPath.text }}
+        </label>
+        <p class="text-white">{{ submission[choice.choiceKey].careerPath }}</p>
       </div>
     </div>
   </div>

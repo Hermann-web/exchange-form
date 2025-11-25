@@ -27,19 +27,51 @@ export interface SchoolChoice {
 }
 
 // for each school, naming of academicPath and careerPath is different
-export const schoolAcademicPathKeyMap: Record<
+// for each school, if academicPath is required and if careerPath is required
+// combine in a single map
+export const schoolAcademicPathKeyAndRequiredMap: Record<
   School,
-  { academicPath: string; careerPath: string }
+  {
+    academicPath: { text: string; required: boolean };
+    careerPath: { text: string; required: boolean };
+  }
 > = {
-  s9_centrale_supelec_rennes: { academicPath: 'Option', careerPath: 'Filière Métier' },
-  s9_centrale_supelec_metz: { academicPath: 'Option', careerPath: 'Filière Métier' },
-  s9_centrale_supelec_gif: { academicPath: 'Option', careerPath: 'Filière Métier' },
-  s9_centrale_mediterranee: { academicPath: 'Option', careerPath: 'Filière Métier' },
-  s9_centrale_nantes: { academicPath: 'Option', careerPath: 'Filière Métier' },
-  s9_centrale_lille: { academicPath: 'Option', careerPath: 'Filière Métier' },
-  s9_centrale_lyon: { academicPath: 'Option', careerPath: 'Filière Métier' },
-  s9_centrale_pekin: { academicPath: 'Option', careerPath: 'Filière Métier' },
-  unset: { academicPath: '', careerPath: '' },
+  s9_centrale_supelec_rennes: {
+    academicPath: { text: 'Option', required: true },
+    careerPath: { text: 'Filière Métier', required: true },
+  },
+  s9_centrale_supelec_metz: {
+    academicPath: { text: 'Option', required: true },
+    careerPath: { text: 'Filière Métier', required: false },
+  },
+  s9_centrale_supelec_gif: {
+    academicPath: { text: 'Séquence Thématique', required: true },
+    careerPath: { text: 'Filière Métier', required: false },
+  },
+  s9_centrale_mediterranee: {
+    academicPath: { text: 'Parcours', required: true },
+    careerPath: { text: 'Filière Métier', required: false },
+  },
+  s9_centrale_nantes: {
+    academicPath: { text: 'Option', required: true },
+    careerPath: { text: 'Filière Métier', required: false },
+  },
+  s9_centrale_lille: {
+    academicPath: { text: 'Option', required: true },
+    careerPath: { text: 'Filière Métier', required: false },
+  },
+  s9_centrale_lyon: {
+    academicPath: { text: 'Option', required: true },
+    careerPath: { text: 'Filière Métier', required: false },
+  },
+  s9_centrale_pekin: {
+    academicPath: { text: 'Option', required: true },
+    careerPath: { text: 'Filière Métier', required: false },
+  },
+  unset: {
+    academicPath: { text: '', required: false },
+    careerPath: { text: '', required: false },
+  },
 };
 
 export interface PersonalSubmissionFormMeta {

@@ -1,7 +1,10 @@
 <!-- src/components/SchoolChoice.vue -->
 <script setup lang="ts">
 import { watch, computed } from 'vue';
-import type { SubmissionForm } from '@/types/submissionapi';
+import {
+  type SubmissionForm,
+  schoolAcademicPathKeyAndRequiredMap,
+} from '@/types/submissionapi';
 import type {
   SchoolChoiceConfig,
   SchoolOption,
@@ -20,17 +23,34 @@ const props = defineProps<Props>();
 // Computed properties for constraints validation
 const selectedSchool = computed(() => props.form[props.choice.choiceKey].schoolName);
 
-// Validate thematic sequence
-const validateThematicSequence = () => {
+const schoolConfig = computed(
+  () => schoolAcademicPathKeyAndRequiredMap[selectedSchool.value]
+);
+
+// Validate academic path
+const validateAcademicPath = () => {
   const choiceKey = props.choice.choiceKey;
   const schoolObj = props.form[choiceKey];
 
-  if (
-    ['s9_centrale_supelec_gif', 's9_centrale_mediterranee'].includes(schoolObj.schoolName)
-  ) {
+  if (schoolConfig.value.academicPath.required) {
     const thematicValue = schoolObj.academicPath;
-    console.log('thematicValue = ', thematicValue);
-    props.errors[choiceKey] = !thematicValue?.trim() ? 'Séquence thématique requise' : '';
+    props.errors[choiceKey] = !thematicValue?.trim()
+      ? `${schoolConfig.value.academicPath.text} requis(e)`
+      : '';
+  } else {
+    props.errors[choiceKey] = '';
+  }
+};
+
+const validateCareerPath = () => {
+  const choiceKey = props.choice.choiceKey;
+  const schoolObj = props.form[choiceKey];
+
+  if (schoolConfig.value.careerPath.required) {
+    const careerValue = schoolObj.careerPath;
+    props.errors[choiceKey] = !careerValue?.trim()
+      ? `${schoolConfig.value.careerPath.text} requis(e)`
+      : '';
   } else {
     props.errors[choiceKey] = '';
   }
@@ -38,21 +58,26 @@ const validateThematicSequence = () => {
 
 // Watch for school changes and empty all fields
 watch(selectedSchool, () => {
-  // If switching to 'unset', clear all fields
+  // If changing school, clear all fields
   props.form[props.choice.choiceKey].academicPath = '';
+  props.form[props.choice.choiceKey].careerPath = '';
 
   // Revalidate after school change to be ultra safe
   validateSchool();
-  validateThematicSequence();
+  validateAcademicPath();
+  validateCareerPath();
 });
 
-// Watch for thematic sequence changes
-watch(() => props.form[props.choice.choiceKey].academicPath, validateThematicSequence);
+// Watch for academic path changes
+watch(() => props.form[props.choice.choiceKey].academicPath, validateAcademicPath);
+// Watch for career path changes
+watch(() => props.form[props.choice.choiceKey].careerPath, validateCareerPath);
 
 const validateSchool = () => {
   const choiceKey = props.choice.choiceKey;
   const schoolObj = props.form[choiceKey];
 
+  // If first choice is unset, show error
   if (choiceKey === 'choice1' && schoolObj.schoolName == 'unset') {
     props.errors[choiceKey] = 'Le premier choix doit être mentionné';
     return;
@@ -66,7 +91,8 @@ watch(
   () => props.form,
   () => {
     validateSchool();
-    validateThematicSequence();
+    validateAcademicPath();
+    validateCareerPath();
   },
   { immediate: true }
 );
@@ -101,30 +127,31 @@ watch(
         </p>
       </div>
 
-      <div
-        v-if="
-          ['s9_centrale_supelec_gif', 's9_centrale_mediterranee'].includes(
-            form[choice.choiceKey].schoolName
-          )
-        "
-      >
+      <div v-if="schoolConfig.academicPath.required">
         <label class="block text-blue-100 text-sm font-medium mb-2">
-          {{
-            form[choice.choiceKey].schoolName === 's9_centrale_supelec_gif'
-              ? 'Séquence Thématique *'
-              : 'Parcours *'
-          }}
+          {{ schoolConfig.academicPath.text }} *
         </label>
         <input
           v-model="form[choice.choiceKey].academicPath"
           type="text"
           class="input-field"
           :class="{ 'border-red-500 focus:border-red-400': errors[choice.choiceKey] }"
-          :placeholder="
-            form[choice.choiceKey].schoolName === 's9_centrale_supelec_gif'
-              ? 'Saisir la séquence thématique'
-              : 'Saisir le parcours'
-          "
+          :placeholder="`Saisir : ${schoolConfig.academicPath.text}`"
+        />
+        <p v-if="errors[choice.choiceKey]" class="text-red-300 text-xs mt-1">
+          {{ errors[choice.choiceKey] }}
+        </p>
+      </div>
+      <div v-if="schoolConfig.careerPath.required">
+        <label class="block text-blue-100 text-sm font-medium mb-2">
+          {{ schoolConfig.careerPath.text }} *
+        </label>
+        <input
+          v-model="form[choice.choiceKey].careerPath"
+          type="text"
+          class="input-field"
+          :class="{ 'border-red-500 focus:border-red-400': errors[choice.choiceKey] }"
+          :placeholder="`Saisir : ${schoolConfig.careerPath.text}`"
         />
         <p v-if="errors[choice.choiceKey]" class="text-red-300 text-xs mt-1">
           {{ errors[choice.choiceKey] }}
