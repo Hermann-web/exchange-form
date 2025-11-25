@@ -89,7 +89,7 @@ const getAvailableDocuments = () => {
         <div class="flex items-center gap-3 ml-4">
           <div class="hidden sm:block text-right">
             <div class="text-sm font-medium text-white">
-              {{ schoolLabels[submission.school1.schoolName] }}
+              {{ schoolLabels[submission.choice1.schoolName] }}
             </div>
           </div>
           <button @click="toggleExpanded" class="btn-secondary p-2 text-sm">
@@ -101,7 +101,7 @@ const getAvailableDocuments = () => {
       <!-- Mobile School Info -->
       <div class="sm:hidden mt-3 pt-3 border-t border-white/10">
         <div class="text-sm font-medium text-white">
-          {{ schoolLabels[submission.school1.schoolName] }}
+          {{ schoolLabels[submission.choice1.schoolName] }}
         </div>
       </div>
     </div>

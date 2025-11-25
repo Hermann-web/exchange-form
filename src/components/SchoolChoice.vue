@@ -18,26 +18,26 @@ interface Props {
 const props = defineProps<Props>();
 
 // Computed properties for constraints validation
-const selectedSchool = computed(() => props.form[props.choice.schoolKey].schoolName);
+const selectedSchool = computed(() => props.form[props.choice.choiceKey].schoolName);
 
 // Validate thematic sequence
 const validateThematicSequence = () => {
-  const schoolKey = props.choice.schoolKey;
-  const schoolObj = props.form[schoolKey];
+  const choiceKey = props.choice.choiceKey;
+  const schoolObj = props.form[choiceKey];
 
   if (['centrale_supelec', 'centrale_mediterranee'].includes(schoolObj.schoolName)) {
     const thematicValue = schoolObj.thematicSequence;
     console.log('thematicValue = ', thematicValue);
-    props.errors[schoolKey] = !thematicValue?.trim() ? 'Séquence thématique requise' : '';
+    props.errors[choiceKey] = !thematicValue?.trim() ? 'Séquence thématique requise' : '';
   } else {
-    props.errors[schoolKey] = '';
+    props.errors[choiceKey] = '';
   }
 };
 
 // Watch for school changes and empty all fields
 watch(selectedSchool, () => {
   // If switching to 'unset', clear all fields
-  props.form[props.choice.schoolKey].thematicSequence = '';
+  props.form[props.choice.choiceKey].thematicSequence = '';
 
   // Revalidate after school change to be ultra safe
   validateSchool();
@@ -46,21 +46,21 @@ watch(selectedSchool, () => {
 
 // Watch for thematic sequence changes
 watch(
-  () => props.form[props.choice.schoolKey].thematicSequence,
+  () => props.form[props.choice.choiceKey].thematicSequence,
   validateThematicSequence
 );
 
 const validateSchool = () => {
-  const schoolKey = props.choice.schoolKey;
-  const schoolObj = props.form[schoolKey];
+  const choiceKey = props.choice.choiceKey;
+  const schoolObj = props.form[choiceKey];
 
-  if (schoolKey === 'school1' && schoolObj.schoolName == 'unset') {
-    props.errors[schoolKey] = 'Le premier choix doit être mentionné';
+  if (choiceKey === 'choice1' && schoolObj.schoolName == 'unset') {
+    props.errors[choiceKey] = 'Le premier choix doit être mentionné';
     return;
   }
-  props.errors[schoolKey] = '';
+  props.errors[choiceKey] = '';
 };
-watch(() => props.form[props.choice.schoolKey].schoolName, validateSchool);
+watch(() => props.form[props.choice.choiceKey].schoolName, validateSchool);
 
 // Initialize validation on mount
 watch(
@@ -85,9 +85,9 @@ watch(
       <div>
         <label class="block text-blue-100 text-sm font-medium mb-2">École *</label>
         <select
-          v-model="form[choice.schoolKey].schoolName"
+          v-model="form[choice.choiceKey].schoolName"
           class="input-field"
-          :class="{ 'border-red-500 focus:border-red-400': errors[choice.schoolKey] }"
+          :class="{ 'border-red-500 focus:border-red-400': errors[choice.choiceKey] }"
         >
           <option
             v-for="school in props.schoolOptions"
@@ -97,38 +97,38 @@ watch(
             {{ school.label }}
           </option>
         </select>
-        <p v-if="errors[choice.schoolKey]" class="text-red-300 text-xs mt-1">
-          {{ errors[choice.schoolKey] }}
+        <p v-if="errors[choice.choiceKey]" class="text-red-300 text-xs mt-1">
+          {{ errors[choice.choiceKey] }}
         </p>
       </div>
 
       <div
         v-if="
           ['centrale_supelec', 'centrale_mediterranee'].includes(
-            form[choice.schoolKey].schoolName
+            form[choice.choiceKey].schoolName
           )
         "
       >
         <label class="block text-blue-100 text-sm font-medium mb-2">
           {{
-            form[choice.schoolKey].schoolName === 'centrale_supelec'
+            form[choice.choiceKey].schoolName === 'centrale_supelec'
               ? 'Séquence Thématique *'
               : 'Parcours *'
           }}
         </label>
         <input
-          v-model="form[choice.schoolKey].thematicSequence"
+          v-model="form[choice.choiceKey].thematicSequence"
           type="text"
           class="input-field"
-          :class="{ 'border-red-500 focus:border-red-400': errors[choice.schoolKey] }"
+          :class="{ 'border-red-500 focus:border-red-400': errors[choice.choiceKey] }"
           :placeholder="
-            form[choice.schoolKey].schoolName === 'centrale_supelec'
+            form[choice.choiceKey].schoolName === 'centrale_supelec'
               ? 'Saisir la séquence thématique'
               : 'Saisir le parcours'
           "
         />
-        <p v-if="errors[choice.schoolKey]" class="text-red-300 text-xs mt-1">
-          {{ errors[choice.schoolKey] }}
+        <p v-if="errors[choice.choiceKey]" class="text-red-300 text-xs mt-1">
+          {{ errors[choice.choiceKey] }}
         </p>
       </div>
     </div>

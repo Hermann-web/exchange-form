@@ -51,7 +51,7 @@ export interface DocumentDisplay<T = any> {
 export interface SchoolChoiceConfig {
   title: string;
   text: string;
-  schoolKey: 'school1' | 'school2';
+  choiceKey: 'choice1' | 'choice2';
   emoji?: string;
   bgClass?: string;
 }
@@ -91,14 +91,14 @@ export const schoolChoices: SchoolChoiceConfig[] = [
   {
     title: 'first_choice',
     text: 'Premier Choix',
-    schoolKey: 'school1',
+    choiceKey: 'choice1',
     emoji: '🥇',
     bgClass: 'bg-green-500/10 border-green-400/20',
   },
   {
     title: 'second_choice',
     text: 'Deuxième Choix',
-    schoolKey: 'school2',
+    choiceKey: 'choice2',
     emoji: '🥈',
     bgClass: 'bg-yellow-500/10 border-yellow-400/20',
   },
@@ -137,18 +137,18 @@ export const createDocumentConfigs = (icons: any) => {
       filename: 's6-transcripts.pdf',
     },
     {
-      key: 'school1LearningAgreement',
+      key: 'choice1LearningAgreement',
       label: 'Learning Agreement (École 1)',
       description: 'Document PDF (.pdf)',
       icon: icons.DocumentTextIcon,
-      filename: 'learning-agreement-school1.pdf',
+      filename: 'learning-agreement-choice1.pdf',
     },
     {
-      key: 'school2LearningAgreement',
+      key: 'choice2LearningAgreement',
       label: 'Learning Agreement (École 2)',
       description: 'Document PDF (.pdf)',
       icon: icons.DocumentTextIcon,
-      filename: 'learning-agreement-school2.pdf',
+      filename: 'learning-agreement-choice2.pdf',
     },
     {
       key: 'passeportPdf',
@@ -280,20 +280,20 @@ export const createFileUploadFieldConfigs = (form: SubmissionForm) => {
       required: true,
     },
     {
-      key: 'school1LearningAgreement',
+      key: 'choice1LearningAgreement',
       label: 'Learning Agreement (School 1) (.pdf)',
       accept: '.pdf',
       extensions: ['pdf'],
       required: false,
-      conditional: () => form.school1.schoolName !== 'unset',
+      conditional: () => form.choice1.schoolName !== 'unset',
     },
     {
-      key: 'school2LearningAgreement',
+      key: 'choice2LearningAgreement',
       label: 'Learning Agreement (School 2) (.pdf)',
       accept: '.pdf',
       extensions: ['pdf'],
       required: false,
-      conditional: () => form.school2.schoolName !== 'unset',
+      conditional: () => form.choice2.schoolName !== 'unset',
     },
     {
       key: 'passeportPdf',
@@ -355,15 +355,15 @@ export const initialize_submission_reactives = (
     lastName: '',
     nationality: 'moroccan',
     email: initialEmail || '',
-    school1: { schoolName: 'centrale_supelec', thematicSequence: '' },
-    school2: { schoolName: 'em_lyon', thematicSequence: '' },
+    choice1: { schoolName: 'centrale_supelec', thematicSequence: '' },
+    choice2: { schoolName: 'em_lyon', thematicSequence: '' },
     applicationFormDocx: null as any,
     resumePdf: null as any,
     s5Transcripts: null as any,
     s6Transcripts: null as any,
     residencePermit: undefined,
-    school1LearningAgreement: null as any,
-    school2LearningAgreement: null as any,
+    choice1LearningAgreement: null as any,
+    choice2LearningAgreement: null as any,
     passeportPdf: null as any,
     otherFilesPdf: null as any,
   };
@@ -377,12 +377,12 @@ export const initialize_submission_reactives = (
     s5Transcripts: '',
     s6Transcripts: '',
     residencePermit: '',
-    school1LearningAgreement: '',
-    school2LearningAgreement: '',
+    choice1LearningAgreement: '',
+    choice2LearningAgreement: '',
     passeportPdf: '',
     nationality: '',
-    school1: '',
-    school2: '',
+    choice1: '',
+    choice2: '',
     otherFilesPdf: '',
   };
 
@@ -416,27 +416,27 @@ export const validateAllFields = (
   ];
 
   if (
-    form.school1.schoolName === 'centrale_supelec' ||
-    form.school1.schoolName == 'centrale_mediterranee'
+    form.choice1.schoolName === 'centrale_supelec' ||
+    form.choice1.schoolName == 'centrale_mediterranee'
   ) {
-    requiredFields.push(form.school1.thematicSequence);
+    requiredFields.push(form.choice1.thematicSequence);
   }
 
   if (
-    form.school2.schoolName === 'centrale_supelec' ||
-    form.school2.schoolName == 'centrale_mediterranee'
+    form.choice2.schoolName === 'centrale_supelec' ||
+    form.choice2.schoolName == 'centrale_mediterranee'
   ) {
-    requiredFields.push(form.school2.thematicSequence);
+    requiredFields.push(form.choice2.thematicSequence);
   }
 
   if (form.nationality === 'other') {
     requiredFields.push(form.residencePermit);
   }
-  if (form.school1.schoolName !== 'unset') {
-    requiredFields.push(form.school1LearningAgreement);
+  if (form.choice1.schoolName !== 'unset') {
+    requiredFields.push(form.choice1LearningAgreement);
   }
-  if (form.school2.schoolName !== 'unset') {
-    requiredFields.push(form.school2LearningAgreement);
+  if (form.choice2.schoolName !== 'unset') {
+    requiredFields.push(form.choice2LearningAgreement);
   }
 
   const hasAllRequiredFields = requiredFields.every((field) => field);

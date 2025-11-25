@@ -36,8 +36,8 @@ export interface PersonalSubmissionFormMeta {
 
 export interface SchoolSubmissionFormMeta {
   // Exchange choices (vertical structure)
-  school1: SchoolChoice;
-  school2: SchoolChoice;
+  choice1: SchoolChoice;
+  choice2: SchoolChoice;
 }
 
 export type SubmissionFormMeta = PersonalSubmissionFormMeta & SchoolSubmissionFormMeta;
@@ -49,8 +49,8 @@ export interface SubmissionFormObject {
   s5Transcripts: File; // 2-page PDF
   s6Transcripts: File; // 2-page PDF
   residencePermit?: File; // required only for non-Moroccans, .pdf
-  school1LearningAgreement: File; // pdf
-  school2LearningAgreement?: File; // pdf
+  choice1LearningAgreement: File; // pdf
+  choice2LearningAgreement?: File; // pdf
   passeportPdf: File; // pdf
   otherFilesPdf?: File; // pdf
 }
@@ -64,8 +64,8 @@ export interface SubmissionFormObjectUrls {
   s5TranscriptsUrl: string; // public download URL for S5 transcripts
   s6TranscriptsUrl: string; // public download URL for S6 transcripts
   residencePermitUrl?: string; // if applicable
-  school1LearningAgreementUrl: string; // pdf
-  school2LearningAgreementUrl?: string; // pdf
+  choice1LearningAgreementUrl: string; // pdf
+  choice2LearningAgreementUrl?: string; // pdf
   passeportUrl: string; // pdf
   otherFilesPdfUrl?: string; // pdf
 }
@@ -80,17 +80,17 @@ export const SubmissionFormObjectUrlsMap: Record<
   s5Transcripts: 's5TranscriptsUrl',
   s6Transcripts: 's6TranscriptsUrl',
   residencePermit: 'residencePermitUrl',
-  school1LearningAgreement: 'school1LearningAgreementUrl',
-  school2LearningAgreement: 'school2LearningAgreementUrl',
+  choice1LearningAgreement: 'choice1LearningAgreementUrl',
+  choice2LearningAgreement: 'choice2LearningAgreementUrl',
   passeportPdf: 'passeportUrl',
   otherFilesPdf: 'otherFilesPdfUrl',
 };
 
 // Helper function to map school key to learning agreement field name
 export const getSchoolLearningAgreementKey = (
-  schoolKey: 'school1' | 'school2'
+  choiceKey: 'choice1' | 'choice2'
 ): keyof SubmissionFormObject => {
-  return `${schoolKey}LearningAgreement` as keyof SubmissionFormObject;
+  return `${choiceKey}LearningAgreement` as keyof SubmissionFormObject;
 };
 
 export interface SubmissionData extends SubmissionFormMeta, SubmissionFormObjectUrls {

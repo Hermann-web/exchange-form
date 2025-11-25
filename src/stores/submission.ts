@@ -57,9 +57,9 @@ export const useSubmissionStore = defineStore('submission', () => {
 
     // some check
     // if choice is unset, empty some fields
-    if (formData.school2.schoolName == 'unset') {
-      formData.school2LearningAgreement = undefined;
-      formData.school2.thematicSequence = '';
+    if (formData.choice2.schoolName == 'unset') {
+      formData.choice2LearningAgreement = undefined;
+      formData.choice2.thematicSequence = '';
     }
 
     formData.email = email;
@@ -88,14 +88,14 @@ export const useSubmissionStore = defineStore('submission', () => {
         residencePermitUrl: formData.residencePermit
           ? await uploadSingleFile('residencePermit', formData.residencePermit)
           : undefined,
-        school1LearningAgreementUrl: await uploadSingleFile(
-          'school1LearningAgreement',
-          formData.school1LearningAgreement
+        choice1LearningAgreementUrl: await uploadSingleFile(
+          'choice1LearningAgreement',
+          formData.choice1LearningAgreement
         ),
-        school2LearningAgreementUrl: formData.school2LearningAgreement
+        choice2LearningAgreementUrl: formData.choice2LearningAgreement
           ? await uploadSingleFile(
-              'school2LearningAgreement',
-              formData.school2LearningAgreement
+              'choice2LearningAgreement',
+              formData.choice2LearningAgreement
             )
           : undefined,
         passeportUrl: await uploadSingleFile('passeportPdf', formData.passeportPdf),
@@ -171,7 +171,7 @@ export const useSubmissionStore = defineStore('submission', () => {
   // Filter submissions by school
   const getSubmissionsBySchool = (school: School): SubmissionMetaDb[] => {
     return allSubmissions.value.filter(
-      (sub) => sub.school1.schoolName === school || sub.school2.schoolName === school
+      (sub) => sub.choice1.schoolName === school || sub.choice2.schoolName === school
     );
   };
 
@@ -194,8 +194,8 @@ export const useSubmissionStore = defineStore('submission', () => {
 
     allSubmissions.value.forEach((submission) => {
       // Count by first choice school
-      if (submission.school1) {
-        bySchool[submission.school1.schoolName]++;
+      if (submission.choice1) {
+        bySchool[submission.choice1.schoolName]++;
       }
 
       // Count by nationality

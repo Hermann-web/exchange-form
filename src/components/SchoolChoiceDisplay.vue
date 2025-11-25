@@ -32,16 +32,16 @@ const { choice, submission, compact } = defineProps<Props>();
       <div class="flex justify-between">
         <span class="text-blue-300">École:</span>
         <span class="text-white font-medium">
-          {{ schoolLabels[submission[choice.schoolKey].schoolName] }}
+          {{ schoolLabels[submission[choice.choiceKey].schoolName] }}
         </span>
       </div>
       <div
-        v-if="submission[choice.schoolKey].thematicSequence"
+        v-if="submission[choice.choiceKey].thematicSequence"
         class="flex justify-between"
       >
         <span class="text-blue-300">Séquence Thématique:</span>
         <span class="text-white">{{
-          submission[choice.schoolKey].thematicSequence
+          submission[choice.choiceKey].thematicSequence
         }}</span>
       </div>
     </div>
@@ -51,16 +51,16 @@ const { choice, submission, compact } = defineProps<Props>();
         <div>
           <label class="block text-blue-300 text-sm font-medium mb-1">École</label>
           <p class="text-white font-medium">
-            {{ schoolLabels[submission[choice.schoolKey].schoolName] }}
+            {{ schoolLabels[submission[choice.choiceKey].schoolName] }}
           </p>
         </div>
       </div>
 
-      <div v-if="submission[choice.schoolKey].thematicSequence" class="pt-2">
+      <div v-if="submission[choice.choiceKey].thematicSequence" class="pt-2">
         <label class="block text-blue-300 text-sm font-medium mb-1">
           Séquence Thématique
         </label>
-        <p class="text-white">{{ submission[choice.schoolKey].thematicSequence }}</p>
+        <p class="text-white">{{ submission[choice.choiceKey].thematicSequence }}</p>
       </div>
     </div>
   </div>
