@@ -4,7 +4,7 @@ export const schoolLabels = {
   s9_centrale_supelec_gif: 'CentraleSupélec (Gif)',
   s9_centrale_supelec_metz: 'CentraleSupélec (Metz)',
   s9_centrale_supelec_rennes: 'CentraleSupélec (Rennes)',
-  s9_centrale_nantes: 'EM Lyon',
+  s9_centrale_nantes: 'Centrale Nantes',
   s9_centrale_lille: 'Centrale Lille',
   s9_centrale_mediterranee: 'Centrale Méditerranée',
   s9_centrale_lyon: 'Centrale Lyon',
