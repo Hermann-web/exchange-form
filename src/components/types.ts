@@ -140,14 +140,14 @@ export const createDocumentConfigs = (icons: any) => {
     },
     {
       key: 'choice1LearningAgreement',
-      label: 'Learning Agreement (École 1)',
+      label: 'Dossier de Candidature (École 1)',
       description: 'Document PDF (.pdf)',
       icon: icons.DocumentTextIcon,
       filename: 'learning-agreement-choice1.pdf',
     },
     {
       key: 'choice2LearningAgreement',
-      label: 'Learning Agreement (École 2)',
+      label: 'Dossier de Candidature (École 2)',
       description: 'Document PDF (.pdf)',
       icon: icons.DocumentTextIcon,
       filename: 'learning-agreement-choice2.pdf',
@@ -283,7 +283,7 @@ export const createFileUploadFieldConfigs = (form: SubmissionForm) => {
     },
     {
       key: 'choice1LearningAgreement',
-      label: 'Learning Agreement (School 1) (.pdf)',
+      label: 'Dossier de Candidature (École 1) (.pdf)',
       accept: '.pdf',
       extensions: ['pdf'],
       required: false,
@@ -291,7 +291,7 @@ export const createFileUploadFieldConfigs = (form: SubmissionForm) => {
     },
     {
       key: 'choice2LearningAgreement',
-      label: 'Learning Agreement (School 2) (.pdf)',
+      label: 'Dossier de Candidature (École 2) (.pdf)',
       accept: '.pdf',
       extensions: ['pdf'],
       required: false,

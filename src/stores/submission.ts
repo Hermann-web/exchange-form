@@ -188,6 +188,14 @@ export const useSubmissionStore = defineStore('submission', () => {
       s9_centrale_mediterranee: 0,
       s9_centrale_lyon: 0,
       s9_centrale_pekin: 0,
+      s9_enit: 0,
+      s9_enise: 0,
+      s9_ensimag: 0,
+      dd_centrale_supelec: 0,
+      dd_centrale_lille: 0,
+      dd_centrale_mediterranee: 0,
+      dd_georgia_tech: 0,
+      dd_uppa: 0,
       unset: 0,
     };
     const byNationality: Record<Nationality, number> = {

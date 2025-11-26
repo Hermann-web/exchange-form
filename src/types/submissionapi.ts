@@ -1,14 +1,22 @@
 // src/types/submissionapi.ts
 
 export const schoolLabels = {
-  s9_centrale_supelec_gif: 'CentraleSupélec (Gif)',
-  s9_centrale_supelec_metz: 'CentraleSupélec (Metz)',
-  s9_centrale_supelec_rennes: 'CentraleSupélec (Rennes)',
-  s9_centrale_nantes: 'Centrale Nantes',
-  s9_centrale_lille: 'Centrale Lille',
-  s9_centrale_mediterranee: 'Centrale Méditerranée',
-  s9_centrale_lyon: 'Centrale Lyon',
-  s9_centrale_pekin: 'Centrale Pékin',
+  s9_centrale_supelec_gif: '3A CentraleSupélec (Gif)',
+  s9_centrale_supelec_metz: '3A CentraleSupélec (Metz)',
+  s9_centrale_supelec_rennes: '3A CentraleSupélec (Rennes)',
+  s9_centrale_nantes: '3A Centrale Nantes',
+  s9_centrale_lille: '3A Centrale Lille',
+  s9_centrale_mediterranee: '3A Centrale Méditerranée',
+  s9_centrale_lyon: '3A Centrale Lyon',
+  s9_centrale_pekin: '3A Centrale Pékin',
+  s9_enit: '3A ENIT',
+  s9_enise: '3A ENISE',
+  s9_ensimag: 'S9 ENSIMAG',
+  dd_centrale_supelec: 'DD CentraleSupélec',
+  dd_centrale_lille: 'DD Centrale Lille',
+  dd_centrale_mediterranee: 'DD Centrale Méditerranée',
+  dd_georgia_tech: 'DD Georgia Tech',
+  dd_uppa: "DD Université de Pau et des Pays de l'Adour",
   unset: 'Aucun',
 } as const;
 
@@ -42,31 +50,63 @@ export const schoolAcademicPathKeyAndRequiredMap: Record<
   },
   s9_centrale_supelec_metz: {
     academicPath: { text: 'Option', required: true },
-    careerPath: { text: 'Filière Métier', required: false },
+    careerPath: { text: 'Filière Métier', required: true },
   },
   s9_centrale_supelec_gif: {
-    academicPath: { text: 'Séquence Thématique', required: true },
-    careerPath: { text: 'Filière Métier', required: false },
+    academicPath: { text: 'Option', required: true },
+    careerPath: { text: 'Filière Métier', required: true },
   },
   s9_centrale_mediterranee: {
-    academicPath: { text: 'Parcours', required: true },
-    careerPath: { text: 'Filière Métier', required: false },
+    academicPath: { text: 'Option', required: true },
+    careerPath: { text: 'Filière Métier', required: true },
   },
   s9_centrale_nantes: {
     academicPath: { text: 'Option', required: true },
-    careerPath: { text: 'Filière Métier', required: false },
+    careerPath: { text: 'Filière Métier', required: true },
   },
   s9_centrale_lille: {
     academicPath: { text: 'Option', required: true },
-    careerPath: { text: 'Filière Métier', required: false },
+    careerPath: { text: 'Filière Métier', required: true },
   },
   s9_centrale_lyon: {
     academicPath: { text: 'Option', required: true },
-    careerPath: { text: 'Filière Métier', required: false },
+    careerPath: { text: 'Filière Métier', required: true },
   },
   s9_centrale_pekin: {
     academicPath: { text: 'Option', required: true },
-    careerPath: { text: 'Filière Métier', required: false },
+    careerPath: { text: 'Filière Métier', required: true },
+  },
+  s9_ensimag: {
+    academicPath: { text: 'Filière', required: true },
+    careerPath: { text: '', required: false },
+  },
+  s9_enise: {
+    academicPath: { text: 'Master+Parcours', required: true },
+    careerPath: { text: '', required: false },
+  },
+  s9_enit: {
+    academicPath: { text: 'Filière+Option', required: true },
+    careerPath: { text: '', required: false },
+  },
+  dd_georgia_tech: {
+    academicPath: { text: 'Voie de Spécialisation + Parcours', required: true },
+    careerPath: { text: '', required: false },
+  },
+  dd_centrale_lille: {
+    academicPath: { text: 'Voie de Spécialisation', required: true },
+    careerPath: { text: '', required: false },
+  },
+  dd_centrale_mediterranee: {
+    academicPath: { text: 'Voie de Spécialisation + Parcours', required: true },
+    careerPath: { text: '', required: false },
+  },
+  dd_centrale_supelec: {
+    academicPath: { text: 'Voie de Spécialisation', required: true },
+    careerPath: { text: '', required: false },
+  },
+  dd_uppa: {
+    academicPath: { text: 'Voie de Spécialisation + Parcours', required: true },
+    careerPath: { text: '', required: false },
   },
   unset: {
     academicPath: { text: '', required: false },
