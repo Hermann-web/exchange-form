@@ -58,9 +58,10 @@ export const useSubmissionStore = defineStore('submission', () => {
     // some check
     // if choice is unset, empty some fields
     if (formData.choice2.schoolName == 'unset') {
-      formData.choice2LearningAgreement = undefined;
+      formData.motivationLetterChoice2 = undefined;
       formData.choice2.academicPath = '';
       formData.choice2.careerPath = '';
+      formData.choice2.electives = '';
     }
 
     formData.email = email;
@@ -79,26 +80,43 @@ export const useSubmissionStore = defineStore('submission', () => {
 
       const submissionData: SubmissionData = {
         ...formData,
-        applicationFormUrl: await uploadSingleFile(
-          'applicationFormDocx',
-          formData.applicationFormDocx
+        applicationFormEccUrl: await uploadSingleFile(
+          'applicationFormEcc',
+          formData.applicationFormEcc
         ),
+        applicationFormGecUrl: formData.applicationFormGec
+          ? await uploadSingleFile('applicationFormGec', formData.applicationFormGec)
+          : undefined,
         resumeUrl: await uploadSingleFile('resumePdf', formData.resumePdf),
         s5TranscriptsUrl: await uploadSingleFile('s5Transcripts', formData.s5Transcripts),
         s6TranscriptsUrl: await uploadSingleFile('s6Transcripts', formData.s6Transcripts),
+        s7TranscriptsUrl: formData.s7Transcripts
+          ? await uploadSingleFile('s7Transcripts', formData.s7Transcripts)
+          : undefined,
+        s8TranscriptsUrl: formData.s8Transcripts
+          ? await uploadSingleFile('s8Transcripts', formData.s8Transcripts)
+          : undefined,
         residencePermitUrl: formData.residencePermit
           ? await uploadSingleFile('residencePermit', formData.residencePermit)
           : undefined,
-        choice1LearningAgreementUrl: await uploadSingleFile(
-          'choice1LearningAgreement',
-          formData.choice1LearningAgreement
+        motivationLetterChoice1Url: await uploadSingleFile(
+          'motivationLetterChoice1',
+          formData.motivationLetterChoice1
         ),
-        choice2LearningAgreementUrl: formData.choice2LearningAgreement
+        motivationLetterChoice2Url: formData.motivationLetterChoice2
           ? await uploadSingleFile(
-              'choice2LearningAgreement',
-              formData.choice2LearningAgreement
+              'motivationLetterChoice2',
+              formData.motivationLetterChoice2
             )
           : undefined,
+        frenchLevelCertificateUrl: await uploadSingleFile(
+          'frenchLevelCertificate',
+          formData.frenchLevelCertificate
+        ),
+        englishLevelCertificateUrl: await uploadSingleFile(
+          'englishLevelCertificate',
+          formData.englishLevelCertificate
+        ),
         passeportUrl: await uploadSingleFile('passeportPdf', formData.passeportPdf),
         otherFilesPdfUrl: formData.otherFilesPdf
           ? await uploadSingleFile('otherFilesPdf', formData.otherFilesPdf)

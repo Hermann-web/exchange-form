@@ -59,6 +59,13 @@ const schoolConfig = computed(
         <span class="text-blue-300">Filière Métier:</span>
         <span class="text-white">{{ submission[choice.choiceKey].careerPath }}</span>
       </div>
+      <div
+        v-if="schoolConfig.electives.required && submission[choice.choiceKey].electives"
+        class="flex justify-between"
+      >
+        <span class="text-blue-300">Electives:</span>
+        <span class="text-white">{{ submission[choice.choiceKey].electives }}</span>
+      </div>
     </div>
 
     <div v-else class="space-y-3">
@@ -90,6 +97,15 @@ const schoolConfig = computed(
           {{ schoolConfig.careerPath.text }}
         </label>
         <p class="text-white">{{ submission[choice.choiceKey].careerPath }}</p>
+      </div>
+      <div
+        v-if="schoolConfig.electives.required && submission[choice.choiceKey].electives"
+        class="pt-2"
+      >
+        <label class="block text-blue-300 text-sm font-medium mb-1">
+          {{ schoolConfig.electives.text }}
+        </label>
+        <p class="text-white">{{ submission[choice.choiceKey].electives }}</p>
       </div>
     </div>
   </div>

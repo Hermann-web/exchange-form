@@ -111,11 +111,18 @@ export const schoolChoices: SchoolChoiceConfig[] = [
 export const createDocumentConfigs = () => {
   const documentConfigs: DocumentDisplay<SubmissionFormObject>[] = [
     {
-      key: 'applicationFormDocx',
-      label: 'Formulaire de dossier de candidature pour la mobilité S8',
+      key: 'applicationFormEcc',
+      label: 'Formulaire ECC de dossier de candidature',
       description: 'Document Microsoft Word (.docx)',
       icon: icons.DocumentTextIcon,
-      filename: 'application-form.docx',
+      filename: 'application-form-ecc.docx',
+    },
+    {
+      key: 'applicationFormGec',
+      label: 'Formulaire GEC de dossier de candidature',
+      description: 'Document Microsoft Word (.docx)',
+      icon: icons.DocumentTextIcon,
+      filename: 'application-form-gec.docx',
     },
     {
       key: 'resumePdf',
@@ -139,19 +146,48 @@ export const createDocumentConfigs = () => {
       icon: icons.DocumentTextIcon,
       filename: 's6-transcripts.pdf',
     },
+    // s7Transcripts, s8Transcripts
     {
-      key: 'choice1LearningAgreement',
+      key: 's7Transcripts',
+      label: 'Relevés de notes S7 (2 pages)',
+      description: 'Document PDF (.pdf)',
+      icon: icons.DocumentTextIcon,
+      filename: 's7-transcripts.pdf',
+    },
+    {
+      key: 's8Transcripts',
+      label: 'Relevés de notes S8 (2 pages)',
+      description: 'Document PDF (.pdf)',
+      icon: icons.DocumentTextIcon,
+      filename: 's8-transcripts.pdf',
+    },
+    {
+      key: 'motivationLetterChoice1',
       label: 'Dossier de Candidature (École 1)',
       description: 'Document PDF (.pdf)',
       icon: icons.DocumentTextIcon,
       filename: 'learning-agreement-choice1.pdf',
     },
     {
-      key: 'choice2LearningAgreement',
+      key: 'motivationLetterChoice2',
       label: 'Dossier de Candidature (École 2)',
       description: 'Document PDF (.pdf)',
       icon: icons.DocumentTextIcon,
       filename: 'learning-agreement-choice2.pdf',
+    },
+    {
+      key: 'frenchLevelCertificate',
+      label: 'Niveau de français',
+      description: 'Document PDF (.pdf)',
+      icon: icons.DocumentTextIcon,
+      filename: 'french-level-certificate.pdf',
+    },
+    {
+      key: 'englishLevelCertificate',
+      label: "Niveau d'anglais",
+      description: 'Document PDF (.pdf)',
+      icon: icons.DocumentTextIcon,
+      filename: 'english-level-certificate.pdf',
     },
     {
       key: 'passeportPdf',
@@ -169,7 +205,7 @@ export const createDocumentConfigs = () => {
     },
     {
       key: 'otherFilesPdf',
-      label: 'Supporting Attachments',
+      label: 'Documents Supplémentaires',
       description: 'Document PDF (.pdf)',
       icon: icons.DocumentTextIcon,
       filename: 'other-files.pdf',
@@ -252,35 +288,56 @@ export const createPersonalFieldConfigs = () => {
 export const createFileUploadFieldConfigs = (form: SubmissionForm) => {
   const fileUploadConfigs: FileUploadField<SubmissionFormObject>[] = [
     {
-      key: 'applicationFormDocx',
-      label: 'Application Form (.docx)',
+      key: 'applicationFormEcc',
+      label: 'Formulaire ECC de dossier de candidature (.docx)',
+      accept: '.docx',
+      extensions: ['docx'],
+      required: true,
+    },
+    {
+      key: 'applicationFormGec',
+      label: 'Formulaire GEC de dossier de candidature (.docx)',
       accept: '.docx',
       extensions: ['docx'],
       required: true,
     },
     {
       key: 'resumePdf',
-      label: 'Resume/CV (.pdf)',
+      label: 'Curriculum Vitae (CV) actualisé (.pdf)',
       accept: '.pdf',
       extensions: ['pdf'],
       required: true,
     },
     {
       key: 's5Transcripts',
-      label: 'S5 Transcripts (.pdf)',
+      label: 'Relevés de notes S5 (.pdf)',
       accept: '.pdf',
       extensions: ['pdf'],
       required: true,
     },
     {
       key: 's6Transcripts',
-      label: 'S6 Transcripts (.pdf)',
+      label: 'Relevés de notes S6 (.pdf)',
       accept: '.pdf',
       extensions: ['pdf'],
       required: true,
     },
     {
-      key: 'choice1LearningAgreement',
+      key: 's7Transcripts',
+      label: 'Relevés de notes S7 (.pdf)',
+      accept: '.pdf',
+      extensions: ['pdf'],
+      required: true,
+    },
+    {
+      key: 's8Transcripts',
+      label: 'Relevés de notes S8 (.pdf)',
+      accept: '.pdf',
+      extensions: ['pdf'],
+      required: true,
+    },
+    {
+      key: 'motivationLetterChoice1',
       label: 'Dossier de Candidature (École 1) (.pdf)',
       accept: '.pdf',
       extensions: ['pdf'],
@@ -288,7 +345,7 @@ export const createFileUploadFieldConfigs = (form: SubmissionForm) => {
       conditional: () => form.choice1.schoolName !== 'unset',
     },
     {
-      key: 'choice2LearningAgreement',
+      key: 'motivationLetterChoice2',
       label: 'Dossier de Candidature (École 2) (.pdf)',
       accept: '.pdf',
       extensions: ['pdf'],
@@ -303,8 +360,22 @@ export const createFileUploadFieldConfigs = (form: SubmissionForm) => {
       required: true,
     },
     {
+      key: 'frenchLevelCertificate',
+      label: 'Attestation de niveau de français (.pdf)',
+      accept: '.pdf',
+      extensions: ['pdf'],
+      required: true,
+    },
+    {
+      key: 'englishLevelCertificate',
+      label: "Attestation de niveau d'anglais (.pdf)",
+      accept: '.pdf',
+      extensions: ['pdf'],
+      required: true,
+    },
+    {
       key: 'residencePermit',
-      label: 'Residence Permit (.pdf)',
+      label: 'Titre de séjour (.pdf)',
       accept: '.pdf',
       extensions: ['pdf'],
       required: false,
@@ -312,7 +383,7 @@ export const createFileUploadFieldConfigs = (form: SubmissionForm) => {
     },
     {
       key: 'otherFilesPdf',
-      label: 'More Supporting Documents (onefile, optional) (.pdf)',
+      label: 'Documents Supplémentaires (un fichier, optionnel) (.pdf)',
       accept: '.pdf',
       extensions: ['pdf'],
       required: false,
@@ -351,15 +422,20 @@ export const initialize_submission_reactives = (
     lastName: '',
     nationality: 'moroccan',
     email: initialEmail || '',
-    choice1: { schoolName: 'unset', academicPath: '', careerPath: '' },
-    choice2: { schoolName: 'unset', academicPath: '', careerPath: '' },
-    applicationFormDocx: null as any,
+    choice1: { schoolName: 'unset', academicPath: '', careerPath: '', electives: '' },
+    choice2: { schoolName: 'unset', academicPath: '', careerPath: '', electives: '' },
+    applicationFormEcc: null as any,
+    applicationFormGec: null as any,
     resumePdf: null as any,
     s5Transcripts: null as any,
     s6Transcripts: null as any,
+    s7Transcripts: null as any,
+    s8Transcripts: null as any,
     residencePermit: undefined,
-    choice1LearningAgreement: null as any,
-    choice2LearningAgreement: null as any,
+    motivationLetterChoice1: null as any,
+    motivationLetterChoice2: null as any,
+    frenchLevelCertificate: null as any,
+    englishLevelCertificate: null as any,
     passeportPdf: null as any,
     otherFilesPdf: null as any,
   };
@@ -368,13 +444,18 @@ export const initialize_submission_reactives = (
     firstName: '',
     lastName: '',
     email: '',
-    applicationFormDocx: '',
+    applicationFormEcc: '',
+    applicationFormGec: '',
     resumePdf: '',
     s5Transcripts: '',
     s6Transcripts: '',
+    s7Transcripts: '',
+    s8Transcripts: '',
     residencePermit: '',
-    choice1LearningAgreement: '',
-    choice2LearningAgreement: '',
+    motivationLetterChoice1: '',
+    motivationLetterChoice2: '',
+    frenchLevelCertificate: '',
+    englishLevelCertificate: '',
     passeportPdf: '',
     nationality: '',
     choice1: '',
@@ -399,19 +480,6 @@ export const validateAllFields = (
     .filter((field) => (field.conditional ? field.conditional() : field.required))
     .map((field) => form[field.key]);
 
-  // extract the required fields from the form
-  // for exemple,
-  // const requiredFields: any[] = [
-  //   form.firstName,
-  //   form.lastName,
-  //   form.nationality,
-  //   form.email,
-  //   form.applicationFormDocx,
-  //   form.resumePdf,
-  //   form.s5Transcripts,
-  //   form.s6Transcripts,
-  //   form.passeportPdf,
-  // ];
   const requiredFields: any[] = [...requiredPersonalFields, ...requiredFileUploadFields];
 
   if (
@@ -432,6 +500,14 @@ export const validateAllFields = (
 
   if (schoolAcademicPathKeyAndRequiredMap[form.choice2.schoolName].careerPath.required) {
     requiredFields.push(form.choice2.careerPath);
+  }
+
+  if (schoolAcademicPathKeyAndRequiredMap[form.choice1.schoolName].electives.required) {
+    requiredFields.push(form.choice1.electives);
+  }
+
+  if (schoolAcademicPathKeyAndRequiredMap[form.choice2.schoolName].electives.required) {
+    requiredFields.push(form.choice2.electives);
   }
 
   const hasSetTheFirstChoice = form.choice1.schoolName !== 'unset';

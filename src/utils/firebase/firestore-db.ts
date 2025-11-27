@@ -96,14 +96,14 @@ export const databaseApi: DataBaseApiInterface = {
       // Prepare submission data with timestamp
       const {
         residencePermitUrl,
-        choice2LearningAgreementUrl,
+        motivationLetterChoice2Url,
         otherFilesPdfUrl,
         ...others
       } = submissionData;
       const submissionWithTimestamp = {
         ...others,
         ...(residencePermitUrl ? { residencePermitUrl } : {}), // only add if defined
-        ...(choice2LearningAgreementUrl ? { choice2LearningAgreementUrl } : {}), // only add if defined
+        ...(motivationLetterChoice2Url ? { motivationLetterChoice2Url } : {}), // only add if defined
         ...(otherFilesPdfUrl ? { otherFilesPdfUrl } : {}), // only add if defined
       };
 

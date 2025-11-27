@@ -26,6 +26,7 @@ const localErrors = reactive<Record<keyof SchoolChoice, string>>({
   schoolName: '',
   academicPath: '',
   careerPath: '',
+  electives: '',
 });
 
 // Computed properties for constraints validation
@@ -64,6 +65,20 @@ const validateCareerPath = () => {
   }
 };
 
+const validateElectives = () => {
+  const choiceKey = props.choice.choiceKey;
+  const schoolObj = props.form[choiceKey];
+
+  if (schoolConfig.value.electives.required) {
+    const electivesValue = schoolObj.electives;
+    localErrors.electives = !electivesValue?.trim()
+      ? `${schoolConfig.value.electives.text} requis(e)`
+      : '';
+  } else {
+    localErrors.electives = '';
+  }
+};
+
 // Watch for school changes and empty all fields
 watch(selectedSchool, () => {
   // If changing school, clear all fields
@@ -74,12 +89,15 @@ watch(selectedSchool, () => {
   validateSchool();
   validateAcademicPath();
   validateCareerPath();
+  validateElectives();
 });
 
 // Watch for academic path changes
 watch(() => props.form[props.choice.choiceKey].academicPath, validateAcademicPath);
 // Watch for career path changes
 watch(() => props.form[props.choice.choiceKey].careerPath, validateCareerPath);
+// Watch for electives changes
+watch(() => props.form[props.choice.choiceKey].electives, validateElectives);
 
 const validateSchool = () => {
   const choiceKey = props.choice.choiceKey;
@@ -100,7 +118,10 @@ watch(
   () => {
     const choiceKey = props.choice.choiceKey;
     const anyError =
-      localErrors.schoolName || localErrors.academicPath || localErrors.careerPath;
+      localErrors.schoolName ||
+      localErrors.academicPath ||
+      localErrors.careerPath ||
+      localErrors.electives;
     props.errors[choiceKey] = anyError;
   },
   { deep: true }
@@ -113,6 +134,7 @@ watch(
     validateSchool();
     validateAcademicPath();
     validateCareerPath();
+    validateElectives();
   },
   { immediate: true }
 );
@@ -217,6 +239,43 @@ watch(
 
         <p v-if="localErrors.careerPath" class="text-red-300 text-xs mt-1">
           {{ localErrors.careerPath }}
+        </p>
+      </div>
+      <!-- Electives -->
+      <div v-if="schoolConfig.electives.required">
+        <label class="block text-blue-100 text-sm font-medium mb-2">
+          {{ schoolConfig.electives.text }} *
+        </label>
+
+        <!-- Select for Electives -->
+        <select
+          v-if="schoolConfig.electives.options"
+          v-model="form[choice.choiceKey].electives"
+          class="input-field"
+          :class="{ 'border-red-500 focus:border-red-400': localErrors.electives }"
+        >
+          <option value="" disabled selected>Select an option</option>
+          <option
+            v-for="option in schoolConfig.electives.options"
+            :key="option"
+            :value="option"
+          >
+            {{ option }}
+          </option>
+        </select>
+
+        <!-- Text Input for Electives -->
+        <input
+          v-else
+          v-model="form[choice.choiceKey].electives"
+          type="text"
+          class="input-field"
+          :class="{ 'border-red-500 focus:border-red-400': localErrors.electives }"
+          :placeholder="`Saisir : ${schoolConfig.electives.text}`"
+        />
+
+        <p v-if="localErrors.electives" class="text-red-300 text-xs mt-1">
+          {{ localErrors.electives }}
         </p>
       </div>
     </div>

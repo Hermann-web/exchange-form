@@ -146,8 +146,14 @@ async function testUpdate() {
       schoolName: 's9_centrale_supelec_gif',
       academicPath: 'TS1',
       careerPath: 'TS2',
+      electives: 'TS3',
     },
-    choice2: { schoolName: 's9_centrale_lyon', academicPath: 'TS2', careerPath: 'TS2' },
+    choice2: {
+      schoolName: 's9_centrale_lyon',
+      academicPath: 'TS2',
+      careerPath: 'TS2',
+      electives: 'TS3',
+    },
   };
 
   try {
