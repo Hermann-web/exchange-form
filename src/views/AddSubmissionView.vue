@@ -49,10 +49,23 @@ const errors: SubmissionErrorType = reactive(initial_errors);
 
 // Configuration objects
 const personalFields: PersonalField<PersonalSubmissionFormMeta>[] =
-  createPersonalFieldConfigs(form, errors);
+  createPersonalFieldConfigs();
 
 const fileUploadConfigs: FileUploadField<SubmissionFormObject>[] =
   createFileUploadFieldConfigs(form);
+
+const validatePersonalField = (field: PersonalField<PersonalSubmissionFormMeta>) => {
+  if (field.validator) {
+    errors[field.key] = field.validator(form[field.key]);
+  }
+};
+
+const setMetaField = <K extends keyof SubmissionForm>(
+  key: K,
+  value: SubmissionForm[K]
+) => {
+  form[key] = value;
+};
 
 const validateFile = (
   field: keyof SubmissionFormObject,
@@ -113,9 +126,7 @@ const handleSubmit = async () => {
 
   // Validate all personal fields
   personalFields.forEach((field) => {
-    if (field.validator) {
-      field.validator(form[field.key] as string);
-    }
+    validatePersonalField(field);
   });
 
   // Validate all files
@@ -143,13 +154,6 @@ onMounted(async () => {
     }
   }
 });
-
-const setMetaField = <K extends keyof SubmissionForm>(
-  key: K,
-  value: SubmissionForm[K]
-) => {
-  form[key] = value;
-};
 </script>
 
 <template>
@@ -222,7 +226,7 @@ const setMetaField = <K extends keyof SubmissionForm>(
             :value="form[field.key] as string"
             :error="errors[field.key]"
             @update:value="setMetaField(field.key, $event)"
-            @validate="field.validator && field.validator($event)"
+            @validate="validatePersonalField(field)"
           />
         </div>
       </div>

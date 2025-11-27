@@ -27,7 +27,7 @@ export interface PersonalField<TForm = any> {
   placeholder?: string;
   options?: FieldOption[];
   rows?: number;
-  validator?: (value: string) => void;
+  validator?: (value: string) => string;
 }
 
 type Extension = '.docx' | '.pdf';
@@ -209,24 +209,21 @@ export const downloadFile = (url: string, filename: string) => {
 export type SubmissionErrorType = { [K in keyof SubmissionForm]?: string };
 
 // Personal fields configuration factory
-export const createPersonalFieldConfigs = (
-  form: SubmissionForm,
-  errors: SubmissionErrorType
-) => {
+export const createPersonalFieldConfigs = () => {
   const personalFields: PersonalField<PersonalSubmissionFormMeta>[] = [
     {
       key: 'firstName',
       label: 'First Name',
       type: 'text',
       required: true,
-      validator: (value: string) => validateRequired('firstName', value, errors),
+      validator: (value: string) => validateRequired(value),
     },
     {
       key: 'lastName',
       label: 'Last Name',
       type: 'text',
       required: true,
-      validator: (value: string) => validateRequired('lastName', value, errors),
+      validator: (value: string) => validateRequired(value),
     },
     {
       key: 'nationality',
@@ -244,7 +241,7 @@ export const createPersonalFieldConfigs = (
       type: 'email',
       required: true,
       readonly: true,
-      validator: () => validateEmail(errors, form),
+      validator: (value: string) => validateEmail(value),
     },
   ];
   return personalFields;
@@ -335,18 +332,14 @@ export const testEmail = (email: string): boolean => {
 };
 
 // Validation functions
-const validateEmail = (errors: SubmissionErrorType, form: SubmissionForm) => {
-  errors.email = !testEmail(form.email)
+export const validateEmail = (value: string): string => {
+  return !testEmail(value)
     ? `Email must be in format: firstname.lastname@${import.meta.env.VITE_ALLOWED_EMAIL_DOMAIN}`
     : '';
 };
 
-export const validateRequired = (
-  field: string,
-  value: string,
-  errors: SubmissionErrorType
-) => {
-  errors[field as keyof typeof errors] = !value.trim() ? 'This field is required' : '';
+export const validateRequired = (value: string): string => {
+  return !value.trim() ? 'This field is required' : '';
 };
 
 export const initialize_submission_reactives = (
@@ -395,7 +388,7 @@ export const validateAllFields = (
   form: SubmissionForm,
   errors: SubmissionErrorType
 ): boolean => {
-  const personalFieldConfigs = createPersonalFieldConfigs(form, errors);
+  const personalFieldConfigs = createPersonalFieldConfigs();
   const fileUploadConfigs = createFileUploadFieldConfigs(form);
 
   const requiredPersonalFields = personalFieldConfigs
