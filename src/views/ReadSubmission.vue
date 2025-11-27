@@ -13,7 +13,6 @@ import {
   CheckCircleIcon,
   XCircleIcon,
 } from '@heroicons/vue/24/outline';
-import * as Icons from '@heroicons/vue/24/outline';
 
 import {
   schoolChoices,
@@ -30,7 +29,7 @@ const authStore = useAuthStore();
 const submissionStore = useSubmissionStore();
 
 const submission = computed(() => submissionStore.mySubmission);
-const documentConfigs = createDocumentConfigs(Icons);
+const documentConfigs = createDocumentConfigs();
 
 const personalInfoFields = computed(() => {
   if (!submission.value) return [];

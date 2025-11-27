@@ -6,6 +6,7 @@ import {
   GlobeAltIcon,
   EyeIcon,
   ArrowDownTrayIcon,
+  DocumentTextIcon,
 } from '@heroicons/vue/24/outline';
 import {
   SubmissionFormObjectUrlsMap,
@@ -16,7 +17,6 @@ import { formatDate, formatDateShort, createDocumentConfigs } from '@/components
 import DocumentItem from '@/components/DocumentItem.vue';
 import SchoolChoiceDisplay from '@/components/SchoolChoiceDisplay.vue';
 import { schoolChoices } from '@/components/types';
-import * as Icons from '@heroicons/vue/24/outline';
 
 interface Props {
   submission: SubmissionMetaDb;
@@ -29,7 +29,7 @@ const emit = defineEmits<{
 }>();
 
 const isExpanded = ref(false);
-const documentConfigs = createDocumentConfigs(Icons);
+const documentConfigs = createDocumentConfigs();
 
 const toggleExpanded = () => {
   isExpanded.value = !isExpanded.value;
@@ -123,7 +123,7 @@ const getAvailableDocuments = () => {
         <!-- Documents -->
         <div>
           <h4 class="text-blue-200 font-medium mb-3 flex items-center text-sm">
-            <Icons.DocumentTextIcon class="w-4 h-4 mr-2" />
+            <DocumentTextIcon class="w-4 h-4 mr-2" />
             Documents
           </h4>
           <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">

@@ -10,6 +10,7 @@ import {
   type SchoolSubmissionFormMeta,
   schoolAcademicPathKeyAndRequiredMap,
 } from '@/types/submissionapi';
+import * as icons from '@heroicons/vue/24/outline';
 
 export interface FieldOption {
   value: string;
@@ -107,7 +108,7 @@ export const schoolChoices: SchoolChoiceConfig[] = [
 ];
 
 // Document configuration factory
-export const createDocumentConfigs = (icons: any) => {
+export const createDocumentConfigs = () => {
   const documentConfigs: DocumentDisplay<SubmissionFormObject>[] = [
     {
       key: 'applicationFormDocx',
@@ -350,8 +351,8 @@ export const initialize_submission_reactives = (
     lastName: '',
     nationality: 'moroccan',
     email: initialEmail || '',
-    choice1: { schoolName: 's9_centrale_supelec_gif', academicPath: '', careerPath: '' },
-    choice2: { schoolName: 's9_centrale_nantes', academicPath: '', careerPath: '' },
+    choice1: { schoolName: 'unset', academicPath: '', careerPath: '' },
+    choice2: { schoolName: 'unset', academicPath: '', careerPath: '' },
     applicationFormDocx: null as any,
     resumePdf: null as any,
     s5Transcripts: null as any,
