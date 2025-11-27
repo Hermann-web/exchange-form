@@ -151,13 +151,34 @@ watch(
         <label class="block text-blue-100 text-sm font-medium mb-2">
           {{ schoolConfig.academicPath.text }} *
         </label>
+
+        <!-- Select for Academic Path -->
+        <select
+          v-if="schoolConfig.academicPath.options"
+          v-model="form[choice.choiceKey].academicPath"
+          class="input-field"
+          :class="{ 'border-red-500 focus:border-red-400': localErrors.academicPath }"
+        >
+          <option value="" disabled selected>Select an option</option>
+          <option
+            v-for="option in schoolConfig.academicPath.options"
+            :key="option"
+            :value="option"
+          >
+            {{ option }}
+          </option>
+        </select>
+
+        <!-- Text Input for Academic Path -->
         <input
+          v-else
           v-model="form[choice.choiceKey].academicPath"
           type="text"
           class="input-field"
           :class="{ 'border-red-500 focus:border-red-400': localErrors.academicPath }"
           :placeholder="`Saisir : ${schoolConfig.academicPath.text}`"
         />
+
         <p v-if="localErrors.academicPath" class="text-red-300 text-xs mt-1">
           {{ localErrors.academicPath }}
         </p>
@@ -166,13 +187,34 @@ watch(
         <label class="block text-blue-100 text-sm font-medium mb-2">
           {{ schoolConfig.careerPath.text }} *
         </label>
+
+        <!-- Select for Career Path -->
+        <select
+          v-if="schoolConfig.careerPath.options"
+          v-model="form[choice.choiceKey].careerPath"
+          class="input-field"
+          :class="{ 'border-red-500 focus:border-red-400': localErrors.careerPath }"
+        >
+          <option value="" disabled selected>Select an option</option>
+          <option
+            v-for="option in schoolConfig.careerPath.options"
+            :key="option"
+            :value="option"
+          >
+            {{ option }}
+          </option>
+        </select>
+
+        <!-- Text Input for Career Path -->
         <input
+          v-else
           v-model="form[choice.choiceKey].careerPath"
           type="text"
           class="input-field"
           :class="{ 'border-red-500 focus:border-red-400': localErrors.careerPath }"
           :placeholder="`Saisir : ${schoolConfig.careerPath.text}`"
         />
+
         <p v-if="localErrors.careerPath" class="text-red-300 text-xs mt-1">
           {{ localErrors.careerPath }}
         </p>

@@ -40,17 +40,25 @@ export interface SchoolChoice {
 export const schoolAcademicPathKeyAndRequiredMap: Record<
   School,
   {
-    academicPath: { text: string; required: boolean };
-    careerPath: { text: string; required: boolean };
+    academicPath: { text: string; required: boolean; options?: string[] };
+    careerPath: { text: string; required: boolean; options?: string[] };
   }
 > = {
   s9_centrale_supelec_rennes: {
-    academicPath: { text: 'Option', required: true },
+    academicPath: {
+      text: 'Option',
+      required: true,
+      options: ['Mathématiques', 'Informatique', 'Physique'],
+    },
     careerPath: { text: 'Filière Métier', required: true },
   },
   s9_centrale_supelec_metz: {
     academicPath: { text: 'Option', required: true },
-    careerPath: { text: 'Filière Métier', required: true },
+    careerPath: {
+      text: 'Filière Métier',
+      required: true,
+      options: ['Recherche & Développement', 'Innovation'],
+    },
   },
   s9_centrale_supelec_gif: {
     academicPath: { text: 'Option', required: true },
