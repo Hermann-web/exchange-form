@@ -22,7 +22,7 @@ import {
 } from '@/components/types';
 import SchoolChoiceDisplay from '@/components/SchoolChoiceDisplay.vue';
 import DocumentItem from '@/components/DocumentItem.vue';
-import { SubmissionFormObjectUrlsMap } from '@/types/submissionapi';
+import { nationalityLabels, SubmissionFormObjectUrlsMap } from '@/types/submissionapi';
 
 const router = useRouter();
 const authStore = useAuthStore();
@@ -45,7 +45,7 @@ const personalInfoFields = computed(() => {
     },
     {
       label: 'Nationalité',
-      value: submission.value.nationality === 'moroccan' ? 'Marocaine' : 'Autre',
+      value: nationalityLabels[submission.value.nationality],
     },
   ];
 });

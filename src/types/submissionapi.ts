@@ -36,8 +36,8 @@ export const schoolLabels = {
 } as const;
 
 export const nationalityLabels = {
-  moroccan: 'Moroccan',
-  other: 'Other',
+  moroccan: 'Marocaine',
+  other: 'Internationale',
 } as const;
 
 export const civilityLabels = {

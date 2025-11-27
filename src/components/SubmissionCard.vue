@@ -17,6 +17,7 @@ import { formatDate, formatDateShort, createDocumentConfigs } from '@/components
 import DocumentItem from '@/components/DocumentItem.vue';
 import SchoolChoiceDisplay from '@/components/SchoolChoiceDisplay.vue';
 import { schoolChoices } from '@/components/types';
+import { nationalityLabels } from '@/types/submissionapi';
 
 interface Props {
   submission: SubmissionMetaDb;
@@ -78,7 +79,10 @@ const getAvailableDocuments = () => {
                 </span>
                 <span class="flex items-center">
                   <GlobeAltIcon class="w-3 h-3 mr-1" />
-                  {{ submission.nationality === 'moroccan' ? 'MAR' : 'INT' }}
+                  <!-- first 3 letters / uppercase -->
+                  {{
+                    nationalityLabels[submission.nationality].slice(0, 3).toUpperCase()
+                  }}
                 </span>
               </div>
             </div>

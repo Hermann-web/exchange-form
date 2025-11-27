@@ -268,8 +268,8 @@ export const createPersonalFieldConfigs = () => {
       type: 'select',
       required: true,
       options: [
-        { value: 'moroccan', label: 'Moroccan' },
-        { value: 'other', label: 'Other' },
+        { value: 'moroccan', label: nationalityLabels['moroccan'] },
+        { value: 'other', label: nationalityLabels['other'] },
       ],
     },
     {
