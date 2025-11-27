@@ -1,9 +1,10 @@
 <!-- src/components/SchoolChoice.vue -->
 <script setup lang="ts">
-import { watch, computed } from 'vue';
+import { watch, computed, reactive } from 'vue';
 import {
   type SubmissionForm,
   schoolAcademicPathKeyAndRequiredMap,
+  type SchoolChoice,
 } from '@/types/submissionapi';
 import type {
   SchoolChoiceConfig,
@@ -20,6 +21,13 @@ interface Props {
 
 const props = defineProps<Props>();
 
+// Local errors for granular validation
+const localErrors = reactive<Record<keyof SchoolChoice, string>>({
+  schoolName: '',
+  academicPath: '',
+  careerPath: '',
+});
+
 // Computed properties for constraints validation
 const selectedSchool = computed(() => props.form[props.choice.choiceKey].schoolName);
 
@@ -34,11 +42,11 @@ const validateAcademicPath = () => {
 
   if (schoolConfig.value.academicPath.required) {
     const thematicValue = schoolObj.academicPath;
-    props.errors[choiceKey] = !thematicValue?.trim()
+    localErrors.academicPath = !thematicValue?.trim()
       ? `${schoolConfig.value.academicPath.text} requis(e)`
       : '';
   } else {
-    props.errors[choiceKey] = '';
+    localErrors.academicPath = '';
   }
 };
 
@@ -48,11 +56,11 @@ const validateCareerPath = () => {
 
   if (schoolConfig.value.careerPath.required) {
     const careerValue = schoolObj.careerPath;
-    props.errors[choiceKey] = !careerValue?.trim()
+    localErrors.careerPath = !careerValue?.trim()
       ? `${schoolConfig.value.careerPath.text} requis(e)`
       : '';
   } else {
-    props.errors[choiceKey] = '';
+    localErrors.careerPath = '';
   }
 };
 
@@ -79,12 +87,24 @@ const validateSchool = () => {
 
   // If first choice is unset, show error
   if (choiceKey === 'choice1' && schoolObj.schoolName == 'unset') {
-    props.errors[choiceKey] = 'Le premier choix doit être mentionné';
+    localErrors.schoolName = 'Le premier choix doit être mentionné';
     return;
   }
-  props.errors[choiceKey] = '';
+  localErrors.schoolName = '';
 };
 watch(() => props.form[props.choice.choiceKey].schoolName, validateSchool);
+
+// Sync local errors to parent props.errors
+watch(
+  localErrors,
+  () => {
+    const choiceKey = props.choice.choiceKey;
+    const anyError =
+      localErrors.schoolName || localErrors.academicPath || localErrors.careerPath;
+    props.errors[choiceKey] = anyError;
+  },
+  { deep: true }
+);
 
 // Initialize validation on mount
 watch(
@@ -112,7 +132,7 @@ watch(
         <select
           v-model="form[choice.choiceKey].schoolName"
           class="input-field"
-          :class="{ 'border-red-500 focus:border-red-400': errors[choice.choiceKey] }"
+          :class="{ 'border-red-500 focus:border-red-400': localErrors.schoolName }"
         >
           <option
             v-for="school in props.schoolOptions"
@@ -122,8 +142,8 @@ watch(
             {{ school.label }}
           </option>
         </select>
-        <p v-if="errors[choice.choiceKey]" class="text-red-300 text-xs mt-1">
-          {{ errors[choice.choiceKey] }}
+        <p v-if="localErrors.schoolName" class="text-red-300 text-xs mt-1">
+          {{ localErrors.schoolName }}
         </p>
       </div>
 
@@ -135,11 +155,11 @@ watch(
           v-model="form[choice.choiceKey].academicPath"
           type="text"
           class="input-field"
-          :class="{ 'border-red-500 focus:border-red-400': errors[choice.choiceKey] }"
+          :class="{ 'border-red-500 focus:border-red-400': localErrors.academicPath }"
           :placeholder="`Saisir : ${schoolConfig.academicPath.text}`"
         />
-        <p v-if="errors[choice.choiceKey]" class="text-red-300 text-xs mt-1">
-          {{ errors[choice.choiceKey] }}
+        <p v-if="localErrors.academicPath" class="text-red-300 text-xs mt-1">
+          {{ localErrors.academicPath }}
         </p>
       </div>
       <div v-if="schoolConfig.careerPath.required">
@@ -150,11 +170,11 @@ watch(
           v-model="form[choice.choiceKey].careerPath"
           type="text"
           class="input-field"
-          :class="{ 'border-red-500 focus:border-red-400': errors[choice.choiceKey] }"
+          :class="{ 'border-red-500 focus:border-red-400': localErrors.careerPath }"
           :placeholder="`Saisir : ${schoolConfig.careerPath.text}`"
         />
-        <p v-if="errors[choice.choiceKey]" class="text-red-300 text-xs mt-1">
-          {{ errors[choice.choiceKey] }}
+        <p v-if="localErrors.careerPath" class="text-red-300 text-xs mt-1">
+          {{ localErrors.careerPath }}
         </p>
       </div>
     </div>
