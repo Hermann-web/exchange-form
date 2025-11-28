@@ -1,29 +1,18 @@
 // src/utils/fastapi/filestorage.ts
+import { ApiError } from '@/types/exceptions';
 import type {
   FileStorageApiInterface,
   SubmissionFormObject,
 } from '@/types/submissionapi';
 
 // Configuration
-const API_BASE_URL = import.meta.env.VITE_FASTAPI_BASE_URL || 'http://localhost:8000';
+const API_BASE_URL = import.meta.env.VITE_CUSTOM_CDN_BASE_URL || 'http://localhost:8000';
 
 // Simple API Response for file upload
 interface FileUploadResponse {
   success: boolean;
   public_url: string;
   message: string;
-}
-
-// Error handling utility
-class ApiError extends Error {
-  constructor(
-    message: string,
-    public status?: number,
-    public details?: any
-  ) {
-    super(message);
-    this.name = 'ApiError';
-  }
 }
 
 // Helper function to upload a single file

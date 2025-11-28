@@ -2,7 +2,6 @@
 import { defineStore } from 'pinia';
 import { ref, computed } from 'vue';
 import { authApi } from '@/utils/api';
-import type { User } from '@/types';
 import type { AuthSession, SignupRequest, UserProfile } from '@/types/authapi';
 
 const ADMIN_EMAILS = import.meta.env.VITE_ADMIN_EMAILS;
@@ -13,7 +12,7 @@ if (!ADMIN_EMAILS || ADMIN_EMAILS.trim() === '') {
 const adminEmails = ADMIN_EMAILS.split(',');
 
 export const useAuthStore = defineStore('auth', () => {
-  const user = ref<User | null>(null);
+  const user = ref<UserProfile | null>(null);
   const session = ref<AuthSession | null>(null);
   const loading = ref<boolean>(false);
   const error = ref<string | null>(null);
