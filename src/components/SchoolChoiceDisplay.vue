@@ -1,7 +1,8 @@
 <!-- src/components/SchoolChoiceDisplay.vue -->
 <script setup lang="ts">
 import type { SchoolChoiceConfig } from '@/components/types';
-import { schoolAcademicPathKeyAndRequiredMap, schoolLabels } from '@/types/submissionapi';
+import { schoolLabels } from '@/types/submissionapi';
+import { schoolAcademicPathKeyAndRequiredMap } from '@/types/mappings';
 import type { SubmissionMetaDb } from '@/types/submissionapi';
 import { computed } from 'vue';
 

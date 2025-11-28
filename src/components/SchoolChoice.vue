@@ -1,11 +1,8 @@
 <!-- src/components/SchoolChoice.vue -->
 <script setup lang="ts">
 import { watch, computed, reactive } from 'vue';
-import {
-  type SubmissionForm,
-  schoolAcademicPathKeyAndRequiredMap,
-  type SchoolChoice,
-} from '@/types/submissionapi';
+import { type SubmissionForm, type SchoolChoice } from '@/types/submissionapi';
+import { schoolAcademicPathKeyAndRequiredMap } from '@/types/mappings';
 import type {
   SchoolChoiceConfig,
   SchoolOption,

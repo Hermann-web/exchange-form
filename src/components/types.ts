@@ -8,8 +8,8 @@ import {
   type SubmissionFormObject,
   type PersonalSubmissionFormMeta,
   type SchoolSubmissionFormMeta,
-  schoolAcademicPathKeyAndRequiredMap,
 } from '@/types/submissionapi';
+import { schoolAcademicPathKeyAndRequiredMap } from '@/types/mappings';
 import * as icons from '@heroicons/vue/24/outline';
 
 export interface FieldOption {

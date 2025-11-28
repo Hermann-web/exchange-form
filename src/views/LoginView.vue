@@ -3,13 +3,17 @@
 import { ref, reactive, computed } from 'vue';
 import { useRouter, RouterLink } from 'vue-router';
 import { useAuthStore } from '@/stores/auth';
-import type { LoginForm } from '@/types';
 
 import { EyeIcon, EyeSlashIcon } from '@heroicons/vue/24/outline';
 import { testEmail } from '@/components/types';
 
 const router = useRouter();
 const authStore = useAuthStore();
+
+export interface LoginForm {
+  email: string;
+  password: string;
+}
 
 const form = reactive<LoginForm>({
   email: '',

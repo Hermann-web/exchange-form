@@ -8,10 +8,8 @@ import {
   ArrowDownTrayIcon,
   DocumentTextIcon,
 } from '@heroicons/vue/24/outline';
-import {
-  SubmissionFormObjectUrlsMap,
-  type SubmissionMetaDb,
-} from '@/types/submissionapi';
+import { type SubmissionMetaDb } from '@/types/submissionapi';
+import { SubmissionFormObjectUrlsMap } from '@/types/mappings';
 import { schoolLabels } from '@/types/submissionapi';
 import { formatDate, formatDateShort, createDocumentConfigs } from '@/components/types';
 import DocumentItem from '@/components/DocumentItem.vue';

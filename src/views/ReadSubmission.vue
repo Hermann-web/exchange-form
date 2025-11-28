@@ -22,7 +22,8 @@ import {
 } from '@/components/types';
 import SchoolChoiceDisplay from '@/components/SchoolChoiceDisplay.vue';
 import DocumentItem from '@/components/DocumentItem.vue';
-import { nationalityLabels, SubmissionFormObjectUrlsMap } from '@/types/submissionapi';
+import { nationalityLabels } from '@/types/submissionapi';
+import { SubmissionFormObjectUrlsMap } from '@/types/mappings';
 
 const router = useRouter();
 const authStore = useAuthStore();

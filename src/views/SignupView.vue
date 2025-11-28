@@ -4,13 +4,20 @@
 import { RouterLink } from 'vue-router';
 import { useAuthStore } from '@/stores/auth';
 import { ref, reactive, computed } from 'vue';
-import type { LogupForm } from '@/types';
 import { testEmail } from '@/components/types';
 import router from '@/router';
 
 const isSubmitting = ref(false);
 const authStore = useAuthStore();
 const error = ref('');
+
+export interface LogupForm {
+  email: string;
+  password: string;
+  first_name: string;
+  last_name: string;
+  confirmPassword?: string;
+}
 
 const form = reactive<LogupForm>({
   email: '',
