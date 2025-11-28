@@ -18,8 +18,9 @@ import {
   updatePassword,
   sendEmailVerification,
 } from 'firebase/auth';
+import { lazyFirebaseAuth } from './lib';
 
-import { auth } from '@/lib/firebase';
+// import { auth } from '@/utils/firebase/lib';
 
 // Map Firebase user → AuthUser
 const mapFirebaseUser = (firebaseUser: any): AuthUser => ({
@@ -43,19 +44,22 @@ const buildSession = async (firebaseUser: any): Promise<AuthSession> => {
 
 // Current user
 const getCurrentUser = async (): Promise<AuthUser> => {
-  const currentUser = auth.currentUser;
+  const currentUser = lazyFirebaseAuth().currentUser;
   if (!currentUser) throw Error('user not found');
   await currentUser.reload(); // Refresh user data
 
   return new Promise((resolve, reject) => {
-    const unsubscribe = onAuthStateChanged(auth, async (firebaseUser: any) => {
-      unsubscribe();
-      if (firebaseUser) {
-        resolve(mapFirebaseUser(firebaseUser));
-      } else {
-        reject(new Error('No authenticated user'));
+    const unsubscribe = onAuthStateChanged(
+      lazyFirebaseAuth(),
+      async (firebaseUser: any) => {
+        unsubscribe();
+        if (firebaseUser) {
+          resolve(mapFirebaseUser(firebaseUser));
+        } else {
+          reject(new Error('No authenticated user'));
+        }
       }
-    });
+    );
   });
 };
 
@@ -64,7 +68,11 @@ export const authApi: AuthApiInterface = {
   passwordResetStrategy: 'provider-hosted',
 
   login: async (email: string, password: string): Promise<LoginResponse> => {
-    const userCredential = await signInWithEmailAndPassword(auth, email, password);
+    const userCredential = await signInWithEmailAndPassword(
+      lazyFirebaseAuth(),
+      email,
+      password
+    );
     const user = mapFirebaseUser(userCredential.user);
     const session = await buildSession(userCredential.user);
     return { user, session };
@@ -72,7 +80,7 @@ export const authApi: AuthApiInterface = {
 
   signup: async (userData: SignupRequest): Promise<SignupResponse> => {
     const userCredential = await createUserWithEmailAndPassword(
-      auth,
+      lazyFirebaseAuth(),
       userData.email,
       userData.password
     );
@@ -82,6 +90,7 @@ export const authApi: AuthApiInterface = {
   },
 
   sendVerificationEmail: async (): Promise<void> => {
+    const auth = lazyFirebaseAuth();
     if (!auth.currentUser) throw new Error('No authenticated user');
     console.log('authenticated user: sending verification email');
     await sendEmailVerification(auth.currentUser);
@@ -93,7 +102,7 @@ export const authApi: AuthApiInterface = {
 
   me: async (): Promise<UserProfile> => {
     const user = await getCurrentUser();
-    const currentUser = auth.currentUser;
+    const currentUser = lazyFirebaseAuth().currentUser;
     if (!currentUser) throw Error('user not found');
     await currentUser.reload(); // Refresh user data
     const is_email_verified = currentUser.emailVerified;
@@ -108,15 +117,15 @@ export const authApi: AuthApiInterface = {
   },
 
   logout: async (): Promise<void> => {
-    await signOut(auth);
+    await signOut(lazyFirebaseAuth());
   },
 
   resetPasswordRequest: async (email: string): Promise<void> => {
-    await sendPasswordResetEmail(auth, email);
+    await sendPasswordResetEmail(lazyFirebaseAuth(), email);
   },
 
   updatePassword: async (newPassword: string): Promise<void> => {
-    const user = auth.currentUser;
+    const user = lazyFirebaseAuth().currentUser;
     if (!user) {
       throw new Error('No authenticated user found.');
     }
@@ -129,7 +138,7 @@ export const authApi: AuthApiInterface = {
 
   getSession: async (): Promise<AuthSession | null> => {
     return new Promise((resolve) => {
-      const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
+      const unsubscribe = onAuthStateChanged(lazyFirebaseAuth(), async (firebaseUser) => {
         unsubscribe();
         if (firebaseUser) {
           const session = await buildSession(firebaseUser);

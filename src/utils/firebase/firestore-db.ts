@@ -1,22 +1,15 @@
 // src/utils/firebase/firestore-db.ts
-import {
-  getFirestore,
-  collection,
-  doc,
-  setDoc,
-  getDocs,
-  query,
-  where,
-} from 'firebase/firestore';
+import { collection, doc, setDoc, getDocs, query, where } from 'firebase/firestore';
 // import { auth } from '@/lib/firebase';
 import type {
   DataBaseApiInterface,
   SubmissionMetaDb,
   SubmissionData,
 } from '../../types/submissionapi';
+import { lazyFirebaseFirestore } from './lib';
 
 // Initialize Firebase services
-const firestore = getFirestore();
+// const firestore = getFirestore();
 // const auth = getAuth();
 
 //   // Helper function to get current user email
@@ -34,6 +27,7 @@ const getMySubmissionFireStore = async (
 ): Promise<SubmissionMetaDb | null> => {
   try {
     // Query Firestore for submissions by current user
+    const firestore = lazyFirebaseFirestore();
     const q = query(collection(firestore, 'submissions'), where('email', '==', email));
 
     const querySnapshot = await getDocs(q);
@@ -64,7 +58,7 @@ const listAllSubmissionsFirestore = async (): Promise<SubmissionMetaDb[]> => {
   try {
     // Note: In a real implementation, you should check admin privileges here
     // For example: await checkAdminRole(getCurrentUserEmail());
-
+    const firestore = lazyFirebaseFirestore();
     const querySnapshot = await getDocs(collection(firestore, 'submissions'));
     const submissions: SubmissionMetaDb[] = [];
 
@@ -91,6 +85,7 @@ export const databaseApi: DataBaseApiInterface = {
   saveSubmission: async (submissionData: SubmissionData): Promise<SubmissionMetaDb> => {
     try {
       // Generate database ID
+      const firestore = lazyFirebaseFirestore();
       const databaseId = doc(collection(firestore, 'submissions')).id;
 
       // Prepare submission data with timestamp

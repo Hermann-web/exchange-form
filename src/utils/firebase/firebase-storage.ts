@@ -3,7 +3,7 @@ import type {
   FileStorageApiInterface,
   SubmissionFormObject,
 } from '@/types/submissionapi';
-import { uploadFile } from '@/lib/firebase';
+import { uploadFile } from '@/utils/firebase/lib';
 
 export const fileStorageApi: FileStorageApiInterface = {
   uploadSingleFile: async (

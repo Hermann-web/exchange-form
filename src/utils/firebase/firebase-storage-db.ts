@@ -1,23 +1,18 @@
 // src/utils/firebase/firebase-storage-db.ts
-import {
-  getStorage,
-  ref,
-  uploadBytes,
-  getDownloadURL,
-  listAll,
-  getMetadata,
-} from 'firebase/storage';
+import { ref, uploadBytes, getDownloadURL, listAll, getMetadata } from 'firebase/storage';
 import type {
   DataBaseApiInterface,
   SubmissionMetaDb,
   SubmissionData,
 } from '@/types/submissionapi';
+import { lazyFirebaseStorage } from './lib';
 
 // Initialize Firebase services
-const storage = getStorage();
+// const storage = getStorage();
 
 // Helper function to upload a single file
 const uploadFile = async (file: File, path: string): Promise<string> => {
+  const storage = lazyFirebaseStorage();
   const fileRef = ref(storage, path);
   const snapshot = await uploadBytes(fileRef, file);
   return await getDownloadURL(snapshot.ref);
@@ -52,6 +47,7 @@ const getMySubmissionFireBaseMeta = async (
   try {
     // Create reference to the specific user's metadata file
     const metadataPath = `submissions/metadatas/${email}.json`;
+    const storage = lazyFirebaseStorage();
     const metadataRef = ref(storage, metadataPath);
 
     // Try to get the download URL - this will throw an error if file doesn't exist
@@ -85,6 +81,7 @@ const getMySubmissionFireBaseMeta = async (
 const listAllSubmissionsFireBaseMeta = async (): Promise<SubmissionMetaDb[]> => {
   try {
     // Create reference to the metadata directory
+    const storage = lazyFirebaseStorage();
     const metadatasDirRef = ref(storage, 'submissions/metadatas/');
 
     // List all files in the metadata directory

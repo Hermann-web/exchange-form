@@ -79,7 +79,12 @@ export const useSubmissionStore = defineStore('submission', () => {
       console.log('Upload files to storage and get URLs');
 
       const submissionData: SubmissionData = {
-        ...formData,
+        firstName: formData.firstName,
+        lastName: formData.lastName,
+        email: formData.email,
+        nationality: formData.nationality,
+        choice1: formData.choice1,
+        choice2: formData.choice2,
         applicationFormEccUrl: await uploadSingleFile(
           'applicationFormEcc',
           formData.applicationFormEcc
@@ -184,12 +189,14 @@ export const useSubmissionStore = defineStore('submission', () => {
 
   // Get submission by email (from cached all submissions)
   const getSubmissionByEmail = (email: string): SubmissionMetaDb | undefined => {
-    return allSubmissions.value.find((sub) => sub.email === email);
+    return (allSubmissions.value as SubmissionMetaDb[]).find(
+      (sub) => sub.email === email
+    );
   };
 
   // Filter submissions by school
   const getSubmissionsBySchool = (school: School): SubmissionMetaDb[] => {
-    return allSubmissions.value.filter(
+    return (allSubmissions.value as SubmissionMetaDb[]).filter(
       (sub) => sub.choice1.schoolName === school || sub.choice2.schoolName === school
     );
   };
@@ -221,7 +228,7 @@ export const useSubmissionStore = defineStore('submission', () => {
       other: 0,
     };
 
-    allSubmissions.value.forEach((submission) => {
+    allSubmissions.value.forEach((submission: SubmissionMetaDb) => {
       // Count by first choice school
       if (submission.choice1) {
         bySchool[submission.choice1.schoolName]++;

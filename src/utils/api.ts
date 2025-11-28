@@ -1,10 +1,14 @@
 // utils/api.ts
-// import { authApi as FirebaseAuthApi } from './firebase/auth';
+import { authApi as FirebaseAuthApi } from './firebase/auth';
 // import { fileStorageApi as FirebaseStorageFileStorageApi } from './firebase/firebase-storage';
-import { fileStorageApi as SupabaseStorageFileStorageApi } from './supabase/filestorage';
+// import { fileStorageApi as SupabaseStorageFileStorageApi } from './supabase/filestorage';
+// import { cloudinaryStorageApi as CloudinaryFileStorageApi } from './cloudinary/filestorage';
+// import { uploadcareStorageApi as UploadcareFileStorageApi } from './uploadcare/filestorage';
+import { authApi as SupabaseAuthApi } from './supabase/auth';
 import { fileStorageApi as FastApiStorageFileStorageApi } from './fastapi/filestorage';
+import { databaseApi as SupabaseDatabaseApi } from './supabase/database';
 // import { databaseApi as FirebaseFileBasedDataBaseApi } from './firebase/firebase-storage-db';
-// import { databaseApi as FirestoreDataBaseApi } from './firebase/firestore-db';
+import { databaseApi as FirestoreDataBaseApi } from './firebase/firestore-db';
 
 // Mockup imports
 import { authApi as MockAuthApi } from './mockup/auth';
@@ -23,21 +27,25 @@ const AUTH_STRATEGY = import.meta.env.VITE_AUTH_STRATEGY || 'mockup';
 
 // Strategy maps
 const authStrategies: Record<string, AuthApiInterface> = {
-  // firebase: FirebaseAuthApi,
-  mockup: MockAuthApi,
+  firebase: FirebaseAuthApi, // ok
+  mockup: MockAuthApi, // ok
+  supabase: SupabaseAuthApi, // ok
 };
 
 const fileStorageStrategies: Record<string, FileStorageApiInterface> = {
-  // firebase: FirebaseStorageFileStorageApi,
-  fastapi: FastApiStorageFileStorageApi,
-  supabase: SupabaseStorageFileStorageApi,
-  mockup: MockFileStorageApi,
+  // firebase: FirebaseStorageFileStorageApi, // not tested
+  fastapi: FastApiStorageFileStorageApi, // ok
+  // supabase: SupabaseStorageFileStorageApi, // not tested
+  // cloudinary: CloudinaryFileStorageApi, // not ok
+  // uploadcare: UploadcareFileStorageApi, // not ok
+  mockup: MockFileStorageApi, // ok
 };
 
 const databaseStrategies: Record<string, DataBaseApiInterface> = {
-  // firestore: FirestoreDataBaseApi,
-  // firebase: FirebaseFileBasedDataBaseApi,
-  mockup: MockDatabaseApi,
+  firestore: FirestoreDataBaseApi, // ok
+  // firebase: FirebaseFileBasedDataBaseApi, // not tested
+  supabase: SupabaseDatabaseApi, // ok
+  mockup: MockDatabaseApi, // ok
 };
 
 // Strategy selection logic
