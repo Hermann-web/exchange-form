@@ -11,11 +11,13 @@ This is a simple FastAPI backend to demonstrate the integration with the Mobilit
 ## Setup
 
 1.  **Install dependencies** (if not already done):
+
     ```bash
     uv sync
     ```
 
 2.  **Run the server**:
+
     ```bash
     uv run uvicorn main:app --reload --port 8000
     ```
