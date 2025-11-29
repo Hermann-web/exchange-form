@@ -9,16 +9,23 @@ import type {
   SubmissionFormObjectUrls,
 } from './submissionapi';
 
-export interface FieldConfig {
+export interface FieldConfig1 {
+  text: string;
+  required: boolean;
+  options?: string[];
+  uiSplit?: string[];
+}
+
+export interface FieldConfig2 {
   text: string;
   required: boolean;
   options?: string[];
 }
 
 export interface SchoolConfig {
-  academicPath: FieldConfig;
-  careerPath: FieldConfig;
-  electives: FieldConfig;
+  academicPath: FieldConfig1;
+  careerPath: FieldConfig2;
+  electives: FieldConfig2;
 }
 
 // schoolFieldConfiguration
@@ -94,7 +101,11 @@ export const schoolAcademicPathKeyAndRequiredMap: Record<School, SchoolConfig> =
   },
   // unknown specialisations // unknown tracks
   s9_enise: {
-    academicPath: { text: 'Voie de spécialisation + parcours', required: true },
+    academicPath: {
+      text: 'Voie de spécialisation + parcours',
+      required: true,
+      uiSplit: ['Voie de spécialisation', 'Parcours'],
+    },
     careerPath: { text: '', required: false },
     electives: { text: '', required: false },
   },

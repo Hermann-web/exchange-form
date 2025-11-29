@@ -1,6 +1,6 @@
 <!-- src/components/SchoolChoice.vue -->
 <script setup lang="ts">
-import { watch, computed, reactive } from 'vue';
+import { watch, computed, reactive, ref } from 'vue';
 import { type SubmissionForm, type SchoolChoice } from '@/types/submissionapi';
 import { schoolAcademicPathKeyAndRequiredMap } from '@/types/mappings';
 import type {
@@ -76,11 +76,82 @@ const validateElectives = () => {
   }
 };
 
+// Constants
+const RAW_SEP = '/';
+const ACADEMIC_SPLIT_SEPARATOR = ` ${RAW_SEP} `;
+
+// Join a list of parts into a single string
+function joinAcademicParts(parts: string[]): string {
+  const cleaned = parts.map((v) => v.replace(new RegExp(`\\${RAW_SEP}`, 'g'), ''));
+  return cleaned.join(ACADEMIC_SPLIT_SEPARATOR);
+}
+
+// Split an academicPath string into a list of parts
+function splitAcademicString(value: string): string[] {
+  if (!value) return [];
+  return value.split(ACADEMIC_SPLIT_SEPARATOR);
+}
+
+// Local state for split inputs
+const splitValues = ref<string[]>([]);
+
+// Sync splitValues when school or academicPath changes (initial load or external change)
+watch(
+  [schoolConfig, () => props.form[props.choice.choiceKey].academicPath],
+  ([newConfig, newPath]) => {
+    const splits = newConfig.academicPath.uiSplit;
+    if (!splits) {
+      splitValues.value = [];
+      return;
+    }
+
+    // Loop prevention: if current splitValues matches path, don't update
+    if (joinAcademicParts(splitValues.value) === newPath) return;
+
+    const parts = newPath ? splitAcademicString(newPath) : [];
+
+    console.log('Updating splitValues', parts);
+    // Resize splitValues to match splits length, preserving existing values or filling with empty
+    splitValues.value = splits.map((_, i) => parts[i] || '');
+  },
+  { immediate: true }
+);
+
+// Watch splitValues to update academicPath
+watch(
+  splitValues,
+  (newValues) => {
+    if (!schoolConfig.value.academicPath.uiSplit) return;
+    const splits = schoolConfig.value.academicPath.uiSplit;
+    const emptySplits = splits.filter((_, i) => !newValues[i].trim());
+
+    if (emptySplits.length > 0) {
+      localErrors.academicPath = `${schoolConfig.value.academicPath.text} requis(e) entièrement`;
+      return;
+    } else {
+      localErrors.academicPath = '';
+    }
+
+    const joined = joinAcademicParts(newValues);
+    if (props.form[props.choice.choiceKey].academicPath === joined) return;
+    props.form[props.choice.choiceKey].academicPath = joined;
+    validateAcademicPath();
+  },
+  { deep: true }
+);
+
 // Watch for school changes and empty all fields
 watch(selectedSchool, () => {
   // If changing school, clear all fields
   props.form[props.choice.choiceKey].academicPath = '';
   props.form[props.choice.choiceKey].careerPath = '';
+  props.form[props.choice.choiceKey].electives = '';
+
+  // Reset split values
+  splitValues.value = Array.from(
+    { length: schoolConfig.value.academicPath.uiSplit?.length || 0 },
+    () => ''
+  );
 
   // Revalidate after school change to be ultra safe
   validateSchool();
@@ -188,6 +259,33 @@ watch(
           </option>
         </select>
 
+        <!-- Split Text Input for Academic Path -->
+        <!-- when schoolConfig.academicPath.split exists -->
+        <!-- for each split, create a text input (text=split[index]) -->
+        <div
+          v-if="
+            schoolConfig.academicPath.uiSplit &&
+            schoolConfig.academicPath.uiSplit.length > 1
+          "
+        >
+          <div
+            v-for="(split, index) in schoolConfig.academicPath.uiSplit"
+            :key="index"
+            class="mb-2"
+          >
+            <label class="block text-blue-100 text-xs font-medium mb-1">{{
+              split
+            }}</label>
+            <input
+              v-model="splitValues[index]"
+              type="text"
+              class="input-field"
+              :class="{ 'border-red-500 focus:border-red-400': localErrors.academicPath }"
+              :placeholder="`Saisir : ${split}`"
+            />
+          </div>
+        </div>
+
         <!-- Text Input for Academic Path -->
         <input
           v-else
@@ -202,6 +300,7 @@ watch(
           {{ localErrors.academicPath }}
         </p>
       </div>
+
       <div v-if="schoolConfig.careerPath.required">
         <label class="block text-blue-100 text-sm font-medium mb-2">
           {{ schoolConfig.careerPath.text }} *
