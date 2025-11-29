@@ -9,6 +9,8 @@ import { fileStorageApi as FastApiStorageFileStorageApi } from './fastapi/filest
 import { databaseApi as SupabaseDatabaseApi } from './supabase/database';
 // import { databaseApi as FirebaseFileBasedDataBaseApi } from './firebase/firebase-storage-db';
 import { databaseApi as FirestoreDataBaseApi } from './firebase/firestore-db';
+import { authApi as FastApiAuthApi } from './fastapi/auth';
+import { databaseApi as FastApiDatabaseApi } from './fastapi/database';
 
 // Mockup imports
 import { authApi as MockAuthApi } from './mockup/auth';
@@ -30,6 +32,7 @@ const authStrategies: Record<string, AuthApiInterface> = {
   firebase: FirebaseAuthApi, // ok
   mockup: MockAuthApi, // ok
   supabase: SupabaseAuthApi, // ok
+  fastapi: FastApiAuthApi, // ok
 };
 
 const fileStorageStrategies: Record<string, FileStorageApiInterface> = {
@@ -46,6 +49,7 @@ const databaseStrategies: Record<string, DataBaseApiInterface> = {
   // firebase: FirebaseFileBasedDataBaseApi, // not tested
   supabase: SupabaseDatabaseApi, // ok
   mockup: MockDatabaseApi, // ok
+  fastapi: FastApiDatabaseApi, // ok
 };
 
 // Strategy selection logic
