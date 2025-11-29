@@ -7,8 +7,7 @@ interface FileConfig {
   label: string;
   accept: string;
   extensions: string[];
-  required: boolean;
-  conditional?: () => boolean;
+  required: () => boolean;
 }
 
 interface Props {
@@ -34,7 +33,7 @@ const handleFileChange = (event: Event) => {
 <template>
   <div>
     <label class="block text-blue-100 text-sm font-medium mb-2">
-      {{ config.label }}{{ config.required ? ' *' : '' }}
+      {{ config.label }}{{ config.required() ? ' *' : '' }}
     </label>
 
     <!-- Styled button -->

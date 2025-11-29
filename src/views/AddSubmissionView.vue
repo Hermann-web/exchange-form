@@ -109,7 +109,7 @@ const handleFileChange = (
 ) => {
   if (file) {
     form[fileConfig.key] = file;
-    validateFile(fileConfig.key, fileConfig.required, file, fileConfig.extensions);
+    validateFile(fileConfig.key, fileConfig.required(), file, fileConfig.extensions);
   }
 };
 
@@ -131,10 +131,8 @@ const handleSubmit = async () => {
 
   // Validate all files
   fileUploadConfigs.forEach((fileConfig) => {
-    if (!fileConfig.conditional || fileConfig.conditional()) {
-      const file = form[fileConfig.key] as File | null;
-      validateFile(fileConfig.key, fileConfig.required, file, fileConfig.extensions);
-    }
+    const file = form[fileConfig.key] as File | null;
+    validateFile(fileConfig.key, fileConfig.required(), file, fileConfig.extensions);
   });
 
   if (!isFormValid.value) return;
@@ -257,7 +255,7 @@ onMounted(async () => {
           <FileUpload
             v-for="fileConfig in fileUploadConfigs"
             :key="fileConfig.key"
-            v-show="!fileConfig.conditional || fileConfig.conditional()"
+            v-show="fileConfig.required() || fileConfig.optional"
             :config="fileConfig"
             :file="form[fileConfig.key] || null"
             :error="errors[fileConfig.key]"

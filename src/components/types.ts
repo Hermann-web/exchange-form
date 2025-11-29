@@ -39,8 +39,8 @@ export interface FileUploadField<Tform = any> {
   label: string;
   accept: Extension;
   extensions: FileExtension[];
-  required: boolean;
-  conditional?: () => boolean;
+  optional: boolean;
+  required: () => boolean;
 }
 
 export interface DocumentDisplay<T = any> {
@@ -305,101 +305,112 @@ export const createFileUploadFieldConfigs = (form: SubmissionForm) => {
       label: 'Formulaire ECC de dossier de candidature (.docx)',
       accept: '.docx',
       extensions: ['docx'],
-      required: true,
+      required: () => true,
+      optional: false,
     },
     {
       key: 'applicationFormGec',
       label: 'Formulaire GEC de dossier de candidature (.docx)',
       accept: '.docx',
       extensions: ['docx'],
-      required: true,
+      required: () => true,
+      optional: false,
     },
     {
       key: 'resumePdf',
       label: 'Curriculum Vitae (CV) actualisé (.pdf)',
       accept: '.pdf',
       extensions: ['pdf'],
-      required: true,
+      required: () => true,
+      optional: false,
     },
     {
       key: 's5Transcripts',
       label: 'Relevés de notes S5 (.pdf)',
       accept: '.pdf',
       extensions: ['pdf'],
-      required: true,
+      required: () => true,
+      optional: false,
     },
     {
       key: 's6Transcripts',
       label: 'Relevés de notes S6 (.pdf)',
       accept: '.pdf',
       extensions: ['pdf'],
-      required: true,
+      required: () => true,
+      optional: false,
     },
     {
       key: 's7Transcripts',
       label: 'Relevés de notes S7 (.pdf)',
       accept: '.pdf',
       extensions: ['pdf'],
-      required: true,
+      required: () => true,
+      optional: false,
     },
     {
       key: 's8Transcripts',
       label: 'Relevés de notes S8 (.pdf)',
       accept: '.pdf',
       extensions: ['pdf'],
-      required: true,
+      required: () => true,
+      optional: false,
     },
     {
       key: 'motivationLetterChoice1',
       label: 'Dossier de Candidature (École 1) (.pdf)',
       accept: '.pdf',
       extensions: ['pdf'],
-      required: false,
-      conditional: () => form.choice1.schoolName !== 'unset',
+      required: () => form.choice1.schoolName !== 'unset',
+      optional: false,
     },
     {
       key: 'motivationLetterChoice2',
       label: 'Dossier de Candidature (École 2) (.pdf)',
       accept: '.pdf',
       extensions: ['pdf'],
-      required: false,
-      conditional: () => form.choice2.schoolName !== 'unset',
+      required: () => form.choice2.schoolName !== 'unset',
+      optional: false,
     },
     {
       key: 'passeportPdf',
       label: 'Passeport (.pdf)',
       accept: '.pdf',
       extensions: ['pdf'],
-      required: true,
+      required: () => true,
+      optional: false,
     },
     {
       key: 'frenchLevelCertificate',
       label: 'Attestation de niveau de français (.pdf)',
       accept: '.pdf',
       extensions: ['pdf'],
-      required: true,
+      required: () => true,
+      optional: false,
     },
     {
       key: 'englishLevelCertificate',
       label: "Attestation de niveau d'anglais (.pdf)",
       accept: '.pdf',
       extensions: ['pdf'],
-      required: true,
+      required: () => true,
+      optional: false,
     },
     {
       key: 'residencePermit',
       label: 'Titre de séjour (.pdf)',
       accept: '.pdf',
       extensions: ['pdf'],
-      required: false,
-      conditional: () => form.nationality === 'other',
+      required: () => form.nationality === 'other',
+      optional: false,
     },
     {
       key: 'otherFilesPdf',
       label: 'Documents Supplémentaires (un fichier, optionnel) (.pdf)',
       accept: '.pdf',
       extensions: ['pdf'],
-      required: false,
+      required: () => false,
+      optional: true,
     },
   ];
 
@@ -490,7 +501,7 @@ export const validateAllFields = (
     .filter((field) => field.required)
     .map((field) => form[field.key]);
   const requiredFileUploadFields = fileUploadConfigs
-    .filter((field) => (field.conditional ? field.conditional() : field.required))
+    .filter((field) => field.required())
     .map((field) => form[field.key]);
 
   const requiredFields: any[] = [...requiredPersonalFields, ...requiredFileUploadFields];
