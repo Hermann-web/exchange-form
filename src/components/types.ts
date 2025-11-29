@@ -70,25 +70,38 @@ export interface NationalityOption {
   label: string;
 }
 
-function entries<T extends Record<string, unknown>>(
+// Typed entries
+export function typedEntries<T extends Record<string, unknown>>(
   obj: T
 ): { [K in keyof T]: [K, T[K]] }[keyof T][] {
   return Object.entries(obj) as any;
 }
 
-export const schoolOptions: SchoolOption[] = entries(schoolLabels).map(
+// Build a Record from another object T, with every key assigned the same value of type G
+export function fillRecord<T extends Record<string, unknown>, G>(
+  obj: T,
+  fill: G
+): Record<keyof T, G> {
+  const out = {} as Record<keyof T, G>;
+  for (const key of Object.keys(obj) as Array<keyof T>) {
+    out[key] = fill;
+  }
+  return out;
+}
+
+export const schoolOptions: SchoolOption[] = typedEntries(schoolLabels).map(
   ([value, label]) => ({
     value,
     label,
   })
 );
 
-export const nationalityOptions: NationalityOption[] = entries(nationalityLabels).map(
-  ([value, label]) => ({
-    value,
-    label,
-  })
-);
+export const nationalityOptions: NationalityOption[] = typedEntries(
+  nationalityLabels
+).map(([value, label]) => ({
+  value,
+  label,
+}));
 
 export const schoolChoices: SchoolChoiceConfig[] = [
   {
@@ -243,7 +256,7 @@ export const downloadFile = (url: string, filename: string) => {
   document.body.removeChild(link);
 };
 
-export type SubmissionErrorType = { [K in keyof SubmissionForm]?: string };
+export type SubmissionErrorType = { [K in keyof SubmissionForm]: string };
 
 // Personal fields configuration factory
 export const createPersonalFieldConfigs = () => {

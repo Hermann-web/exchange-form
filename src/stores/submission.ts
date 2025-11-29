@@ -9,7 +9,10 @@ import {
   type SubmissionData,
   type SubmissionFormObject,
   type Nationality,
+  schoolLabels,
+  nationalityLabels,
 } from '@/types/submissionapi';
+import { fillRecord } from '@/components/types';
 
 // // Helper function to generate unique storage ID
 // const generateStorageId = (email: string): string => {
@@ -204,29 +207,8 @@ export const useSubmissionStore = defineStore('submission', () => {
   // Get submissions statistics
   const getStatistics = computed(() => {
     const total = allSubmissions.value.length;
-    const bySchool: Record<School, number> = {
-      s9_centrale_supelec_gif: 0,
-      s9_centrale_supelec_metz: 0,
-      s9_centrale_supelec_rennes: 0,
-      s9_centrale_nantes: 0,
-      s9_centrale_lille: 0,
-      s9_centrale_mediterranee: 0,
-      s9_centrale_lyon: 0,
-      s9_centrale_pekin: 0,
-      s9_enit: 0,
-      s9_enise: 0,
-      s9_ensimag: 0,
-      dd_centrale_supelec: 0,
-      dd_centrale_lille: 0,
-      dd_centrale_mediterranee: 0,
-      dd_georgia_tech: 0,
-      dd_uppa: 0,
-      unset: 0,
-    };
-    const byNationality: Record<Nationality, number> = {
-      moroccan: 0,
-      other: 0,
-    };
+    const bySchool: Record<School, number> = fillRecord(schoolLabels, 0);
+    const byNationality: Record<Nationality, number> = fillRecord(nationalityLabels, 0);
 
     allSubmissions.value.forEach((submission: SubmissionMetaDb) => {
       // Count by first choice school
