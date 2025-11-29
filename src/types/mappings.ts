@@ -66,56 +66,121 @@ export const schoolAcademicPathKeyAndRequiredMap: Record<School, SchoolConfig> =
 
   // --- Exception: Centrale Pekin (Has Electives) ---
   s9_centrale_pekin: {
-    academicPath: { text: 'Option', required: true },
-    careerPath: { text: 'Filière Métier', required: true },
+    academicPath: { text: 'Option', required: false },
+    careerPath: { text: 'Filière Métier', required: false },
     electives: {
-      text: 'Electives',
+      text: 'Electifs Centrale Pékin + Electifs BUAA',
       required: true,
       options: ['Robotics', 'AI', 'Energy'],
     }, // Example
   },
 
   // --- Non-GEC (Filiere OR Voie+Parcours) ---
+  // only one specialisation // unknown tracks
   s9_ensimag: {
-    academicPath: { text: 'Filière', required: true },
+    academicPath: {
+      text: 'Filière',
+      required: true,
+      options: ['MMIS (Filière Modélisation mathématique, image, simulation)'],
+    },
     careerPath: { text: '', required: false }, // Single field required
     electives: { text: '', required: false },
   },
-  s9_enise: {
-    academicPath: { text: 'Master', required: true },
-    careerPath: { text: 'Parcours', required: true },
+  // unknown specialisations // unknown tracks
+  s9_ensae: {
+    academicPath: { text: 'Voie de spécialisation', required: true },
+    careerPath: { text: '', required: false }, // Single field required
     electives: { text: '', required: false },
   },
+  // unknown specialisations // unknown tracks
+  s9_enise: {
+    academicPath: { text: 'Voie de spécialisation + parcours', required: true },
+    careerPath: { text: '', required: false },
+    electives: { text: '', required: false },
+  },
+  // unknown specialisations // unknown tracks
   s9_enit: {
     academicPath: { text: 'Filière', required: true },
-    careerPath: { text: 'Option', required: true },
+    careerPath: { text: '', required: false },
     electives: { text: '', required: false },
   },
 
   // --- Double Degrees (Voie+Parcours OR Voie) ---
+  // only one specialisation // known tracks
   dd_georgia_tech: {
-    academicPath: { text: 'Voie de Spécialisation', required: true },
-    careerPath: { text: 'Parcours', required: true },
+    academicPath: {
+      text: 'voie de spécialisation + Parcours',
+      required: true,
+      options: [
+        'Master of Science degree / Aerospace Engineering',
+        'Master of Science degree / Electrical and Computer Engineering',
+        'Master of Science degree / Mechanical Engineering',
+      ],
+    },
+    careerPath: { text: '', required: false },
     electives: { text: '', required: false },
   },
+  // only one specialisation // unknown tracks
   dd_centrale_lille: {
-    academicPath: { text: 'Voie de Spécialisation', required: true },
+    academicPath: {
+      text: 'Voie de Spécialisation',
+      required: true,
+      options: ['Master Sciences des données'],
+    },
     careerPath: { text: '', required: false },
     electives: { text: '', required: false },
   },
+  // only one specialisation // known tracks
   dd_centrale_mediterranee: {
-    academicPath: { text: 'Voie de Spécialisation', required: true },
-    careerPath: { text: 'Parcours', required: true },
-    electives: { text: '', required: false },
-  },
-  dd_centrale_supelec: {
-    academicPath: { text: 'Voie de Spécialisation', required: true },
+    academicPath: {
+      text: 'Voie de Spécialisation + Parcours',
+      required: true,
+      options: [
+        'Master of science and technology in complex systems / Parcours Environmental Engineering',
+        'Master of science and technology in complex systems / Parcours Biomedical Engineering',
+      ],
+    },
     careerPath: { text: '', required: false },
     electives: { text: '', required: false },
   },
+  // only one specialisation // unknown tracks
+  dd_centrale_supelec: {
+    academicPath: {
+      text: 'Voie de Spécialisation',
+      required: true,
+      options: ['Master of Science engineering in Artificial Intelligence'],
+    },
+    careerPath: { text: '', required: false },
+    electives: { text: '', required: false },
+  },
+  // unknown specialisations // unknown tracks
+  dd_politecnico_milano: {
+    academicPath: { text: 'Voie de Spécialisation', required: true, options: [''] },
+    careerPath: { text: '', required: false },
+    electives: { text: '', required: false },
+  },
+  // unknown specialisations // unknown tracks
+  dd_politecnico_torino: {
+    academicPath: { text: 'Voie de Spécialisation', required: true, options: [''] },
+    careerPath: { text: '', required: false },
+    electives: { text: '', required: false },
+  },
+  // unknown specialisations // unknown tracks
+  dd_audencia: {
+    academicPath: { text: 'Voie de Spécialisation', required: true, options: [''] },
+    careerPath: { text: '', required: false },
+    electives: { text: '', required: false },
+  },
+  // only one specialisation // only one track
   dd_uppa: {
-    academicPath: { text: 'Voie de Spécialisation', required: true },
-    careerPath: { text: 'Parcours', required: true },
+    academicPath: {
+      text: 'Voie de Spécialisation + Parcours',
+      required: true,
+      options: [
+        'Master mention informatique / Parcours Systèmes Informatiques pour le Génie de la Logistique Industrielle et des Services (SIGLIS) (M1+M2)',
+      ],
+    },
+    careerPath: { text: '', required: false },
     electives: { text: '', required: false },
   },
 

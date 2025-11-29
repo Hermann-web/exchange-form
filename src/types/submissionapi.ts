@@ -16,15 +16,22 @@ export const schoolLabels = {
   s9_centrale_pekin: '3A Centrale Pékin', // Has Electives
 
   // Non-GEC / Other
-  s9_enit: '3A ENIT',
-  s9_enise: '3A ENISE',
-  s9_ensimag: 'S9 ENSIMAG',
+  s9_enit: '3A ENIT (Ecole des Ingénieurs de Tunis)',
+  s9_enise:
+    '3A ENISE (Ecole Nationale des Ingénieurs de Saint Etienne - Au sein de l’École Centrale de Lyon)',
+  s9_ensimag:
+    'S9 ENSIMAG (Ecole Nationale Supérieure d’Informatique et de Mathématique Appliquée à Grenoble)',
+  s9_ensae:
+    '3A ENSAE (Ecole Nationale des Statistiques et de l’Administration Economique )',
 
   // Double Degrees
   dd_centrale_supelec: 'DD CentraleSupélec',
   dd_centrale_lille: 'DD Centrale Lille',
   dd_centrale_mediterranee: 'DD Centrale Méditerranée',
-  dd_georgia_tech: 'DD Georgia Tech',
+  dd_georgia_tech: 'DD Georgia Tech University',
+  dd_audencia: 'DD Audencia Business School',
+  dd_politecnico_milano: 'DD Politecnico di Milano',
+  dd_politecnico_torino: 'DD Politecnico di Torino',
   dd_uppa: "DD Université de Pau et des Pays de l'Adour",
 
   // // Special
