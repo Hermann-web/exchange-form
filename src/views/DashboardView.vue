@@ -36,15 +36,20 @@
           <ul class="space-y-2 text-blue-100">
             <li class="flex items-center">
               <CheckIcon class="w-4 h-4 text-green-400 mr-2" />
-              Formulaire de demande incluant les Learning Agreements
+              Dossier de candidature (ECC)
             </li>
             <li class="flex items-center">
               <CheckIcon class="w-4 h-4 text-green-400 mr-2" />
-              Relevés de notes académiques (S5, S6)
+              Dossier de candidature GEC (si au moins un voeu en 3A GEC est choisi)
             </li>
             <li class="flex items-center">
               <CheckIcon class="w-4 h-4 text-green-400 mr-2" />
-              Curriculum Vitae
+              2 pages par semestre de relevés de notes ECC (S5 et S6) (et S7 et S8 pour
+              les candidats en césure)
+            </li>
+            <li class="flex items-center">
+              <CheckIcon class="w-4 h-4 text-green-400 mr-2" />
+              Curriculum Vitae (avec une version en anglais incluse selon les voeux)
             </li>
             <li class="flex items-center">
               <CheckIcon class="w-4 h-4 text-green-400 mr-2" />
@@ -52,14 +57,22 @@
             </li>
             <li class="flex items-center">
               <CheckIcon class="w-4 h-4 text-green-400 mr-2" />
-              Learning Agreements en deux fichiers séparés
+              Une lettre de motivation pour chaque voeu
+            </li>
+            <li class="flex items-center">
+              <CheckIcon class="w-4 h-4 text-green-400 mr-2" />
+              Deux attestations de niveau de français et d'anglais
+            </li>
+            <li class="flex items-center">
+              <CheckIcon class="w-4 h-4 text-green-400 mr-2" />
+              Mention d'un enseignant-chercheur ECC pour une lettre de recommandation
             </li>
           </ul>
         </div>
         <div>
           <h3 class="text-lg font-medium text-blue-200 mb-3">Dates Importantes</h3>
           <ul class="space-y-2 text-blue-100">
-            <li><strong>Date limite de soumission :</strong> 15 septembre 2025</li>
+            <li><strong>Date limite de soumission :</strong> 30 janvier 2026</li>
             <li><strong>Période de révision (ECC) :</strong> A Confirmer</li>
             <li><strong>Période de révision (Partenaire) :</strong> A Confirmer</li>
             <li><strong>Annonce des résultats :</strong> A Confirmer</li>

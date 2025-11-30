@@ -176,17 +176,17 @@ export const createDocumentConfigs = () => {
     },
     {
       key: 'motivationLetterChoice1',
-      label: 'Dossier de Candidature (École 1)',
+      label: 'Lettre de Motivation (Voeu 1)',
       description: 'Document PDF (.pdf)',
       icon: icons.DocumentTextIcon,
-      filename: 'learning-agreement-choice1.pdf',
+      filename: 'motivation-letter-choice1.pdf',
     },
     {
       key: 'motivationLetterChoice2',
-      label: 'Dossier de Candidature (École 2)',
+      label: 'Lettre de Motivation (Voeu 2)',
       description: 'Document PDF (.pdf)',
       icon: icons.DocumentTextIcon,
-      filename: 'learning-agreement-choice2.pdf',
+      filename: 'motivation-letter-choice2.pdf',
     },
     {
       key: 'frenchLevelCertificate',
@@ -358,7 +358,7 @@ export const createFileUploadFieldConfigs = (form: SubmissionForm) => {
     },
     {
       key: 'motivationLetterChoice1',
-      label: 'Dossier de Candidature (École 1) (.pdf)',
+      label: 'Lettre de Motivation (Voeu 1) (.pdf)',
       accept: '.pdf',
       extensions: ['pdf'],
       required: () => form.choice1.schoolName !== 'unset',
@@ -366,7 +366,7 @@ export const createFileUploadFieldConfigs = (form: SubmissionForm) => {
     },
     {
       key: 'motivationLetterChoice2',
-      label: 'Dossier de Candidature (École 2) (.pdf)',
+      label: 'Lettre de Motivation (Voeu 2) (.pdf)',
       accept: '.pdf',
       extensions: ['pdf'],
       required: () => form.choice2.schoolName !== 'unset',
