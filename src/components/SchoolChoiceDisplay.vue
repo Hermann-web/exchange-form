@@ -50,21 +50,27 @@ const schoolConfig = computed(
         "
         class="flex justify-between"
       >
-        <span class="text-blue-300">Séquence Thématique:</span>
+        <span class="text-blue-300"
+          >{{ schoolConfig.academicPath.uiSplit.join(' / ') }}:</span
+        >
         <span class="text-white">{{ submission[choice.choiceKey].academicPath }}</span>
       </div>
       <div
         v-if="schoolConfig.careerPath.required && submission[choice.choiceKey].careerPath"
         class="flex justify-between"
       >
-        <span class="text-blue-300">Filière Métier:</span>
+        <span class="text-blue-300"
+          >{{ schoolConfig.careerPath.uiSplit.join(' / ') }}:</span
+        >
         <span class="text-white">{{ submission[choice.choiceKey].careerPath }}</span>
       </div>
       <div
         v-if="schoolConfig.electives.required && submission[choice.choiceKey].electives"
         class="flex justify-between"
       >
-        <span class="text-blue-300">Electives:</span>
+        <span class="text-blue-300"
+          >{{ schoolConfig.electives.uiSplit.join(' / ') }}:</span
+        >
         <span class="text-white">{{ submission[choice.choiceKey].electives }}</span>
       </div>
     </div>
@@ -86,7 +92,7 @@ const schoolConfig = computed(
         class="pt-2"
       >
         <label class="block text-blue-300 text-sm font-medium mb-1">
-          {{ schoolConfig.academicPath.text }}
+          {{ schoolConfig.academicPath.uiSplit.join(' / ') }}
         </label>
         <p class="text-white">{{ submission[choice.choiceKey].academicPath }}</p>
       </div>
@@ -95,7 +101,7 @@ const schoolConfig = computed(
         class="pt-2"
       >
         <label class="block text-blue-300 text-sm font-medium mb-1">
-          {{ schoolConfig.careerPath.text }}
+          {{ schoolConfig.careerPath.uiSplit.join(' / ') }}
         </label>
         <p class="text-white">{{ submission[choice.choiceKey].careerPath }}</p>
       </div>
@@ -104,7 +110,7 @@ const schoolConfig = computed(
         class="pt-2"
       >
         <label class="block text-blue-300 text-sm font-medium mb-1">
-          {{ schoolConfig.electives.text }}
+          {{ schoolConfig.electives.uiSplit.join(' / ') }}
         </label>
         <p class="text-white">{{ submission[choice.choiceKey].electives }}</p>
       </div>

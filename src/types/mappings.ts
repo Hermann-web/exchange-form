@@ -1,6 +1,4 @@
-// for each school, naming of academicPath and careerPath and electives is different
-// for each school, if academicPath is required and if careerPath is required and if electives is required
-// combine in a single map
+// src/types/mappings.ts
 
 import type {
   School,
@@ -9,118 +7,118 @@ import type {
   SubmissionFormObjectUrls,
 } from './submissionapi';
 
-export interface FieldConfig1 {
-  text: string;
+export interface FieldConfig {
   required: boolean;
   options?: string[];
-  uiSplit?: string[];
+  uiSplit: [] | [string] | [string, string];
 }
 
 export interface FieldConfig2 {
-  text: string;
   required: boolean;
   options?: string[];
+  uiSplit: [] | [string];
 }
 
 export interface SchoolConfig {
-  academicPath: FieldConfig1;
+  academicPath: FieldConfig;
   careerPath: FieldConfig2;
   electives: FieldConfig2;
 }
 
-// schoolFieldConfiguration
+// for each school, naming of academicPath and careerPath and electives is different
+// for each school, if academicPath is required and if careerPath is required and if electives is required
+// combine in a single map
 export const schoolAcademicPathKeyAndRequiredMap: Record<School, SchoolConfig> = {
   // --- GEC Schools (Option + Filière) ---
   s9_centrale_supelec_rennes: {
     academicPath: {
-      text: 'Option',
+      uiSplit: ['Option'],
       required: true,
       options: ['Mathématiques', 'Informatique', 'Physique'],
     }, // Example list
-    careerPath: { text: 'Filière Métier', required: true },
-    electives: { text: '', required: false },
+    careerPath: { uiSplit: ['Filière Métier'], required: true },
+    electives: { uiSplit: [], required: false },
   },
   s9_centrale_supelec_metz: {
-    academicPath: { text: 'Option', required: true },
-    careerPath: { text: 'Filière Métier', required: true },
-    electives: { text: '', required: false },
+    academicPath: { uiSplit: ['Option'], required: true },
+    careerPath: { uiSplit: ['Filière Métier'], required: true },
+    electives: { uiSplit: [], required: false },
   },
   s9_centrale_supelec_gif: {
-    academicPath: { text: 'Option', required: true },
-    careerPath: { text: 'Filière Métier', required: true },
-    electives: { text: '', required: false },
+    academicPath: { uiSplit: ['Option'], required: true },
+    careerPath: { uiSplit: ['Filière Métier'], required: true },
+    electives: { uiSplit: [], required: false },
   },
   s9_centrale_mediterranee: {
-    academicPath: { text: 'Option', required: true },
-    careerPath: { text: 'Filière Métier', required: true },
-    electives: { text: '', required: false },
+    academicPath: { uiSplit: ['Option'], required: true },
+    careerPath: { uiSplit: ['Filière Métier'], required: true },
+    electives: { uiSplit: [], required: false },
   },
   s9_centrale_nantes: {
-    academicPath: { text: 'Option', required: true },
-    careerPath: { text: 'Filière Métier', required: true },
-    electives: { text: '', required: false },
+    academicPath: { uiSplit: ['Option'], required: true },
+    careerPath: { uiSplit: ['Filière Métier'], required: true },
+    electives: { uiSplit: [], required: false },
   },
   s9_centrale_lille: {
-    academicPath: { text: 'Option', required: true },
-    careerPath: { text: 'Filière Métier', required: true },
-    electives: { text: '', required: false },
+    academicPath: { uiSplit: ['Option'], required: true },
+    careerPath: { uiSplit: ['Filière Métier'], required: true },
+    electives: { uiSplit: [], required: false },
   },
   s9_centrale_lyon: {
-    academicPath: { text: 'Option', required: true },
-    careerPath: { text: 'Filière Métier', required: true },
-    electives: { text: '', required: false },
+    academicPath: { uiSplit: ['Option'], required: true },
+    careerPath: { uiSplit: ['Filière Métier'], required: true },
+    electives: { uiSplit: [], required: false },
   },
 
   // --- Exception: Centrale Pekin (Has Electives) ---
   s9_centrale_pekin: {
-    academicPath: { text: 'Option', required: false },
-    careerPath: { text: 'Filière Métier', required: false },
+    academicPath: { uiSplit: [''], required: false },
+    careerPath: { uiSplit: [''], required: false },
     electives: {
-      text: 'Electifs Centrale Pékin + Electifs BUAA',
+      uiSplit: ['Electifs Centrale Pékin + Electifs BUAA'],
       required: true,
       options: ['Robotics', 'AI', 'Energy'],
-    }, // Example
+    },
   },
 
   // --- Non-GEC (Filiere OR Voie+Parcours) ---
   // only one specialisation // unknown tracks
   s9_ensimag: {
     academicPath: {
-      text: 'Filière',
+      uiSplit: ['Filière'],
       required: true,
       options: ['MMIS (Filière Modélisation mathématique, image, simulation)'],
     },
-    careerPath: { text: '', required: false }, // Single field required
-    electives: { text: '', required: false },
+    careerPath: { uiSplit: [], required: false }, // Single field required
+    electives: { uiSplit: [], required: false },
   },
   // unknown specialisations // unknown tracks
   s9_ensae: {
-    academicPath: { text: 'Voie de spécialisation', required: true },
-    careerPath: { text: '', required: false }, // Single field required
-    electives: { text: '', required: false },
+    academicPath: { uiSplit: ['Voie de spécialisation'], required: true },
+    careerPath: { uiSplit: [], required: false }, // Single field required
+    electives: { uiSplit: [], required: false },
   },
   // unknown specialisations // unknown tracks
   s9_enise: {
     academicPath: {
-      text: 'Voie de spécialisation + parcours',
+      uiSplit: ['Master 2', 'Parcours'],
       required: true,
-      uiSplit: ['Voie de spécialisation', 'Parcours'],
     },
-    careerPath: { text: '', required: false },
-    electives: { text: '', required: false },
+    careerPath: { uiSplit: [], required: false },
+    electives: { uiSplit: [], required: false },
   },
   // unknown specialisations // unknown tracks
   s9_enit: {
-    academicPath: { text: 'Filière', required: true },
-    careerPath: { text: '', required: false },
-    electives: { text: '', required: false },
+    academicPath: { uiSplit: ['Filière'], required: true },
+    careerPath: { uiSplit: [], required: false },
+    electives: { uiSplit: [], required: false },
   },
 
   // --- Double Degrees (Voie+Parcours OR Voie) ---
   // only one specialisation // known tracks
   dd_georgia_tech: {
     academicPath: {
-      text: 'voie de spécialisation + Parcours',
+      uiSplit: ['voie de spécialisation + Parcours'],
       required: true,
       options: [
         'Master of Science degree / Aerospace Engineering',
@@ -128,84 +126,84 @@ export const schoolAcademicPathKeyAndRequiredMap: Record<School, SchoolConfig> =
         'Master of Science degree / Mechanical Engineering',
       ],
     },
-    careerPath: { text: '', required: false },
-    electives: { text: '', required: false },
+    careerPath: { uiSplit: [], required: false },
+    electives: { uiSplit: [], required: false },
   },
   // only one specialisation // unknown tracks
   dd_centrale_lille: {
     academicPath: {
-      text: 'Voie de Spécialisation',
+      uiSplit: ['Voie de Spécialisation'],
       required: true,
       options: ['Master Sciences des données'],
     },
-    careerPath: { text: '', required: false },
-    electives: { text: '', required: false },
+    careerPath: { uiSplit: [], required: false },
+    electives: { uiSplit: [], required: false },
   },
   // only one specialisation // known tracks
   dd_centrale_mediterranee: {
     academicPath: {
-      text: 'Voie de Spécialisation + Parcours',
+      uiSplit: ['Voie de Spécialisation + Parcours'],
       required: true,
       options: [
         'Master of science and technology in complex systems / Parcours Environmental Engineering',
         'Master of science and technology in complex systems / Parcours Biomedical Engineering',
       ],
     },
-    careerPath: { text: '', required: false },
-    electives: { text: '', required: false },
+    careerPath: { uiSplit: [], required: false },
+    electives: { uiSplit: [], required: false },
   },
   // only one specialisation // unknown tracks
   dd_centrale_supelec: {
     academicPath: {
-      text: 'Voie de Spécialisation',
+      uiSplit: ['Voie de Spécialisation'],
       required: true,
       options: ['Master of Science engineering in Artificial Intelligence'],
     },
-    careerPath: { text: '', required: false },
-    electives: { text: '', required: false },
+    careerPath: { uiSplit: [], required: false },
+    electives: { uiSplit: [], required: false },
   },
   // unknown specialisations // unknown tracks
   dd_politecnico_milano: {
-    academicPath: { text: 'Voie de Spécialisation', required: true, options: [''] },
-    careerPath: { text: '', required: false },
-    electives: { text: '', required: false },
+    academicPath: { uiSplit: ['Voie de Spécialisation'], required: true },
+    careerPath: { uiSplit: [], required: false },
+    electives: { uiSplit: [], required: false },
   },
   // unknown specialisations // unknown tracks
   dd_politecnico_torino: {
-    academicPath: { text: 'Voie de Spécialisation', required: true, options: [''] },
-    careerPath: { text: '', required: false },
-    electives: { text: '', required: false },
+    academicPath: { uiSplit: ['Voie de Spécialisation'], required: true },
+    careerPath: { uiSplit: [], required: false },
+    electives: { uiSplit: [], required: false },
   },
   // unknown specialisations // unknown tracks
   dd_audencia: {
-    academicPath: { text: 'Voie de Spécialisation', required: true, options: [''] },
-    careerPath: { text: '', required: false },
-    electives: { text: '', required: false },
+    academicPath: { uiSplit: ['Voie de Spécialisation'], required: true },
+    careerPath: { uiSplit: [], required: false },
+    electives: { uiSplit: [], required: false },
   },
   // only one specialisation // only one track
   dd_uppa: {
     academicPath: {
-      text: 'Voie de Spécialisation + Parcours',
+      uiSplit: ['Voie de Spécialisation + Parcours'],
       required: true,
       options: [
         'Master mention informatique / Parcours Systèmes Informatiques pour le Génie de la Logistique Industrielle et des Services (SIGLIS) (M1+M2)',
       ],
     },
-    careerPath: { text: '', required: false },
-    electives: { text: '', required: false },
+    careerPath: { uiSplit: [], required: false },
+    electives: { uiSplit: [], required: false },
   },
 
   // // --- Digital Lab (No fields) ---
   // digital_lab_lyon: {
-  //   academicPath: { text: '', required: false },
-  //   careerPath: { text: '', required: false },
-  //   electives: { text: '', required: false },
+  //   academicPath: { uiSplit: [], required: false },
+  //   careerPath: { uiSplit: [], required: false },
+  //   electives: { uiSplit: [], required: false },
   // },
 
   unset: {
-    academicPath: { text: '', required: false },
-    careerPath: { text: '', required: false },
-    electives: { text: '', required: false },
+    academicPath: { uiSplit: [], required: false },
+    careerPath: { uiSplit: [], required: false },
+    electives: { uiSplit: [], required: false },
   },
 };
 

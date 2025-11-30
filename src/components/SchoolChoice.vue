@@ -1,8 +1,12 @@
 <!-- src/components/SchoolChoice.vue -->
 <script setup lang="ts">
 import { watch, computed, reactive, ref } from 'vue';
-import { type SubmissionForm, type SchoolChoice } from '@/types/submissionapi';
-import { schoolAcademicPathKeyAndRequiredMap } from '@/types/mappings';
+import {
+  type SubmissionForm,
+  type SchoolChoice,
+  type School,
+} from '@/types/submissionapi';
+import { schoolAcademicPathKeyAndRequiredMap, type SchoolConfig } from '@/types/mappings';
 import type {
   SchoolChoiceConfig,
   SchoolOption,
@@ -26,161 +30,157 @@ const localErrors = reactive<Record<keyof SchoolChoice, string>>({
   electives: '',
 });
 
-// Computed properties for constraints validation
-const selectedSchool = computed(() => props.form[props.choice.choiceKey].schoolName);
-
-const schoolConfig = computed(
-  () => schoolAcademicPathKeyAndRequiredMap[selectedSchool.value]
-);
-
-// Validate academic path
-const validateAcademicPath = () => {
-  const choiceKey = props.choice.choiceKey;
-  const schoolObj = props.form[choiceKey];
-
-  if (schoolConfig.value.academicPath.required) {
-    const thematicValue = schoolObj.academicPath;
-    localErrors.academicPath = !thematicValue?.trim()
-      ? `${schoolConfig.value.academicPath.text} requis(e)`
-      : '';
-  } else {
-    localErrors.academicPath = '';
-  }
-};
-
-const validateCareerPath = () => {
-  const choiceKey = props.choice.choiceKey;
-  const schoolObj = props.form[choiceKey];
-
-  if (schoolConfig.value.careerPath.required) {
-    const careerValue = schoolObj.careerPath;
-    localErrors.careerPath = !careerValue?.trim()
-      ? `${schoolConfig.value.careerPath.text} requis(e)`
-      : '';
-  } else {
-    localErrors.careerPath = '';
-  }
-};
-
-const validateElectives = () => {
-  const choiceKey = props.choice.choiceKey;
-  const schoolObj = props.form[choiceKey];
-
-  if (schoolConfig.value.electives.required) {
-    const electivesValue = schoolObj.electives;
-    localErrors.electives = !electivesValue?.trim()
-      ? `${schoolConfig.value.electives.text} requis(e)`
-      : '';
-  } else {
-    localErrors.electives = '';
-  }
-};
-
-// Constants
+// Constants for separator handling
 const RAW_SEP = '/';
 const ACADEMIC_SPLIT_SEPARATOR = ` ${RAW_SEP} `;
 
 // Join a list of parts into a single string
-function joinAcademicParts(parts: string[]): string {
+function joinParts(parts: string[]): string {
   const cleaned = parts.map((v) => v.replace(new RegExp(`\\${RAW_SEP}`, 'g'), ''));
   return cleaned.join(ACADEMIC_SPLIT_SEPARATOR);
 }
 
-// Split an academicPath string into a list of parts
-function splitAcademicString(value: string): string[] {
+// Split a string into parts by separator
+function splitString(value: string): string[] {
   if (!value) return [];
   return value.split(ACADEMIC_SPLIT_SEPARATOR);
 }
 
-// Local state for split inputs
-const splitValues = ref<string[]>([]);
+// Computed: selected school name
+const selectedSchool = computed<School>(
+  () => props.form[props.choice.choiceKey].schoolName
+);
 
-// Sync splitValues when school or academicPath changes (initial load or external change)
+// Computed: school config with fallback
+const schoolConfig = computed<SchoolConfig>(() => {
+  return schoolAcademicPathKeyAndRequiredMap[selectedSchool.value];
+});
+
+// Split values refs for each field
+const academicSplitValues = ref<string[]>([]);
+const careerSplitValues = ref<string[]>([]);
+const electivesSplitValues = ref<string[]>([]);
+
+// Sync split values from string form field value
+function syncSplitValues(
+  fieldSplitValues: typeof academicSplitValues,
+  uiSplit: string[],
+  formValue: string
+): void {
+  if (uiSplit.length === 0) {
+    fieldSplitValues.value = [];
+    return;
+  }
+  const parts = splitString(formValue);
+  fieldSplitValues.value = uiSplit.map((_, i) => parts[i] || '');
+}
+
+// Watchers to sync split values with form values
 watch(
   [schoolConfig, () => props.form[props.choice.choiceKey].academicPath],
-  ([newConfig, newPath]) => {
-    const splits = newConfig.academicPath.uiSplit;
-    if (!splits) {
-      splitValues.value = [];
-      return;
-    }
-
-    // Loop prevention: if current splitValues matches path, don't update
-    if (joinAcademicParts(splitValues.value) === newPath) return;
-
-    const parts = newPath ? splitAcademicString(newPath) : [];
-
-    console.log('Updating splitValues', parts);
-    // Resize splitValues to match splits length, preserving existing values or filling with empty
-    splitValues.value = splits.map((_, i) => parts[i] || '');
+  ([newConfig, newVal]) => {
+    syncSplitValues(academicSplitValues, newConfig.academicPath.uiSplit, newVal);
   },
   { immediate: true }
 );
 
-// Watch splitValues to update academicPath
 watch(
-  splitValues,
-  (newValues) => {
-    if (!schoolConfig.value.academicPath.uiSplit) return;
-    const splits = schoolConfig.value.academicPath.uiSplit;
-    const emptySplits = splits.filter((_, i) => !newValues[i].trim());
-
-    if (emptySplits.length > 0) {
-      localErrors.academicPath = `${schoolConfig.value.academicPath.text} requis(e) entièrement`;
-      return;
-    } else {
-      localErrors.academicPath = '';
-    }
-
-    const joined = joinAcademicParts(newValues);
-    if (props.form[props.choice.choiceKey].academicPath === joined) return;
-    props.form[props.choice.choiceKey].academicPath = joined;
-    validateAcademicPath();
+  [schoolConfig, () => props.form[props.choice.choiceKey].careerPath],
+  ([newConfig, newVal]) => {
+    syncSplitValues(careerSplitValues, newConfig.careerPath.uiSplit, newVal);
   },
-  { deep: true }
+  { immediate: true }
 );
 
-// Watch for school changes and empty all fields
-watch(selectedSchool, () => {
-  // If changing school, clear all fields
-  props.form[props.choice.choiceKey].academicPath = '';
-  props.form[props.choice.choiceKey].careerPath = '';
-  props.form[props.choice.choiceKey].electives = '';
+watch(
+  [schoolConfig, () => props.form[props.choice.choiceKey].electives],
+  ([newConfig, newVal]) => {
+    syncSplitValues(electivesSplitValues, newConfig.electives.uiSplit, newVal);
+  },
+  { immediate: true }
+);
 
-  // Reset split values
-  splitValues.value = Array.from(
-    { length: schoolConfig.value.academicPath.uiSplit?.length || 0 },
-    () => ''
+// Generic watcher for split values updating form fields and validating
+function watchSplitValues(
+  fieldSplitValues:
+    | typeof academicSplitValues
+    | typeof careerSplitValues
+    | typeof electivesSplitValues,
+  fieldKey: keyof SchoolConfig
+): void {
+  watch(
+    fieldSplitValues,
+    (newValues) => {
+      const configField = schoolConfig.value[fieldKey];
+
+      const currentUiSplit = configField.uiSplit;
+
+      if (configField.required) {
+        const missing = currentUiSplit.filter((_, i) => !newValues[i].trim());
+
+        if (missing.length) {
+          localErrors[fieldKey] =
+            `${currentUiSplit.join(' / ')} requis(e)` +
+            (currentUiSplit.length > 1 ? ' entièrement' : '');
+          return;
+        }
+      }
+
+      localErrors[fieldKey] = '';
+
+      const joined = joinParts(newValues);
+      if (props.form[props.choice.choiceKey][fieldKey] !== joined) {
+        props.form[props.choice.choiceKey][fieldKey] = joined;
+      }
+    },
+    { deep: true }
   );
+}
 
-  // Revalidate after school change to be ultra safe
-  validateSchool();
-  validateAcademicPath();
-  validateCareerPath();
-  validateElectives();
-});
+watchSplitValues(academicSplitValues, 'academicPath');
+watchSplitValues(careerSplitValues, 'careerPath');
+watchSplitValues(electivesSplitValues, 'electives');
 
-// Watch for academic path changes
-watch(() => props.form[props.choice.choiceKey].academicPath, validateAcademicPath);
-// Watch for career path changes
-watch(() => props.form[props.choice.choiceKey].careerPath, validateCareerPath);
-// Watch for electives changes
-watch(() => props.form[props.choice.choiceKey].electives, validateElectives);
-
-const validateSchool = () => {
+// Validation for schoolName (example for first choice)
+function validateSchool(): void {
   const choiceKey = props.choice.choiceKey;
   const schoolObj = props.form[choiceKey];
 
   // If first choice is unset, show error
   if (choiceKey === 'choice1' && schoolObj.schoolName == 'unset') {
     localErrors.schoolName = 'Le premier choix doit être mentionné';
-    return;
+  } else {
+    localErrors.schoolName = '';
   }
-  localErrors.schoolName = '';
-};
+}
+
+// Watch for schoolName changes
 watch(() => props.form[props.choice.choiceKey].schoolName, validateSchool);
 
-// Sync local errors to parent props.errors
+// Watch for school change to clear fields and reset splits
+watch(selectedSchool, () => {
+  const choiceKey = props.choice.choiceKey;
+  props.form[choiceKey].academicPath = '';
+  props.form[choiceKey].careerPath = '';
+  props.form[choiceKey].electives = '';
+
+  academicSplitValues.value = Array.from(
+    { length: schoolConfig.value.academicPath.uiSplit.length },
+    () => ''
+  );
+  careerSplitValues.value = Array.from(
+    { length: schoolConfig.value.careerPath.uiSplit.length },
+    () => ''
+  );
+  electivesSplitValues.value = Array.from(
+    { length: schoolConfig.value.electives.uiSplit.length },
+    () => ''
+  );
+
+  validateSchool();
+});
+
+// Sync localErrors to parent errors prop
 watch(
   localErrors,
   () => {
@@ -195,16 +195,13 @@ watch(
   { deep: true }
 );
 
-// Initialize validation on mount
+// Initialize validation on mount and form changes
 watch(
   () => props.form,
   () => {
     validateSchool();
-    validateAcademicPath();
-    validateCareerPath();
-    validateElectives();
   },
-  { immediate: true }
+  { immediate: true, deep: true }
 );
 </script>
 
@@ -237,9 +234,10 @@ watch(
         </p>
       </div>
 
+      <!-- Academic Path -->
       <div v-if="schoolConfig.academicPath.required">
         <label class="block text-blue-100 text-sm font-medium mb-2">
-          {{ schoolConfig.academicPath.text }} *
+          {{ schoolConfig.academicPath.uiSplit.join(' + ') }} *
         </label>
 
         <!-- Select for Academic Path -->
@@ -260,24 +258,19 @@ watch(
         </select>
 
         <!-- Split Text Input for Academic Path -->
-        <!-- when schoolConfig.academicPath.split exists -->
-        <!-- for each split, create a text input (text=split[index]) -->
-        <div
-          v-if="
-            schoolConfig.academicPath.uiSplit &&
-            schoolConfig.academicPath.uiSplit.length > 1
-          "
-        >
+        <div v-else-if="schoolConfig.academicPath.uiSplit.length > 0">
           <div
             v-for="(split, index) in schoolConfig.academicPath.uiSplit"
             :key="index"
             class="mb-2"
           >
-            <label class="block text-blue-100 text-xs font-medium mb-1">{{
-              split
-            }}</label>
+            <label
+              v-if="schoolConfig.academicPath.uiSplit.length > 1"
+              class="block text-blue-100 text-xs font-medium mb-1"
+              >{{ split }}</label
+            >
             <input
-              v-model="splitValues[index]"
+              v-model="academicSplitValues[index]"
               type="text"
               class="input-field"
               :class="{ 'border-red-500 focus:border-red-400': localErrors.academicPath }"
@@ -286,24 +279,15 @@ watch(
           </div>
         </div>
 
-        <!-- Text Input for Academic Path -->
-        <input
-          v-else
-          v-model="form[choice.choiceKey].academicPath"
-          type="text"
-          class="input-field"
-          :class="{ 'border-red-500 focus:border-red-400': localErrors.academicPath }"
-          :placeholder="`Saisir : ${schoolConfig.academicPath.text}`"
-        />
-
         <p v-if="localErrors.academicPath" class="text-red-300 text-xs mt-1">
           {{ localErrors.academicPath }}
         </p>
       </div>
 
+      <!-- Career Path -->
       <div v-if="schoolConfig.careerPath.required">
         <label class="block text-blue-100 text-sm font-medium mb-2">
-          {{ schoolConfig.careerPath.text }} *
+          {{ schoolConfig.careerPath.uiSplit.join(' + ') }} *
         </label>
 
         <!-- Select for Career Path -->
@@ -323,24 +307,41 @@ watch(
           </option>
         </select>
 
-        <!-- Text Input for Career Path -->
-        <input
-          v-else
-          v-model="form[choice.choiceKey].careerPath"
-          type="text"
-          class="input-field"
-          :class="{ 'border-red-500 focus:border-red-400': localErrors.careerPath }"
-          :placeholder="`Saisir : ${schoolConfig.careerPath.text}`"
-        />
+        <!-- Split Text Input for Career Path -->
+        <div
+          v-else-if="
+            schoolConfig.careerPath.uiSplit && schoolConfig.careerPath.uiSplit.length > 0
+          "
+        >
+          <div
+            v-for="(split, index) in schoolConfig.careerPath.uiSplit"
+            :key="index"
+            class="mb-2"
+          >
+            <label
+              v-if="schoolConfig.careerPath.uiSplit.length > 1"
+              class="block text-blue-100 text-xs font-medium mb-1"
+              >{{ split }}</label
+            >
+            <input
+              v-model="careerSplitValues[index]"
+              type="text"
+              class="input-field"
+              :class="{ 'border-red-500 focus:border-red-400': localErrors.careerPath }"
+              :placeholder="`Saisir : ${split}`"
+            />
+          </div>
+        </div>
 
         <p v-if="localErrors.careerPath" class="text-red-300 text-xs mt-1">
           {{ localErrors.careerPath }}
         </p>
       </div>
+
       <!-- Electives -->
       <div v-if="schoolConfig.electives.required">
         <label class="block text-blue-100 text-sm font-medium mb-2">
-          {{ schoolConfig.electives.text }} *
+          {{ schoolConfig.electives.uiSplit.join(' + ') }} *
         </label>
 
         <!-- Select for Electives -->
@@ -360,15 +361,31 @@ watch(
           </option>
         </select>
 
-        <!-- Text Input for Electives -->
-        <input
-          v-else
-          v-model="form[choice.choiceKey].electives"
-          type="text"
-          class="input-field"
-          :class="{ 'border-red-500 focus:border-red-400': localErrors.electives }"
-          :placeholder="`Saisir : ${schoolConfig.electives.text}`"
-        />
+        <!-- Split Text Input for Electives -->
+        <div
+          v-else-if="
+            schoolConfig.electives.uiSplit && schoolConfig.electives.uiSplit.length > 0
+          "
+        >
+          <div
+            v-for="(split, index) in schoolConfig.electives.uiSplit"
+            :key="index"
+            class="mb-2"
+          >
+            <label
+              v-if="schoolConfig.electives.uiSplit.length > 1"
+              class="block text-blue-100 text-xs font-medium mb-1"
+              >{{ split }}</label
+            >
+            <input
+              v-model="electivesSplitValues[index]"
+              type="text"
+              class="input-field"
+              :class="{ 'border-red-500 focus:border-red-400': localErrors.electives }"
+              :placeholder="`Saisir : ${split}`"
+            />
+          </div>
+        </div>
 
         <p v-if="localErrors.electives" class="text-red-300 text-xs mt-1">
           {{ localErrors.electives }}
