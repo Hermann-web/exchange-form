@@ -60,78 +60,105 @@ export type Civility = keyof typeof civilityLabels;
 // 2. Choice Structure (Vertical & Nested)
 // =============================================================================
 
-export interface SchoolChoice {
-  schoolName: School;
-  academicPath: string; // Maps to: Dominante + Option, Voie de spécialisation + Parcours, etc.
-  careerPath: string; // Maps to: Filière Métier, etc.
-  electives: string; // Specific for Centrale Pekin (Multi-choice) ";" separated string
-}
+import { z } from 'zod';
 
-export interface PersonalSubmissionFormMeta {
-  firstName: string;
-  lastName: string;
+// =============================================================================
+// 2. Choice Structure (Vertical & Nested)
+// =============================================================================
 
-  // Nationality: only 2 values allowed
-  nationality: Nationality;
+export const SchoolChoiceSchema = z.object({
+  schoolName: z.custom<School>(),
+  academicPath: z.string(),
+  careerPath: z.string(),
+  electives: z.string(),
+});
 
-  // Email must end with @domain (checked in validation)
-  email: string;
-}
+export interface SchoolChoice extends z.infer<typeof SchoolChoiceSchema> {}
 
-export interface SchoolSubmissionFormMeta {
-  // Exchange choices (vertical structure)
-  choice1: SchoolChoice;
-  choice2: SchoolChoice;
-}
+export const PersonalSubmissionFormMetaSchema = z.object({
+  firstName: z.string().min(1),
+  lastName: z.string().min(1),
+  nationality: z.custom<Nationality>(),
+  email: z.string().email(),
+});
 
-export type SubmissionFormMeta = PersonalSubmissionFormMeta & SchoolSubmissionFormMeta;
+export interface PersonalSubmissionFormMeta
+  extends z.infer<typeof PersonalSubmissionFormMetaSchema> {}
 
-export interface SubmissionFormObject {
-  // File uploads
-  applicationFormEcc: File; // .docx file
-  applicationFormGec?: File; // .docx file
-  resumePdf: File; // .pdf file
-  s5Transcripts: File; // 2-page PDF
-  s6Transcripts: File; // 2-page PDF
-  s7Transcripts?: File; // 2-page PDF
-  s8Transcripts?: File; // 2-page PDF
-  residencePermit?: File; // required only for non-Moroccans, .pdf
-  motivationLetterChoice1: File; // pdf
-  motivationLetterChoice2?: File; // pdf
-  frenchLevelCertificate: File;
-  englishLevelCertificate: File;
-  passeportPdf: File; // pdf
-  otherFilesPdf?: File; // pdf
-}
+export const SchoolSubmissionFormMetaSchema = z.object({
+  choice1: SchoolChoiceSchema,
+  choice2: SchoolChoiceSchema,
+});
 
-export type SubmissionForm = SubmissionFormMeta & SubmissionFormObject;
+export interface SchoolSubmissionFormMeta
+  extends z.infer<typeof SchoolSubmissionFormMetaSchema> {}
+
+export const SubmissionFormMetaSchema = PersonalSubmissionFormMetaSchema.extend(
+  SchoolSubmissionFormMetaSchema.shape
+);
+
+export type SubmissionFormMeta = z.infer<typeof SubmissionFormMetaSchema>;
+
+export const SubmissionFormObjectSchema = z.object({
+  applicationFormEcc: z.instanceof(File),
+  applicationFormGec: z.instanceof(File).optional().nullable(),
+  resumePdf: z.instanceof(File),
+  s5Transcripts: z.instanceof(File),
+  s6Transcripts: z.instanceof(File),
+  s7Transcripts: z.instanceof(File).optional().nullable(),
+  s8Transcripts: z.instanceof(File).optional().nullable(),
+  residencePermit: z.instanceof(File).optional().nullable(),
+  motivationLetterChoice1: z.instanceof(File),
+  motivationLetterChoice2: z.instanceof(File).optional().nullable(),
+  frenchLevelCertificate: z.instanceof(File),
+  englishLevelCertificate: z.instanceof(File),
+  passeportPdf: z.instanceof(File),
+  otherFilesPdf: z.instanceof(File).optional().nullable(),
+});
+
+export interface SubmissionFormObject
+  extends z.infer<typeof SubmissionFormObjectSchema> {}
+
+export const SubmissionFormSchema = SubmissionFormMetaSchema.extend(
+  SubmissionFormObjectSchema.shape
+);
+
+export type SubmissionForm = z.infer<typeof SubmissionFormSchema>;
 
 // API Responses
-export interface SubmissionFormObjectUrls {
-  applicationFormEccUrl: string; // public download URL for application form
-  applicationFormGecUrl?: string; // public download URL for application form
-  resumeUrl: string; // public download URL for CV
-  s5TranscriptsUrl: string; // public download URL for S5 transcripts
-  s6TranscriptsUrl: string; // public download URL for S6 transcripts
-  s7TranscriptsUrl?: string; // public download URL for S7 transcripts
-  s8TranscriptsUrl?: string; // public download URL for S8 transcripts
-  residencePermitUrl?: string; // if applicable
-  motivationLetterChoice1Url: string; // pdf
-  motivationLetterChoice2Url?: string; // pdf
-  frenchLevelCertificateUrl: string;
-  englishLevelCertificateUrl: string;
-  passeportUrl: string; // pdf
-  otherFilesPdfUrl?: string; // pdf
-}
+export const SubmissionFormObjectUrlsSchema = z.object({
+  applicationFormEccUrl: z.string(),
+  applicationFormGecUrl: z.string().optional().nullable(),
+  resumeUrl: z.string(),
+  s5TranscriptsUrl: z.string(),
+  s6TranscriptsUrl: z.string(),
+  s7TranscriptsUrl: z.string().optional().nullable(),
+  s8TranscriptsUrl: z.string().optional().nullable(),
+  residencePermitUrl: z.string().optional().nullable(),
+  motivationLetterChoice1Url: z.string(),
+  motivationLetterChoice2Url: z.string().optional().nullable(),
+  frenchLevelCertificateUrl: z.string(),
+  englishLevelCertificateUrl: z.string(),
+  passeportUrl: z.string(),
+  otherFilesPdfUrl: z.string().optional().nullable(),
+});
 
-export interface SubmissionData extends SubmissionFormMeta, SubmissionFormObjectUrls {
-  // storageId: string; // unique ID for submission (e.g., folder ID in Firebase)
-  createdAt: string; // timestamp
-}
+export interface SubmissionFormObjectUrls
+  extends z.infer<typeof SubmissionFormObjectUrlsSchema> {}
 
-export interface SubmissionMetaDb extends SubmissionData {
-  databaseId: string;
-}
+export const SubmissionDataSchema = SubmissionFormMetaSchema.extend(
+  SubmissionFormObjectUrlsSchema.shape
+).extend({
+  createdAt: z.string(),
+});
+
+export interface SubmissionData extends z.infer<typeof SubmissionDataSchema> {}
+
+export const SubmissionMetaDbSchema = SubmissionDataSchema.extend({
+  databaseId: z.string(),
+});
+
+export interface SubmissionMetaDb extends z.infer<typeof SubmissionMetaDbSchema> {}
 
 // API Interface Definitions
 

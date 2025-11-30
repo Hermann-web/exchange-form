@@ -11,8 +11,11 @@ import {
   type Nationality,
   schoolLabels,
   nationalityLabels,
+  SubmissionFormSchema,
+  SubmissionMetaDbSchema,
 } from '@/types/submissionapi';
 import { fillRecord } from '@/components/types';
+import { z } from 'zod';
 
 // // Helper function to generate unique storage ID
 // const generateStorageId = (email: string): string => {
@@ -78,6 +81,9 @@ export const useSubmissionStore = defineStore('submission', () => {
     };
 
     try {
+      // Validate input
+      SubmissionFormSchema.parse(formData);
+
       // Step 1: Upload files to storage and get URLs
       console.log('Upload files to storage and get URLs');
 
@@ -136,6 +142,9 @@ export const useSubmissionStore = defineStore('submission', () => {
       console.log('Save submission metadata to database');
       const savedSubmission = await databaseApi.saveSubmission(submissionData);
 
+      // Validate response
+      SubmissionMetaDbSchema.parse(savedSubmission);
+
       // Update local state
       mySubmission.value = savedSubmission;
 
@@ -156,6 +165,12 @@ export const useSubmissionStore = defineStore('submission', () => {
 
     try {
       const submission = await databaseApi.getMySubmission(email);
+
+      // Validate response if present
+      if (submission) {
+        SubmissionMetaDbSchema.parse(submission);
+      }
+
       mySubmission.value = submission;
     } catch (err: any) {
       console.error('Error fetching user submission:', err);
@@ -172,6 +187,10 @@ export const useSubmissionStore = defineStore('submission', () => {
 
     try {
       const submissions = await databaseApi.listAllSubmissions();
+
+      // Validate response
+      z.array(SubmissionMetaDbSchema).parse(submissions);
+
       allSubmissions.value = submissions;
     } catch (err: any) {
       console.error('Error fetching all submissions:', err);

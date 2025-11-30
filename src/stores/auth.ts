@@ -2,7 +2,15 @@
 import { defineStore } from 'pinia';
 import { ref, computed } from 'vue';
 import { authApi } from '@/utils/api';
-import type { AuthSession, SignupRequest, UserProfile } from '@/types/authapi';
+import {
+  type AuthSession,
+  type SignupRequest,
+  type UserProfile,
+  LoginRequestSchema,
+  SignupRequestSchema,
+  AuthSessionSchema,
+  UserProfileSchema,
+} from '@/types/authapi';
 
 const ADMIN_EMAILS = import.meta.env.VITE_ADMIN_EMAILS;
 // assert not undefined and not empty
@@ -46,13 +54,26 @@ export const useAuthStore = defineStore('auth', () => {
     loading.value = true;
     error.value = null;
     try {
+      // Validate input
+      LoginRequestSchema.parse({ email, password });
+
       console.log('login');
       const { session: authSession } = await authApi.login(email, password);
+
+      // Validate session response
+      if (authSession) {
+        AuthSessionSchema.parse(authSession);
+      }
+
       console.log('setting session');
       setSession(authSession);
       // Get user profile info
       console.log('Get user profile info');
       const userProfile = await authApi.me();
+
+      // Validate user profile response
+      UserProfileSchema.parse(userProfile);
+
       console.log('setting user from profile');
       setUserFromProfile(userProfile);
       console.log('done');
@@ -74,6 +95,9 @@ export const useAuthStore = defineStore('auth', () => {
     loading.value = true;
     error.value = null;
     try {
+      // Validate input
+      SignupRequestSchema.parse(data);
+
       await authApi.signup(data);
       await sendVerificationEmail();
       return true;
@@ -87,6 +111,12 @@ export const useAuthStore = defineStore('auth', () => {
 
   const fetchUser = async (): Promise<boolean> => {
     const _session = await authApi.getSession();
+
+    // Validate session if present
+    if (_session) {
+      AuthSessionSchema.parse(_session);
+    }
+
     setSession(_session);
 
     if (!session.value) {
@@ -95,6 +125,10 @@ export const useAuthStore = defineStore('auth', () => {
     }
     try {
       const userProfile = await authApi.me();
+
+      // Validate user profile
+      UserProfileSchema.parse(userProfile);
+
       setUserFromProfile(userProfile);
       initialized.value = true;
       return true;
@@ -181,7 +215,10 @@ export const useAuthStore = defineStore('auth', () => {
     try {
       // Get initial session through API layer
       const initialSession = await authApi.getSession();
+
+      // Validate initial session
       if (initialSession) {
+        AuthSessionSchema.parse(initialSession);
         setSession(initialSession);
         await fetchUser();
       } else {

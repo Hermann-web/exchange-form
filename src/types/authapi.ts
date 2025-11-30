@@ -1,52 +1,70 @@
 // src/types/authapi.ts
 
+import { z } from 'zod';
+
 // Auth API Types
-export interface LoginRequest {
-  email: string;
-  password: string;
-}
+export const LoginRequestSchema = z.object({
+  email: z.email(),
+  password: z.string().min(1),
+});
 
-export interface LoginResponse {
-  user: AuthUser | null;
-  session: AuthSession | null;
-}
+export interface LoginRequest extends z.infer<typeof LoginRequestSchema> {}
 
-export interface SignupRequest {
-  email: string;
-  first_name: string;
-  last_name: string;
-  password: string;
-}
+export const AuthUserSchema = z
+  .object({
+    id: z.string(),
+    email: z.string().optional(),
+    created_at: z.string().optional(),
+  })
+  .loose();
 
-export interface SignupResponse {
-  user: AuthUser | null;
-  session: AuthSession | null;
-}
+export interface AuthUser extends z.infer<typeof AuthUserSchema> {}
 
-export interface AuthUser {
-  id: string;
-  email?: string;
-  created_at?: string;
-  [key: string]: any;
-}
+export const AuthSessionSchema = z
+  .object({
+    access_token: z.string(),
+    refresh_token: z.string(),
+    expires_at: z.number().optional(),
+    token_type: z.string(),
+    user: AuthUserSchema,
+  })
+  .loose();
 
-export interface AuthSession {
-  access_token: string;
-  refresh_token: string;
-  expires_at?: number;
-  token_type: string;
-  user: AuthUser;
-  [key: string]: any;
-}
+export interface AuthSession extends z.infer<typeof AuthSessionSchema> {}
 
-export interface UserProfile {
-  id: string;
-  email: string;
-  first_name: string | null;
-  last_name: string | null;
-  is_email_verified: boolean;
-  created_at?: string;
-}
+export const LoginResponseSchema = z.object({
+  user: AuthUserSchema.nullable(),
+  session: AuthSessionSchema.nullable(),
+});
+
+export interface LoginResponse extends z.infer<typeof LoginResponseSchema> {}
+
+export const SignupRequestSchema = z.object({
+  email: z.email(),
+  first_name: z.string().min(1),
+  last_name: z.string().min(1),
+  password: z.string().min(6), // Assuming a minimum length for password
+});
+
+export interface SignupRequest extends z.infer<typeof SignupRequestSchema> {}
+
+export const SignupResponseSchema = z.object({
+  user: AuthUserSchema.nullable(),
+  session: AuthSessionSchema.nullable(),
+});
+
+export interface SignupResponse extends z.infer<typeof SignupResponseSchema> {}
+
+export const UserProfileSchema = z.object({
+  id: z.string(),
+  email: z.string(),
+  first_name: z.string().nullable(),
+  last_name: z.string().nullable(),
+  is_email_verified: z.boolean(),
+  created_at: z.string().optional(),
+});
+
+export interface UserProfile extends z.infer<typeof UserProfileSchema> {}
 
 export type PasswordResetStrategy = 'provider-hosted' | 'app-hosted';
 
