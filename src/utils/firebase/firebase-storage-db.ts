@@ -1,22 +1,11 @@
 // src/utils/firebase/firebase-storage-db.ts
-import { ref, uploadBytes, getDownloadURL, listAll, getMetadata } from 'firebase/storage';
+import { ref, getDownloadURL, listAll, getMetadata } from 'firebase/storage';
 import type {
   DataBaseApiInterface,
   SubmissionMetaDb,
   SubmissionData,
 } from '@/types/submissionapi';
 import { lazyFirebaseStorage } from './lib';
-
-// Initialize Firebase services
-// const storage = getStorage();
-
-// Helper function to upload a single file
-const uploadFile = async (file: File, path: string): Promise<string> => {
-  const storage = lazyFirebaseStorage();
-  const fileRef = ref(storage, path);
-  const snapshot = await uploadBytes(fileRef, file);
-  return await getDownloadURL(snapshot.ref);
-};
 
 // Helper function to download and parse JSON metadata from Firebase Storage
 const downloadJsonMetadata = async (url: string): Promise<any> => {
@@ -53,17 +42,13 @@ const getMySubmissionFireBaseMeta = async (
     // Try to get the download URL - this will throw an error if file doesn't exist
     const downloadUrl = await getDownloadURL(metadataRef);
 
-    // Get metadata information
-    const metadata = await getMetadata(metadataRef);
-
     // Download and parse the JSON content
     const submissionData = await downloadJsonMetadata(downloadUrl);
 
     // Return the submission with metadata URL and a generated database ID
     const result: SubmissionMetaDb = {
       ...submissionData,
-      databaseId: `storage_${email}_${metadata.timeCreated}`, // Generate a unique ID
-      metadataUrl: downloadUrl,
+      databaseId: metadataPath,
     };
 
     return result;
@@ -106,7 +91,6 @@ const listAllSubmissionsFireBaseMeta = async (): Promise<SubmissionMetaDb[]> => 
         const result: SubmissionMetaDb = {
           ...submissionData,
           databaseId: `storage_${email}_${metadata.timeCreated}`, // Generate a unique ID
-          metadataUrl: downloadUrl,
         };
 
         return result;
@@ -136,23 +120,12 @@ export const databaseApi: DataBaseApiInterface = {
   // Save submission metadata to Firestore and optionally to Firebase Storage
   saveSubmission: async (submissionData: SubmissionData): Promise<SubmissionMetaDb> => {
     try {
-      const email = submissionData.email;
-
       // Prepare submission data with timestamp
       const submissionWithTimestamp = submissionData;
-
-      // Save metadata as JSON file in Storage
-      const metadataPath = `submissions/metadatas/${email}.json`;
-      const metadataBlob = new Blob([JSON.stringify(submissionWithTimestamp, null, 2)], {
-        type: 'application/json',
-      });
-      const metadataFile = new File([metadataBlob], 'metadata.json');
-      const metadataUrl = await uploadFile(metadataFile, metadataPath);
 
       const result: SubmissionMetaDb = {
         ...submissionWithTimestamp,
         databaseId: '',
-        metadataUrl,
       };
 
       return result;

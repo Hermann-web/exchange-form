@@ -46,7 +46,6 @@ export const databaseApi: DataBaseApiInterface = {
     return {
       ...submissionData,
       databaseId: MOCK_DB_ID,
-      metadataUrl: 'https://mock-db.com/metadata.json',
     };
   },
 
@@ -59,7 +58,6 @@ export const databaseApi: DataBaseApiInterface = {
       return {
         ...MOCK_SUBMISSION_DATA,
         databaseId: MOCK_DB_ID,
-        metadataUrl: 'https://mock-db.com/metadata.json',
       };
     }
     return null;

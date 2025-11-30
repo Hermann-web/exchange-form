@@ -108,7 +108,6 @@ export const databaseApi: DataBaseApiInterface = {
       const result: SubmissionMetaDb = {
         ...submissionWithTimestamp,
         databaseId,
-        metadataUrl: '',
       };
 
       return result;

@@ -160,18 +160,6 @@ const getAvailableDocuments = () => {
               <ArrowDownTrayIcon class="w-3 h-3 mr-1" />
               Exporter
             </button>
-            <button
-              v-if="submission.metadataUrl"
-              @click="
-                handleDownloadFile(
-                  submission.metadataUrl,
-                  `${submission.firstName}-${submission.lastName}-metadata.json`
-                )
-              "
-              class="btn-secondary text-xs py-2 px-3"
-            >
-              Metadonnées
-            </button>
           </div>
         </div>
       </div>

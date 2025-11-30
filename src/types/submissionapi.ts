@@ -131,7 +131,6 @@ export interface SubmissionData extends SubmissionFormMeta, SubmissionFormObject
 
 export interface SubmissionMetaDb extends SubmissionData {
   databaseId: string;
-  metadataUrl: string; // URL to JSON metadata file (containing the submission response) (if stored in Firebase)
 }
 
 // API Interface Definitions

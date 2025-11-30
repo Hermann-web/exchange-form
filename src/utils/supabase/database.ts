@@ -20,7 +20,6 @@ export const databaseApi: DataBaseApiInterface = {
     return {
       ...submissionData,
       databaseId: data.id,
-      metadataUrl: '', // Not applicable for Supabase DB
     };
   },
 
@@ -40,7 +39,6 @@ export const databaseApi: DataBaseApiInterface = {
     return {
       ...data,
       databaseId: data.id,
-      metadataUrl: '',
     };
   },
 
@@ -53,7 +51,6 @@ export const databaseApi: DataBaseApiInterface = {
     return data.map((item: any) => ({
       ...item,
       databaseId: item.id,
-      metadataUrl: '',
     }));
   },
 };
