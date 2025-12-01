@@ -83,7 +83,16 @@ export const useAuthStore = defineStore('auth', () => {
       console.log('done');
       return true;
     } catch (err: any) {
-      error.value = err.message || 'Login failed';
+      const errmsg =
+        err.response?.data?.message ||
+        err.response?.data?.detail ||
+        err.message ||
+        'Login failed';
+      if (errmsg.includes('Invalid credentials')) {
+        error.value = 'Invalid email or password';
+      } else {
+        error.value = errmsg;
+      }
       return false;
     } finally {
       loading.value = false;
@@ -95,7 +104,25 @@ export const useAuthStore = defineStore('auth', () => {
     loading.value = true;
     error.value = null;
     try {
-      await authApi.sendVerificationEmail();
+      // await authApi.sendVerificationEmail();
+      return true;
+    } catch (err: any) {
+      error.value = err.message || "Échec de l'envoi de l'email de vérification.";
+      return false;
+    } finally {
+      loading.value = false;
+    }
+  };
+
+  const sendVerificationEmailNoSession = async (email: string): Promise<boolean> => {
+    if (!email) {
+      error.value = 'Email is required';
+      return false;
+    }
+    loading.value = true;
+    error.value = null;
+    try {
+      await authApi.sendVerificationEmailNoSession(email);
       return true;
     } catch (err: any) {
       error.value = err.message || "Échec de l'envoi de l'email de vérification.";
@@ -113,7 +140,7 @@ export const useAuthStore = defineStore('auth', () => {
       SignupRequestSchema.parse(data);
 
       await authApi.signup(data);
-      await sendVerificationEmail();
+      // await sendVerificationEmail();
       return true;
     } catch (err: any) {
       error.value = err.message || 'Signup failed';
@@ -265,5 +292,6 @@ export const useAuthStore = defineStore('auth', () => {
     clearAuth,
     clearError,
     sendVerificationEmail,
+    sendVerificationEmailNoSession,
   };
 });

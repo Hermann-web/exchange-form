@@ -88,6 +88,8 @@ router.beforeEach(async (to, _from, next) => {
     await authStore.fetchUser();
   }
 
+  if (authStore.isVerified && to.name === 'verify-email') return next('/dashboard');
+
   // Then handle protected routes
   if (to.meta.requiresAuth) {
     if (!authStore.isAuthenticated) return next('/login');

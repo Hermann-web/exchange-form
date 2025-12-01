@@ -27,9 +27,29 @@ export const authApi: AuthApiInterface = {
 
     if (error) throw error;
 
+    const userIn = data.user;
+
+    const user: AuthUser = {
+      id: userIn.id,
+      email: userIn.email || 'unset',
+      created_at: userIn.created_at,
+    };
+
+    const sessionIn = data.session;
+
+    const session: AuthSession = {
+      access_token: sessionIn.access_token,
+      refresh_token: sessionIn.refresh_token,
+      expires_at: sessionIn.expires_at,
+      token_type: sessionIn.token_type,
+      user: user,
+    };
+
+    if (!user) throw new Error('User not found');
+
     return {
-      user: data.user as AuthUser | null,
-      session: data.session as AuthSession | null,
+      user: user,
+      session: session,
     };
   },
 
@@ -47,10 +67,28 @@ export const authApi: AuthApiInterface = {
     });
 
     if (error) throw error;
+    const userIn = data.user;
+    const sessionIn = data.session;
+
+    if (!userIn || !sessionIn) throw new Error('User or session not found');
+
+    const user: AuthUser = {
+      id: userIn.id,
+      email: userIn.email || 'unset',
+      created_at: userIn.created_at,
+    };
+
+    const session: AuthSession = {
+      access_token: sessionIn.access_token,
+      refresh_token: sessionIn.refresh_token,
+      expires_at: sessionIn.expires_at,
+      token_type: sessionIn.token_type,
+      user: user,
+    };
 
     return {
-      user: data.user as AuthUser | null,
-      session: data.session as AuthSession | null,
+      user: user,
+      session: session,
     };
   },
 
@@ -61,14 +99,17 @@ export const authApi: AuthApiInterface = {
       error,
     } = await supabase.auth.getUser();
 
+    console.log(`user: ${JSON.stringify(user)}`);
+    console.log(`error: ${error}`);
+
     if (error) throw error;
     if (!user) throw new Error('User not found');
 
     return {
       id: user.id,
-      email: user.email!,
-      first_name: user.user_metadata?.first_name || null,
-      last_name: user.user_metadata?.last_name || null,
+      email: user.email || 'unset',
+      first_name: user.user_metadata?.first_name || 'unset',
+      last_name: user.user_metadata?.last_name || 'unset',
       is_email_verified: !!user.email_confirmed_at,
       created_at: user.created_at,
     };
@@ -92,6 +133,16 @@ export const authApi: AuthApiInterface = {
       });
       if (error) throw error;
     }
+  },
+
+  // send verification email // no session // so rely on email
+  async sendVerificationEmailNoSession(email: string): Promise<void> {
+    const supabase = lazySupabase();
+    const { error } = await supabase.auth.resend({
+      type: 'signup',
+      email,
+    });
+    if (error) throw error;
   },
 
   async verifyEmailFromOTP(_token: string): Promise<boolean> {

@@ -45,6 +45,10 @@ export const authApi: AuthApiInterface = {
     console.log('[MockAuth] Sending verification email');
   },
 
+  async sendVerificationEmailNoSession(email: string): Promise<void> {
+    console.log('[MockAuth] Sending verification email', email);
+  },
+
   async verifyEmailFromOTP(token: string): Promise<boolean> {
     console.log('[MockAuth] Verifying email with token', token);
     return true;

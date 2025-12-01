@@ -96,6 +96,13 @@ export const authApi: AuthApiInterface = {
     await sendEmailVerification(auth.currentUser);
   },
 
+  async sendVerificationEmailNoSession(email: string): Promise<void> {
+    const auth = lazyFirebaseAuth();
+    if (!auth.currentUser) throw new Error(`User ${email} should be authenticated`);
+    console.log('authenticated user: sending verification email');
+    await sendEmailVerification(auth.currentUser);
+  },
+
   verifyEmailFromOTP: async (): Promise<boolean> => {
     throw new Error('Already handled by firebase');
   },

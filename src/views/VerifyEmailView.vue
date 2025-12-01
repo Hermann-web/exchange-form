@@ -16,6 +16,7 @@ const router = useRouter();
 
 const verificationStatus = ref<'idle' | 'loading' | 'success' | 'error'>('idle');
 const token = ref('');
+const email = ref('');
 
 const isProviderHosted = computed(
   () => authApi.emailVerificationStrategy === 'provider-hosted'
@@ -29,13 +30,16 @@ onMounted(() => {
       token.value = queryToken;
     }
   }
+  email.value = authStore.user?.email || '';
 });
 
-const sendVerificationEmail = async () => {
+const sendVerificationEmailNoSession = async () => {
   try {
     authStore.clearError();
-    await authStore.sendVerificationEmail();
-    alert('Email de vérification envoyé ! Veuillez vérifier votre boîte de réception.');
+    const res = await authStore.sendVerificationEmailNoSession(email.value);
+    if (res) {
+      alert('Email de vérification envoyé ! Veuillez vérifier votre boîte de réception.');
+    }
   } catch (err: any) {
     authStore.error = err.message || "Échec de l'envoi de l'email de vérification.";
   }
@@ -188,31 +192,45 @@ const redirectToDashboard = () => {
       </div>
     </div>
 
-    <!-- Resend Email Section (only if logged in and not verified) -->
-    <div
-      v-if="authStore.isAuthenticated && !authStore.isVerified"
-      class="glass rounded-2xl p-6 mb-8 text-center"
-    >
-      <p class="text-yellow-400 text-lg font-medium mb-4">
-        Vous n'avez pas reçu l'email de vérification ?
-      </p>
-      <p class="text-gray-400 text-sm mb-4">Email actuel : {{ authStore.user?.email }}</p>
-      <button
-        @click="sendVerificationEmail"
-        :disabled="authStore.loading"
-        class="btn-primary inline-flex items-center disabled:opacity-50 disabled:cursor-not-allowed"
-      >
-        <DocumentTextIcon class="w-5 h-5 mr-2" />
-        Renvoyer l'email de vérification
-      </button>
-    </div>
-
     <!-- Error Display -->
     <div
       v-if="authStore.error"
       class="bg-red-500/20 border border-red-400/30 rounded-lg p-3"
     >
       <p class="text-red-300 text-sm">{{ authStore.error }}</p>
+    </div>
+
+    <!-- Resend Email Section (only if not verified) -->
+    <div v-if="!authStore.isVerified" class="glass rounded-2xl p-6 mb-8 text-center">
+      <p class="text-yellow-400 text-lg font-medium mb-4">
+        Vous n'avez pas reçu l'email de vérification ?
+      </p>
+
+      <!-- Show email input if not authenticated -->
+      <div v-if="!authStore.isAuthenticated" class="mb-4">
+        <label for="email" class="block text-sm font-medium text-gray-300 mb-2 text-left">
+          Adresse email
+        </label>
+        <input
+          id="email"
+          v-model="email"
+          type="email"
+          placeholder="Entrez votre adresse email"
+          class="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
+        />
+      </div>
+
+      <!-- Show current email if authenticated -->
+      <p v-else class="text-gray-400 text-sm mb-4">Email actuel : {{ email }}</p>
+
+      <button
+        @click="sendVerificationEmailNoSession"
+        :disabled="authStore.loading || (!authStore.isAuthenticated && !email.trim())"
+        class="btn-primary inline-flex items-center disabled:opacity-50 disabled:cursor-not-allowed"
+      >
+        <DocumentTextIcon class="w-5 h-5 mr-2" />
+        Renvoyer l'email de vérification
+      </button>
     </div>
   </div>
 </template>

@@ -32,8 +32,8 @@ const getAuthHeaders = () => {
 };
 
 export const authApi: AuthApiInterface = {
-  emailVerificationStrategy: 'app-hosted',
-  passwordResetStrategy: 'app-hosted',
+  emailVerificationStrategy: 'provider-hosted',
+  passwordResetStrategy: 'provider-hosted',
 
   async login(email, password): Promise<LoginResponse> {
     try {
@@ -49,8 +49,25 @@ export const authApi: AuthApiInterface = {
 
       return data;
     } catch (error: any) {
+      if (error.status === 401 || error.status === 400) {
+        console.log(`=error.response`, JSON.stringify(error.response));
+        const rsp_msg =
+          error.response?.data?.message ||
+          error.response?.data?.detail ||
+          error.message ||
+          '';
+        const msg: string = rsp_msg.includes('Please verify your email')
+          ? 'Please check your mailbox to verify your email'
+          : rsp_msg.includes('Invalid credentials')
+            ? 'Invalid credentials'
+            : rsp_msg;
+        throw new ApiError(msg, error.response?.status);
+      }
       throw new ApiError(
-        error.response?.data?.detail || error.message || 'Login failed',
+        error.response?.data?.message ||
+          error.response?.data?.detail ||
+          error.message ||
+          'Login failed',
         error.response?.status
       );
     }
@@ -59,7 +76,7 @@ export const authApi: AuthApiInterface = {
   async signup(userData: SignupRequest): Promise<SignupResponse> {
     try {
       // Map SignupRequest to SignupDto (if needed, but they look identical in specs)
-      const response = await axios.post(`${API_BASE_URL}/auth/signup`, userData);
+      const response = await axios.post(`${API_BASE_URL}/auth/register`, userData);
       const data: SignupResponse = response.data;
 
       if (data.session) {
@@ -69,7 +86,10 @@ export const authApi: AuthApiInterface = {
       return data;
     } catch (error: any) {
       throw new ApiError(
-        error.response?.data?.detail || error.message || 'Signup failed',
+        error.response?.data?.message ||
+          error.response?.data?.detail ||
+          error.message ||
+          'Signup failed',
         error.response?.status
       );
     }
@@ -83,7 +103,10 @@ export const authApi: AuthApiInterface = {
       return response.data;
     } catch (error: any) {
       throw new ApiError(
-        error.response?.data?.detail || error.message || 'Failed to fetch user profile',
+        error.response?.data?.message ||
+          error.response?.data?.detail ||
+          error.message ||
+          'Failed to fetch user profile',
         error.response?.status
       );
     }
@@ -98,13 +121,32 @@ export const authApi: AuthApiInterface = {
   async sendVerificationEmail(): Promise<void> {
     try {
       await axios.post(
-        `${API_BASE_URL}/auth/verify-email`,
+        `${API_BASE_URL}/auth/resend-verification`,
         {},
         { headers: getAuthHeaders() }
       );
     } catch (error: any) {
       throw new ApiError(
-        error.response?.data?.detail ||
+        error.response?.data?.message ||
+          error.response?.data?.detail ||
+          error.message ||
+          'Failed to send verification email',
+        error.response?.status
+      );
+    }
+  },
+
+  async sendVerificationEmailNoSession(email: string): Promise<void> {
+    try {
+      await axios.post(
+        `${API_BASE_URL}/auth/resend-verification`,
+        { email: email },
+        { headers: getAuthHeaders() }
+      );
+    } catch (error: any) {
+      throw new ApiError(
+        error.response?.data?.message ||
+          error.response?.data?.detail ||
           error.message ||
           'Failed to send verification email',
         error.response?.status
@@ -118,7 +160,10 @@ export const authApi: AuthApiInterface = {
       return true;
     } catch (error: any) {
       throw new ApiError(
-        error.response?.data?.detail || error.message || 'Email verification failed',
+        error.response?.data?.message ||
+          error.response?.data?.detail ||
+          error.message ||
+          'Email verification failed',
         error.response?.status
       );
     }
@@ -131,7 +176,8 @@ export const authApi: AuthApiInterface = {
       // Always succeed for security reasons if 200 is returned
       if (error.response?.status !== 200) {
         throw new ApiError(
-          error.response?.data?.detail ||
+          error.response?.data?.message ||
+            error.response?.data?.detail ||
             error.message ||
             'Password reset request failed',
           error.response?.status
@@ -152,7 +198,10 @@ export const authApi: AuthApiInterface = {
       });
     } catch (error: any) {
       throw new ApiError(
-        error.response?.data?.detail || error.message || 'Password reset failed',
+        error.response?.data?.message ||
+          error.response?.data?.detail ||
+          error.message ||
+          'Password reset failed',
         error.response?.status
       );
     }

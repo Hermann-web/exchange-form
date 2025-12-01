@@ -195,7 +195,7 @@ def get_current_user(authorization: Optional[str] = Header(None)) -> User:
 # 6. ENDPOINTS: AUTH
 # ==============================================================================
 
-@app.post("/auth/signup", response_model=SignupResponse)
+@app.post("/auth/register", response_model=SignupResponse)
 def signup(dto: SignupDto):
     if dto.email in USERS:
         raise HTTPException(status_code=400, detail="Email already registered")
@@ -270,7 +270,7 @@ def login(dto: LoginDto):
 def me(user: User = Depends(get_current_user)):
     return UserProfileResponse(**user.dict())
 
-@app.post("/auth/verify-email")
+@app.post("/auth/resend-verification")
 def send_verification_email(user: User = Depends(get_current_user)):
     print(f"Sending verification email to {user.email}")
     # Auto-verify for demo purposes
@@ -278,7 +278,7 @@ def send_verification_email(user: User = Depends(get_current_user)):
         USERS[user.email].is_email_verified = True
     return {"message": "Verification email sent"}
 
-@app.post("/auth/verify-email/confirm")
+@app.post("/auth/verify")
 def verify_email_confirm(dto: VerifyEmailConfirmDto):
     token = dto.token
     if token == "invalid":

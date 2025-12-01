@@ -28,7 +28,7 @@ export class ResetPasswordDto {
 
 #### 3.2 Endpoints
 
-##### `POST /auth/signup`
+##### `POST /auth/register`
 
 - **Input:** `SignupDto`
 - **Output:** `SignupResponse`
@@ -58,15 +58,14 @@ export class ResetPasswordDto {
   }
   ```
 
-##### `POST /auth/verify-email`
+##### `POST /auth/resend-verification`
 
-- **Guard:** `JwtAuthGuard` (User must be logged in to trigger sending)
-- **Action:** Triggers `sendVerificationEmail()`.
+- **Input:** `{ "email": "string" }`
+- **Action:** If user exists, triggers `sendVerificationEmail(email)`.
 - **Output:** `200 OK`
 
-##### `POST /auth/verify-email/confirm`
+##### `POST /auth/verify?token=...`
 
-- **Input:** `{ "token": "string" }`
 - **Action:** Validates token -> Updates `User.is_verified = true`.
 - **Output:** `200 OK`
 
