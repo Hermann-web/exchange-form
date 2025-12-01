@@ -112,9 +112,10 @@ export const authApi: AuthApiInterface = {
     }
   },
 
-  async verifyEmailWithoutSession(token: string): Promise<void> {
+  async verifyEmailFromOTP(token: string): Promise<boolean> {
     try {
-      await axios.post(`${API_BASE_URL}/auth/verify-email/confirm`, { token });
+      await axios.get(`${API_BASE_URL}/auth/verify?token=${token}`);
+      return true;
     } catch (error: any) {
       throw new ApiError(
         error.response?.data?.detail || error.message || 'Email verification failed',

@@ -24,6 +24,12 @@ const router = createRouter({
       component: () => import('@/views/ForgotPasswordView.vue'),
       meta: { requiresAuth: false },
     },
+    {
+      path: '/verify-email',
+      name: 'verify-email',
+      component: () => import('@/views/VerifyEmailView.vue'),
+      meta: { requiresAuth: false },
+    },
 
     // Protected routes (all wrapped by AppLayout)
     {
@@ -40,11 +46,6 @@ const router = createRouter({
           path: 'dashboard',
           name: 'dashboard',
           component: () => import('@/views/DashboardView.vue'),
-        },
-        {
-          path: 'verify',
-          name: 'verify',
-          component: () => import('@/views/VerifyEmailView.vue'),
         },
         {
           path: 'update-password',
@@ -90,7 +91,7 @@ router.beforeEach(async (to, _from, next) => {
   // Then handle protected routes
   if (to.meta.requiresAuth) {
     if (!authStore.isAuthenticated) return next('/login');
-    if (!authStore.isVerified && to.name !== 'verify') return next('/verify');
+    if (!authStore.isVerified && to.name !== 'verify-email') return next('/verify-email');
   }
 
   if (to.meta.requiresAdmin) {

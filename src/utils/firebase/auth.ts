@@ -96,7 +96,7 @@ export const authApi: AuthApiInterface = {
     await sendEmailVerification(auth.currentUser);
   },
 
-  verifyEmailWithoutSession: async (): Promise<void> => {
+  verifyEmailFromOTP: async (): Promise<boolean> => {
     throw new Error('Already handled by firebase');
   },
 

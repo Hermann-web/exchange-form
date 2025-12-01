@@ -50,6 +50,10 @@ export const useAuthStore = defineStore('auth', () => {
     };
   };
 
+  const clearError = (): void => {
+    error.value = null;
+  };
+
   const login = async (email: string, password: string): Promise<boolean> => {
     loading.value = true;
     error.value = null;
@@ -86,9 +90,19 @@ export const useAuthStore = defineStore('auth', () => {
     }
   };
 
-  const sendVerificationEmail = async (): Promise<void> => {
+  const sendVerificationEmail = async (): Promise<boolean> => {
     console.log('sending verification email');
-    await authApi.sendVerificationEmail();
+    loading.value = true;
+    error.value = null;
+    try {
+      await authApi.sendVerificationEmail();
+      return true;
+    } catch (err: any) {
+      error.value = err.message || "Échec de l'envoi de l'email de vérification.";
+      return false;
+    } finally {
+      loading.value = false;
+    }
   };
 
   const signup = async (data: SignupRequest): Promise<boolean> => {
@@ -141,6 +155,7 @@ export const useAuthStore = defineStore('auth', () => {
 
   const logout = async (): Promise<void> => {
     loading.value = true;
+    error.value = null;
     try {
       await authApi.logout();
       clearAuth();
@@ -152,33 +167,27 @@ export const useAuthStore = defineStore('auth', () => {
     }
   };
 
-  // const verifyEmail = async (token: string): Promise<boolean> => {
+  const verifyEmail = async (token: string): Promise<boolean> => {
+    if (authApi.emailVerificationStrategy === 'provider-hosted') {
+      // Some Providers handles the verification link
+      // refetching user and getting isVerified.value gives us the data
+      error.value =
+        'Check your mailbox as email verification is handled by the provider.';
+      return false;
+    }
 
-  //   if (authApi.emailVerificationStrategy === 'provider-hosted') {
-  //     // Some Providers handles the verification link
-  //     // refeching user and getting isVerified.value gives us the data
-  //     throw new Error('Email verification is handled by the provider. This method is not needed.');
-  //   }
-
-  //   fetchUser();
-
-  //   if (isVerified.value) {
-  //     console.log('Email is already verified.');
-  //     return true;
-  //   }
-
-  //   loading.value = true;
-  //   error.value = null;
-  //   try {
-  //     await authApi.verifyEmailByToken(token);
-  //     return true;
-  //   } catch (err: any) {
-  //     error.value = err.response?.message || err.message || 'Email verification failed';
-  //     return false;
-  //   } finally {
-  //     loading.value = false;
-  //   }
-  // };
+    loading.value = true;
+    error.value = null;
+    try {
+      await authApi.verifyEmailFromOTP(token);
+      return true;
+    } catch (err: any) {
+      error.value = err.response?.message || err.message || 'Email verification failed';
+      return false;
+    } finally {
+      loading.value = false;
+    }
+  };
 
   const resetPasswordRequest = async (email: string): Promise<boolean> => {
     loading.value = true;
@@ -231,10 +240,6 @@ export const useAuthStore = defineStore('auth', () => {
     }
   };
 
-  const clearError = (): void => {
-    error.value = null;
-  };
-
   // Initialize auth state
   initializeAuth();
 
@@ -256,7 +261,7 @@ export const useAuthStore = defineStore('auth', () => {
     logout,
     resetPasswordRequest,
     updatePassword,
-    // verifyEmail,
+    verifyEmail,
     clearAuth,
     clearError,
     sendVerificationEmail,

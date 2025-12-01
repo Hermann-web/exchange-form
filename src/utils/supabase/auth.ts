@@ -8,6 +8,7 @@ import type {
   AuthUser,
 } from '@/types/authapi';
 import { lazySupabase } from './lib';
+import { ApiError } from '@/types/exceptions';
 
 export const authApi: AuthApiInterface = {
   emailVerificationStrategy: 'provider-hosted',
@@ -19,6 +20,10 @@ export const authApi: AuthApiInterface = {
       email,
       password,
     });
+
+    if (error?.code == 'email_not_confirmed') {
+      throw new ApiError('Email not confirmed !', 401);
+    }
 
     if (error) throw error;
 
@@ -89,7 +94,7 @@ export const authApi: AuthApiInterface = {
     }
   },
 
-  async verifyEmailWithoutSession(_token: string): Promise<void> {
+  async verifyEmailFromOTP(_token: string): Promise<boolean> {
     // Supabase usually handles this via link click which redirects to app with session
     // If we need to manually verify with a token (OTP), we would use verifyOtp
     // But typically for email links, the session is established upon redirect if configured correctly.
@@ -109,8 +114,9 @@ export const authApi: AuthApiInterface = {
         });
         */
     throw new Error(
-      'verifyEmailWithoutSession not fully implemented for Supabase strategy as it relies on provider flow'
+      'verifyEmailFromOTP not fully implemented for Supabase strategy as it relies on provider flow'
     );
+    return true;
   },
 
   async resetPasswordRequest(email: string): Promise<void> {

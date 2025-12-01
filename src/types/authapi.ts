@@ -76,13 +76,13 @@ export interface AuthApiInterface {
 
   // email verification handling
   emailVerificationStrategy: EmailVerificationStrategy;
-  // email verification request (user is authenticated)
+  // email verification request (user is authenticated or not)
   // a mail will get sent along with a token (in url or not)
   sendVerificationEmail(): Promise<void>;
   // the user send the token on the interface here (copy or url click)
   // user not authenticated (if token define the user)
   // some backend handled redirect user to their own url so this would not be needed
-  verifyEmailWithoutSession(token: string): Promise<void>;
+  verifyEmailFromOTP(token: string): Promise<boolean>;
 
   signup(userData: SignupRequest): Promise<SignupResponse>;
   me(): Promise<UserProfile>;
