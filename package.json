@@ -12,7 +12,7 @@
     "export": "ts-node tools/export.ts",
     "test-zod": "ts-node scripts/test-zod.ts",
     "lint": "vue-tsc -b --noEmit",
-    "format": "prettier --write --list-different ."
+    "format": "prettier --write --list-different ./src"
   },
   "dependencies": {
     "@heroicons/vue": "^2.2.0",
